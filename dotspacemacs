@@ -53,6 +53,7 @@
      syntax-checking
      sql
      vagrant
+     version-control
      vim-empty-lines
      xkcd
      )
