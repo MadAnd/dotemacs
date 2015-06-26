@@ -30,7 +30,6 @@
      erc
      evil-commentary
      eyebrowse
-     extra-langs
      (evil-snipe :variables
                  evil-snipe-enable-alternate-f-and-t-behaviors t)
      fasd
@@ -54,14 +53,13 @@
      sql
      vagrant
      version-control
-     vim-empty-lines
      xkcd
      )
    ;; List of additional packages that will be installed wihout being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages then consider to create a layer, you can also put the
    ;; configuration in `dotspacemacs/config'.
-   dotspacemacs-additional-packages '(speed-type)
+   dotspacemacs-additional-packages '(yaml-mode speed-type)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -154,7 +152,7 @@ before layers configuration."
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters the
    ;; point when it reaches the top or bottom of the screen.
-   dotspacemacs-smooth-scrolling t
+   dotspacemacs-smooth-scrolling nil
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
    dotspacemacs-smartparens-strict-mode t
    ;; Select a scope to highlight delimiters. Possible value is `all',
@@ -180,15 +178,9 @@ layers configuration."
   (setq-default
    magit-expand-staged-on-commit t
    powerline-default-separator 'alternate
-   smooth-scroll-margin 2
    scroll-margin 2
+   scroll-conservatively 1000
    )
-
-  ;; Workaround for scroll jump when going to the last buffer line
-  (define-key evil-normal-state-map (kbd "G") (lambda ()
-                                                (interactive)
-                                                (evil-goto-line)
-                                                (execute-kbd-macro (kbd "k zb"))))
 
   (define-key evil-normal-state-map (kbd "[ b") 'spacemacs/previous-useful-buffer)
   (define-key evil-normal-state-map (kbd "] b") 'spacemacs/next-useful-buffer)
