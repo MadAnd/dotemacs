@@ -18,7 +18,7 @@
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      (auto-completion :variables
-                      auto-completion-complete-with-key-sequence "jk"
+                      auto-completion-complete-with-key-sequence "ht"
                       auto-completion-enable-sort-by-usage t)
      clojure
      (colors :variables
@@ -44,6 +44,7 @@
      (perspectives :variables
                    perspective-enable-persp-projectile t)
      pandoc
+     programmer-dvorak
      (python :variables
              python-enable-yapf-format-on-save t)
      ruby
@@ -61,7 +62,7 @@
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages '(yaml-mode speed-type)
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(evil-escape)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'
