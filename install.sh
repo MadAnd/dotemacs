@@ -36,7 +36,7 @@ find_executable()
 # USAGE
 #   backup_place path
 # DESCRIPTION
-#   Rename the target file or diretory by adding the ".bak" prefix
+#   Rename the target file or diretory by adding the ".bak" suffix
 #   or delete it, if it is a symlink.
 # EXAMPLES
 #   `backup_place ~/.config` - will rename it to `~/.config.bak`
@@ -56,8 +56,6 @@ backup_place()
     fi
 }
 
-# Generate EMACS_CMD
-find_executable emacs
 # Generate GIT_CMD
 find_executable git
 
@@ -72,4 +70,5 @@ ln -sf "$INSTALL_DIR/dotspacemacs" "$DOTSPACEMACS"
 
 # Install spacemacs
 $GIT_CMD clone --recursive --branch develop "$SPACEMACS_REPO" "$SPACEMACS_DIR"
-$EMACS_CMD
+
+exit 0
