@@ -68,7 +68,7 @@ values."
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages then consider to create a layer, you can also put the
-   ;; configuration in `dotspacemacs/config'.
+   ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(editorconfig yaml-mode speed-type)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '(evil-escape)
@@ -144,7 +144,7 @@ values."
    ;; `find-files' (SPC f f), `find-spacemacs-file' (SPC f e s), and
    ;; `find-contrib-file' (SPC f e c) are replaced. (default nil)
    dotspacemacs-use-ido nil
-   ;; If non nil, `helm' will try to miminimize the space it uses. (default nil)
+   ;; If non nil, `helm' will try to minimize the space it uses. (default nil)
    dotspacemacs-helm-resize nil
    ;; if non nil, the helm header is hidden when there is only one source.
    ;; (default nil)
@@ -219,7 +219,7 @@ user code."
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
- This function is called at the very end of Spacemacs initialization after
+This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
   (setq-default
    magit-expand-staged-on-commit t
@@ -231,6 +231,10 @@ layers configuration. You are free to put any user code."
    js2-strict-missing-semi-warning nil)
 
   (spacemacs/set-google-translate-languages "en" "uk")
+
+  (with-eval-after-load 'magit
+    (add-hook 'magit-status-headers-hook 'magit-insert-repo-header t)
+    (define-key magit-mode-map (kbd "<backtab>") 'magit-section-cycle-global))
 
   (with-eval-after-load 'recentf
    (setq recentf-exclude (delete (expand-file-name package-user-dir) recentf-exclude)))
