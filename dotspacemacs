@@ -44,6 +44,7 @@ values."
      javascript
      haskell
      html
+     lua
      markdown
      org
      (perspectives :variables
