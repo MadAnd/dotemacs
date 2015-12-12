@@ -47,8 +47,6 @@ values."
      lua
      markdown
      org
-     (perspectives :variables
-                   perspective-enable-persp-projectile t)
      pandoc
      programmer-dvorak
      php
