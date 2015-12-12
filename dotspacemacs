@@ -251,6 +251,9 @@ layers configuration. You are free to put any user code."
   (with-eval-after-load 'yasnippet
     (define-key yas-minor-mode-map (kbd "C-;") 'yas-expand))
 
+  ;; Make C-h act like <Backspace>.
+  (define-key key-translation-map [?\C-h] [?\C-?])
+
   (evil-leader/set-key "o SPC" 'redraw-display)
 
   (define-key evil-normal-state-map (kbd "[ b") 'spacemacs/previous-useful-buffer)
