@@ -2,6 +2,8 @@
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
+(require 'cl-lib)
+
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration.
 You should not put any user code in this function besides modifying the variable
@@ -48,7 +50,6 @@ values."
      markdown
      org
      pandoc
-     programmer-dvorak
      php
      (python :variables
              python-enable-yapf-format-on-save t)
@@ -275,6 +276,15 @@ layers configuration. You are free to put any user code."
     (define-key helm-find-files-map [?\C-?] 'helm-find-files-up-one-level))
 
   (evil-leader/set-key "o SPC" 'redraw-display)
+
+  ;; Adapt window navigation to Programmer Dvopak keyboard
+  (let ((num-keys "]&[{}(=*)+"))
+   (cl-loop for i from 0 to 9
+            do
+            (evil-leader/set-key (number-to-string i) nil)
+            (evil-leader/set-key
+              (string (aref num-keys i))
+              (intern (format "select-window-%d" i)))))
 
   (define-key evil-normal-state-map (kbd "[ b") 'spacemacs/previous-useful-buffer)
   (define-key evil-normal-state-map (kbd "] b") 'spacemacs/next-useful-buffer)
