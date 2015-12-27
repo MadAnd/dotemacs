@@ -271,6 +271,8 @@ layers configuration. You are free to put any user code."
 
   ;; Make C-h act like <Backspace>.
   (define-key key-translation-map [?\C-h] [?\C-?])
+  (with-eval-after-load 'helm-files
+    (define-key helm-find-files-map [?\C-?] 'helm-find-files-up-one-level))
 
   (evil-leader/set-key "o SPC" 'redraw-display)
 
