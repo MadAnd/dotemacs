@@ -260,6 +260,8 @@ layers configuration. You are free to put any user code."
 
   (spacemacs/set-google-translate-languages "en" "uk")
 
+  (editorconfig-mode 1)
+
   (with-eval-after-load 'magit
     (add-hook 'magit-status-headers-hook 'magit-insert-repo-header t)
     (define-key magit-mode-map (kbd "<backtab>") 'magit-section-cycle-global))
