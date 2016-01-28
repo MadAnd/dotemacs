@@ -301,6 +301,8 @@ layers configuration. You are free to put any user code."
     (define-key helm-find-files-map [?\C-?] 'helm-find-files-up-one-level))
 
   (evil-leader/set-key "o SPC" 'redraw-display)
+  (evil-leader/set-key "SPC" 'evil-avy-goto-word-1)
+  (evil-leader/set-key ";" 'helm-M-x)
 
   ;; Adapt window navigation to Programmer Dvopak keyboard
   (let ((num-keys "]&[{}(=*)+"))
