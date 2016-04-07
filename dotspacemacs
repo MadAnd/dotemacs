@@ -395,6 +395,9 @@ you should place you code here."
  '(expand-region-contract-fast-key "V")
  '(expand-region-reset-fast-key "r")
  '(magit-use-overlays nil)
+ '(org-pomodoro-length 45)
+ '(org-pomodoro-long-break-length 60)
+ '(org-pomodoro-short-break-length 10)
  '(ring-bell-function (quote ignore) t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
