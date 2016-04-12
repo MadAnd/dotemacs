@@ -336,14 +336,27 @@ you should place your code here."
   (evil-leader/set-key "SPC" 'evil-avy-goto-word-1)
   (evil-leader/set-key ";" 'helm-M-x)
 
-  ;; Adapt window navigation to Programmer Dvopak keyboard
-  (let ((num-keys "]&[{}(=*)+"))
-   (cl-loop for i from 0 to 9
-            do
-            (evil-leader/set-key (number-to-string i) nil)
-            (evil-leader/set-key
-              (string (aref num-keys i))
-              (intern (format "select-window-%d" i)))))
+  ;; Adapt numeric (0-9) navigation to Programmer Dvopak (dvp) keyboard
+  (defun my//intern-symbol (command-str &rest args)
+    (intern (apply 'format command-str args)))
+  (let ((dvp-numbers-row "]&[{}(=*)+")
+        layouts-new-bindings workspaces-new-bindings)
+    (cl-loop
+     for i from 0 to 9 do
+     (let ((qwerty-key (number-to-string i))
+           (dvp-key (string (aref dvp-numbers-row i))))
+       ;; Windows
+       (spacemacs/set-leader-keys
+         qwerty-key nil
+         dvp-key (my//intern-symbol "select-window-%d" i))
+       ;; Layouts
+       (let ((cmd (my//intern-symbol "spacemacs/persp-switch-to-%d" i)))
+         (push (list dvp-key cmd :exit t) layouts-new-bindings))
+       ;; Workspaces
+       (let ((cmd (my//intern-symbol "eyebrowse-switch-to-window-config-%d" i)))
+         (push (list dvp-key cmd :exit t) workspaces-new-bindings))))
+    (setq spacemacs-layouts-transient-state-add-bindings layouts-new-bindings
+          spacemacs-workspaces-transient-state-add-bindings workspaces-new-bindings))
 
   (define-key evil-normal-state-map (kbd "[ b") 'spacemacs/previous-useful-buffer)
   (define-key evil-normal-state-map (kbd "] b") 'spacemacs/next-useful-buffer)
