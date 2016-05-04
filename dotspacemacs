@@ -44,6 +44,7 @@ values."
      clojure
      (colors :variables
              colors-enable-rainbow-identifiers t)
+     csv
      emacs-lisp
      emoji
      erc
@@ -59,12 +60,14 @@ values."
      html
      lua
      markdown
-     org
+     (org :variables
+          org-enable-github-support t)
      pandoc
      php
      (python :variables
              python-enable-yapf-format-on-save t)
      racket
+     ranger
      ruby
      search-engine
      (shell :variables
@@ -76,6 +79,7 @@ values."
      sql
      vagrant
      version-control
+     vimscript
      xkcd
      )
    ;; List of additional packages that will be installed without being
