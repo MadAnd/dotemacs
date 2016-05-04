@@ -2,8 +2,6 @@
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
-(require 'cl-lib)
-
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration.
 You should not put any user code in this function besides modifying the variable
@@ -39,7 +37,6 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     spacemacs-helm
      (auto-completion :variables
                       auto-completion-complete-with-key-sequence "ht"
                       auto-completion-complete-with-key-sequence-delay 0.2
@@ -50,8 +47,6 @@ values."
      emacs-lisp
      emoji
      erc
-     evil-commentary
-     eyebrowse
      fasd
      finance
      (git :variables
@@ -300,13 +295,14 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  (setq-default
+  (setq
    erc-default-port 6697
    magit-expand-staged-on-commit t
    powerline-default-separator 'alternate
    scroll-margin 2
    scroll-conservatively 1000
    paradox-github-token t
+   ;; JS
    js2-strict-trailing-comma-warning nil
    js2-strict-missing-semi-warning nil)
 
