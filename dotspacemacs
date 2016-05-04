@@ -315,6 +315,18 @@ you should place your code here."
   ;; Activate EditorConfig http://editorconfig.org/ support for all programming modes
   (add-hook 'prog-mode-hook 'editorconfig-mode)
 
+  ;; Avy setup
+  ;; (require 'avy)
+  (setq avy-dispatch-alist '((?k . avy-action-kill-move)
+                             (?K . avy-action-kill-stay)
+                             (?m . avy-action-mark)
+                             (?c . avy-action-copy)
+                             (?i . avy-action-ispell)))
+  (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
+  (define-key evil-motion-state-map (kbd "s") 'avy-goto-char-timer)
+  (evil-define-key 'visual evil-surround-mode-map "s" 'avy-goto-char-timer)
+  (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region)
+
   (with-eval-after-load 'info
     (define-key Info-mode-map (kbd "S-SPC") 'Info-scroll-up))
 
