@@ -310,9 +310,10 @@ you should place your code here."
    js2-strict-trailing-comma-warning nil
    js2-strict-missing-semi-warning nil)
 
-  (editorconfig-mode 1)
-
   (spacemacs/set-google-translate-languages "en" "uk")
+
+  ;; Activate EditorConfig http://editorconfig.org/ support for all programming modes
+  (add-hook 'prog-mode-hook 'editorconfig-mode)
 
   (with-eval-after-load 'info
     (define-key Info-mode-map (kbd "S-SPC") 'Info-scroll-up))
