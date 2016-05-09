@@ -86,7 +86,14 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(editorconfig yaml-mode speed-type typit nginx-mode)
+   dotspacemacs-additional-packages '(crontab-mode
+                                      editorconfig
+                                      nginx-mode
+                                      keyfreq
+                                      speed-type
+                                      string-inflection
+                                      typit
+                                      yaml-mode)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '(evil-escape)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -143,7 +150,7 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(solarized-dark spacemacs-dark)
+   dotspacemacs-themes '(solarized-dark solarized-light)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -299,13 +306,16 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  (setq
+  (setq-default
    erc-default-port 6697
    magit-expand-staged-on-commit t
    powerline-default-separator 'alternate
    scroll-margin 2
    scroll-conservatively 1000
    paradox-github-token t
+   delete-by-moving-to-trash nil
+   ;; Clojure
+   cider-repl-display-help-banner nil
    ;; JS
    js2-strict-trailing-comma-warning nil
    js2-strict-missing-semi-warning nil)
@@ -314,6 +324,50 @@ you should place your code here."
 
   ;; Activate EditorConfig http://editorconfig.org/ support for all programming modes
   (add-hook 'prog-mode-hook 'editorconfig-mode)
+
+  (require 'keyfreq)
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1)
+
+  (defun my-tramp-add-root-proxies (&rest host-names)
+    "Add each of the HOST-NAMES to `tramp-default-proxies-alist'.
+
+Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
+    (dolist (host host-names)
+      (add-to-list 'tramp-default-proxies-alist
+                   (list host "\\`root\\'" "/ssh:%h:"))))
+  (my-tramp-add-root-proxies "s1" "rudno_pc")
+
+  ;; PHP-related config
+  (with-eval-after-load 'php-mode
+    (defun my-php-search-web-documentation-in-default-browser (word)
+      "Search documentation on PHP web site in default browser.
+
+The value of `php-search-documentation-browser-function' will be ignored
+and `browse-url-browser-function' will be used instead."
+      (interactive (php--search-documentation-read-arg))
+      (let ((php-search-documentation-browser-function nil))
+        (php-search-web-documentation word)))
+    (setq flycheck-phpcs-standard "PSR2"
+          phpcbf-standard "PSR2"
+          php-template-compatibility nil
+          php-manual-path "/usr/share/doc/php/php-chunked-xhtml"
+          php-search-documentation-browser-function 'browse-url-eww
+          flycheck-php-phpcs-executable "~/.composer/vendor/bin/phpcs")
+    (evil-define-key 'insert php-mode-map
+      (kbd "M-s") "->"
+      (kbd "M--") " => "
+      (kbd "M-d") "$")
+    (spacemacs/declare-prefix-for-mode 'php-mode "mh" "documentation")
+    (spacemacs/set-leader-keys-for-major-mode 'php-mode
+      "hh" 'php-search-documentation
+      "hH" 'my-php-search-web-documentation-in-default-browser)
+    (add-hook 'php-mode-hook 'php-enable-psr2-coding-style)
+    (add-hook 'php-mode-hook
+              (lambda ()
+                (set-fill-column 100))
+              t)
+    )
 
   ;; Avy setup
   ;; (require 'avy)
@@ -327,57 +381,114 @@ you should place your code here."
   (evil-define-key 'visual evil-surround-mode-map "s" 'avy-goto-char-timer)
   (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region)
 
+  (with-eval-after-load 'company
+    (define-key company-active-map [C-i] 'company-complete-common-or-cycle))
+
+  ;; Diminish gtags minor mode indicator
+  (with-eval-after-load 'ggtags
+    (spacemacs|diminish ggtags-mode))
+
   (with-eval-after-load 'info
     (define-key Info-mode-map (kbd "S-SPC") 'Info-scroll-up))
 
+  (with-eval-after-load 'ispell
+    ;; Replace ispell choice buffer with avy-powered one
+    (defun ispell-command-loop (miss guess word start end)
+      (let ((wnd (selected-window)))
+        (pop-to-buffer "*avy-ispell*")
+        ;; (set-window-text-height nil (window-buffer-height nil))
+        (erase-buffer)
+        (insert (mapconcat #'identity miss "  "))
+        (when guess
+          (newline 2)
+          (insert (mapconcat #'identity guess "  ")))
+        (setq truncate-lines nil)
+        (set-window-text-height nil (1+ (count-screen-lines nil nil t)))
+        (let ((avy-style 'pre)
+              (avy-background-face nil)
+              (avy-goto-word-0-regexp "[^ \r\n\t]+"))
+            (avy-goto-word-0 t))
+        (let ((selected (word-at-point)))
+          (select-window wnd)
+          selected)))
+    (define-key evil-normal-state-map (kbd "zi") 'ispell-word))
+
   (with-eval-after-load 'magit
-    (add-hook 'magit-status-headers-hook 'magit-insert-repo-header t)
-    (define-key magit-mode-map (kbd "<backtab>") 'magit-section-cycle-global))
+    (add-hook 'magit-status-headers-hook 'magit-insert-repo-header t))
 
   (with-eval-after-load 'recentf
-   (setq recentf-exclude (delete (expand-file-name package-user-dir) recentf-exclude)))
+    (setq recentf-exclude (delete (expand-file-name package-user-dir) recentf-exclude)))
 
   (with-eval-after-load 'yasnippet
-    (define-key yas-minor-mode-map (kbd "C-;") 'yas-expand))
+    (define-key yas-minor-mode-map (kbd "C-;") 'yas-expand)
+    (define-key yas-minor-mode-map (kbd "M-h") 'yas-skip-and-clear-or-delete-char)
+    (define-key yas-minor-mode-map (kbd "M-t") 'yas-prev-field)
+    (define-key yas-minor-mode-map (kbd "M-n") 'yas-next-field))
 
-  ;; Make C-h act like <Backspace>.
-  (define-key key-translation-map [?\C-h] [?\C-?])
-  (with-eval-after-load 'helm-files
-    (define-key helm-find-files-map [?\C-?] 'helm-find-files-up-one-level))
 
-  (evil-leader/set-key "o SPC" 'redraw-display)
-  (evil-leader/set-key "SPC" 'evil-avy-goto-word-1)
-  (evil-leader/set-key ";" 'helm-M-x)
-
-  ;; Adapt numeric (0-9) navigation to Programmer Dvopak (dvp) keyboard
-  (defun my//intern-symbol (command-str &rest args)
-    (intern (apply 'format command-str args)))
-  (let ((dvp-numbers-row "]&[{}(=*)+")
-        layouts-new-bindings workspaces-new-bindings)
+  ;; Avy overlay keys from Dvorak Keyboard home row
+  (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?d)
+        avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?d))
+  ;; Adapt numeric (0-9) navigation to Programmer Dvorak (dvp) keyboard
+  (or (boundp 'spacemacs-layouts-transient-state-add-bindings)
+      (setq spacemacs-layouts-transient-state-add-bindings '()))
+  (or (boundp 'spacemacs-workspaces-transient-state-add-bindings)
+      (setq spacemacs-workspaces-transient-state-add-bindings '()))
+  (let ((dvp-numeric-keys "]&[{}(=*)+"))
     (cl-loop
      for i from 0 to 9 do
      (let ((qwerty-key (number-to-string i))
-           (dvp-key (string (aref dvp-numbers-row i))))
-       ;; Windows
-       (spacemacs/set-leader-keys
-         qwerty-key nil
-         dvp-key (my//intern-symbol "select-window-%d" i))
-       ;; Layouts
-       (let ((cmd (my//intern-symbol "spacemacs/persp-switch-to-%d" i)))
-         (push (list dvp-key cmd :exit t) layouts-new-bindings))
-       ;; Workspaces
-       (let ((cmd (my//intern-symbol "eyebrowse-switch-to-window-config-%d" i)))
-         (push (list dvp-key cmd :exit t) workspaces-new-bindings))))
-    (setq spacemacs-layouts-transient-state-add-bindings layouts-new-bindings
-          spacemacs-workspaces-transient-state-add-bindings workspaces-new-bindings))
+           (dvp-key (string (aref dvp-numeric-keys i))))
+       (cl-flet ((get-cmd (command-fmt &rest args)
+                          (intern (apply 'format command-fmt args))))
+         ;; Windows
+         (spacemacs/set-leader-keys
+           qwerty-key nil
+           dvp-key (get-cmd "select-window-%d" i))
+         ;; Layouts
+         (let ((cmd (get-cmd "spacemacs/persp-switch-to-%d" i)))
+           (push (list dvp-key cmd :exit t)
+                 spacemacs-layouts-transient-state-add-bindings))
+         ;; Workspaces
+         (let ((cmd (get-cmd "eyebrowse-switch-to-window-config-%d" i)))
+           (push (list dvp-key cmd :exit t)
+                 spacemacs-workspaces-transient-state-add-bindings))))))
 
-  (define-key evil-normal-state-map (kbd "[ b") 'spacemacs/previous-useful-buffer)
-  (define-key evil-normal-state-map (kbd "] b") 'spacemacs/next-useful-buffer)
-  (define-key evil-normal-state-map (kbd "[ SPC") 'spacemacs/insert-line-above-no-indent)
-  (define-key evil-normal-state-map (kbd "] SPC") 'spacemacs/insert-line-below-no-indent)
-  (define-key evil-normal-state-map (kbd "[ e") (kbd "gX k gxx j gxx"))
-  (define-key evil-normal-state-map (kbd "] e") (kbd "gX gxx j gxx j"))
 
+  ;; Implement list of major modes where Insert state is "replaced" by Emacs state
+  (defvar my-force-emacs-state-instead-insert-modes-list '(term-mode)
+    "List of major modes that will be forced into Emacs state whenever Insert
+    state is normally entered.")
+  (defun my-force-emacs-state-instead-insert (&optional arg)
+    "If current major mode is in a list
+`my-force-emacs-state-instead-insert-modes-list', enter Emacs state and return
+nil. Otherwise return t."
+    (interactive "p")
+    (if (memq major-mode my-force-emacs-state-instead-insert-modes-list)
+        (evil-emacs-state)
+      t))
+  (advice-add 'evil-insert-state :before-while #'my-force-emacs-state-instead-insert)
+
+
+  (spacemacs/set-leader-keys
+    ";" 'evil-avy-goto-line
+    "o SPC" 'redraw-display
+    "w O" 'delete-other-windows)
+
+  ;; Make C-i work like Tab in Insert state
+  (define-key evil-insert-state-map [C-i] (kbd "<tab>"))
+  ;; Swap ; and :
+  (define-key evil-normal-state-map (kbd ";") 'evil-ex)
+  (define-key evil-visual-state-map (kbd ";") 'evil-ex)
+  (define-key evil-normal-state-map (kbd ":") 'evil-repeat-find-char)
+  (define-key evil-visual-state-map (kbd ":") 'evil-repeat-find-char)
+  ;; Make C-h act like Backspace key in Insert state
+  (define-key evil-insert-state-map (kbd "C-h") (kbd "DEL"))
+  (define-key evil-insert-state-map (kbd "C-S-h") help-map)
+  ;; Make C-s act like Delete key in Insert state
+  (define-key evil-insert-state-map (kbd "C-s") (kbd "<deletechar>"))
+  (define-key evil-insert-state-map (kbd "C-S-s") 'recenter-top-bottom)
+  ;; Make Q window+buffer killer
   (define-key evil-normal-state-map (kbd "Q") 'kill-buffer-and-window)
   (define-key evil-evilified-state-map (kbd "Q") 'kill-buffer-and-window)
   (define-key evil-emacs-state-map (kbd "Q") 'kill-buffer-and-window)
@@ -387,6 +498,8 @@ you should place your code here."
   (add-hook 'ediff-before-setup-hook 'new-frame)
   (add-hook 'ediff-quit-hook 'delete-frame)
 
+  (defun browse-url-eww (url &optional new-window)
+    (eww url))
   ;; Use Palemoon as the external browser
   (defun browse-url-palemoon (url &optional new-window)
     (interactive (browse-url-interactive-arg "URL: "))
@@ -415,14 +528,20 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(ahs-idle-interval 0.25)
  '(erc-hide-list (quote ("JOIN" "NICK" "PART" "QUIT")))
+ '(evil-want-Y-yank-to-eol t)
+ '(magit-pull-arguments nil)
+ '(magit-rebase-arguments (quote ("--autosquash")))
  '(org-pomodoro-length 45)
  '(org-pomodoro-long-break-length 60)
  '(org-pomodoro-short-break-length 10)
- '(ring-bell-function (quote ignore) t))
+ '(ring-bell-function (quote ignore) t)
+ '(safe-local-variable-values (quote ((firestarter . ert-run-tests-interactively)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
+ '(magit-blame-date ((t (:background "#93a1a1" :foreground "firebrick4"))))
+ '(magit-blame-name ((t (:background "#93a1a1" :foreground "firebrick4")))))
