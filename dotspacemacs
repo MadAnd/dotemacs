@@ -27,7 +27,7 @@ values."
    ;; If non-nil layers with lazy install support are lazy installed.
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
-   dotspacemacs-configuration-layer-path '()
+   dotspacemacs-configuration-layer-path '("~/.emacs/layers/")
    ;; List of configuration layers to load. If it is the symbol `all' instead
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
@@ -81,6 +81,8 @@ values."
      version-control
      vimscript
      xkcd
+     ;; Private layers:
+     my-programmer-dvorak
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -425,34 +427,6 @@ and `browse-url-browser-function' will be used instead."
     (define-key yas-minor-mode-map (kbd "M-t") 'yas-prev-field)
     (define-key yas-minor-mode-map (kbd "M-n") 'yas-next-field))
 
-
-  ;; Avy overlay keys from Dvorak Keyboard home row
-  (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?d)
-        avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?d))
-  ;; Adapt numeric (0-9) navigation to Programmer Dvorak (dvp) keyboard
-  (or (boundp 'spacemacs-layouts-transient-state-add-bindings)
-      (setq spacemacs-layouts-transient-state-add-bindings '()))
-  (or (boundp 'spacemacs-workspaces-transient-state-add-bindings)
-      (setq spacemacs-workspaces-transient-state-add-bindings '()))
-  (let ((dvp-numeric-keys "]&[{}(=*)+"))
-    (cl-loop
-     for i from 0 to 9 do
-     (let ((qwerty-key (number-to-string i))
-           (dvp-key (string (aref dvp-numeric-keys i))))
-       (cl-flet ((get-cmd (command-fmt &rest args)
-                          (intern (apply 'format command-fmt args))))
-         ;; Windows
-         (spacemacs/set-leader-keys
-           qwerty-key nil
-           dvp-key (get-cmd "select-window-%d" i))
-         ;; Layouts
-         (let ((cmd (get-cmd "spacemacs/persp-switch-to-%d" i)))
-           (push (list dvp-key cmd :exit t)
-                 spacemacs-layouts-transient-state-add-bindings))
-         ;; Workspaces
-         (let ((cmd (get-cmd "eyebrowse-switch-to-window-config-%d" i)))
-           (push (list dvp-key cmd :exit t)
-                 spacemacs-workspaces-transient-state-add-bindings))))))
 
 
   ;; Implement list of major modes where Insert state is "replaced" by Emacs state
