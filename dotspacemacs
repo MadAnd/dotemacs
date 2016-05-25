@@ -158,11 +158,7 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Droid Sans Mono Slashed For Powerline"
-                               :size 18
-                               :weight normal
-                               :width normal
-                               :powerline-scale 1.1)
+   dotspacemacs-default-font '("not existent font")
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -303,7 +299,21 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
-  )
+  ;; Custom font settings. Spacemacs' core font handling caused issues with
+  ;; `page-break-lines' and ASCII symbols in `woman'.
+  ;; If I enable fallback font, there is a considerable slow-down due to
+  ;; high CPU usage by the X server!
+  ;; TODO: find fallback Unicode font that won't cause the CPU overheat.
+  (defvar my-font-default (font-spec :name "Droid Sans Mono Slashed"
+                                     :size 18))
+  ;; (defvar my-font-fallback1 (font-spec :name "Droid Sans Fallback" :size 18))
+  (spacemacs|do-after-display-system-init
+   (set-fontset-font t 'unicode my-font-default nil)
+   (set-fontset-font "fontset-startup" 'unicode my-font-default nil)
+   ;; (set-fontset-font t 'unicode my-font-fallback1 nil 'append)
+   ;; (set-fontset-font "fontset-startup" 'unicode my-font-fallback1 nil 'append)
+
+   (set-frame-font my-font-default nil t)))
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
