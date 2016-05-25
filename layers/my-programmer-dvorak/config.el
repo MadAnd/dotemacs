@@ -2,7 +2,7 @@
 ;;
 ;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
 ;;
-;; Author:  <dev@madand.net>
+;; Author: Andriy Kmit' <dev@madand.net>
 ;; URL: https://github.com/syl20bnr/spacemacs
 ;;
 ;; This file is not part of GNU Emacs.
@@ -24,6 +24,6 @@
     ("8" . ")")
     ("9" . "+")
     ("0" . "]"))
-  "Alist of digit keys of QWERY and corresponding chacters of the Programmer Dvorak.")
+  "Alist of digit keys of QWERY with corresponding chacters of the Programmer Dvorak.")
 
 ;;; config.el ends here
