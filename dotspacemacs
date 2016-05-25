@@ -90,6 +90,7 @@ values."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(crontab-mode
                                       editorconfig
+                                      simple-mpc
                                       nginx-mode
                                       keyfreq
                                       speed-type
@@ -420,6 +421,19 @@ and `browse-url-browser-function' will be used instead."
 
   (with-eval-after-load 'magit
     (add-hook 'magit-status-headers-hook 'magit-insert-repo-header t))
+
+  (use-package simple-mpc
+    :commands simple-mpc-view-current-playlist
+    :init
+    (spacemacs/set-leader-keys "am" (lambda ()
+                                      (interactive)
+                                      (simple-mpc-view-current-playlist)))
+    :config
+    (progn
+      (setq simple-mpc-mpd-playlist-directory "~/.config/mpd/playlists/")
+      (evilified-state-evilify-map simple-mpc-mode-map
+        :mode simple-mpc-mode
+        :bindings (kbd "RET") (kbd "<return>"))))
 
   (with-eval-after-load 'recentf
     (setq recentf-exclude (delete (expand-file-name package-user-dir) recentf-exclude)))
