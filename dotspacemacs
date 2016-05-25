@@ -40,7 +40,8 @@ values."
      (auto-completion :variables
                       auto-completion-complete-with-key-sequence "ht"
                       auto-completion-complete-with-key-sequence-delay 0.2
-                      auto-completion-enable-sort-by-usage t)
+                      auto-completion-enable-sort-by-usage t
+                      auto-completion-private-snippets-directory "~/.emacs/snippets")
      clojure
      (colors :variables
              colors-enable-rainbow-identifiers t)
@@ -398,7 +399,24 @@ and `browse-url-browser-function' will be used instead."
   (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region)
 
   (with-eval-after-load 'company
-    (define-key company-active-map [C-i] 'company-complete-common-or-cycle))
+    (setq-default company-gtags-insert-arguments nil)
+    (define-key company-active-map [C-i] 'company-complete-common-or-cycle)
+    (define-key company-active-map (kbd "M-t") (lambda ()
+                                                 (interactive)
+                                                 (when (yas--active-field-overlay)
+                                                   (company-abort)
+                                                   (yas-prev-field))))
+    (define-key company-active-map (kbd "M-n") (lambda ()
+                                                 (when (yas--active-field-overlay)
+                                                   (company-abort)
+                                                   (yas-prev-field)))))
+
+  (with-eval-after-load 'yasnippet
+    (evil-define-key 'insert yas-minor-mode-map
+      (kbd "SPC") 'yas-expand)
+    (define-key yas-keymap (kbd "M-h") 'yas-skip-and-clear-or-delete-char)
+    (define-key yas-keymap (kbd "M-t") 'yas-prev-field)
+    (define-key yas-keymap (kbd "M-n") 'yas-next-field))
 
   ;; Diminish gtags minor mode indicator
   (with-eval-after-load 'ggtags
@@ -447,14 +465,6 @@ and `browse-url-browser-function' will be used instead."
 
   (with-eval-after-load 'recentf
     (setq recentf-exclude (delete (expand-file-name package-user-dir) recentf-exclude)))
-
-  (with-eval-after-load 'yasnippet
-    (define-key yas-minor-mode-map (kbd "C-;") 'yas-expand)
-    (define-key yas-minor-mode-map (kbd "M-h") 'yas-skip-and-clear-or-delete-char)
-    (define-key yas-minor-mode-map (kbd "M-t") 'yas-prev-field)
-    (define-key yas-minor-mode-map (kbd "M-n") 'yas-next-field))
-
-
 
   ;; Implement list of major modes where Insert state is "replaced" by Emacs state
   (defvar my-force-emacs-state-instead-insert-modes-list '(term-mode)

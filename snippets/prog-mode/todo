@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: todo
+# key: t
+# condition: (not (eq major-mode 'php-mode))
+# --
+`(yas-with-comment "TODO: ")`

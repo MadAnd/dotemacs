@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: \Yii::$app->
+# key: yap
+# --
+\Yii::$app->

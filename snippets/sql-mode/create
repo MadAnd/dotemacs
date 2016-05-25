@@ -1,0 +1,8 @@
+#contributor : Alejandro Espinoza Esparza <aespinoza@structum.com.mx>
+#name : create table ...
+# --
+CREATE TABLE ${1:table_name} (
+    ${2:id} ${3:BIGINT} ${4:NOT NULL}
+    $0
+    CONSTRAINT [${5:pk_$1}] PRIMARY KEY ${6:CLUSTERED} ($2)
+);

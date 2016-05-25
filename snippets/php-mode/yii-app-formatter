@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: \Yii::$app->formatter->
+# key: yapf
+# --
+\Yii::\$app->formatter->$0

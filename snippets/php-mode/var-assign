@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: $var = val;
+# key: va
+# --
+\$${1:var} = $0;

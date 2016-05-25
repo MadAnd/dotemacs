@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name : if (...) { ... }
+# key: if
+# condition: (not (eq major-mode 'php-mode))
+# --
+if (${1:condition}) ${2:{
+    $0
+}}
