@@ -24,6 +24,6 @@
     ("8" . ")")
     ("9" . "+")
     ("0" . "]"))
-  "Alist of digit keys of QWERY with corresponding chacters of the Programmer Dvorak.")
+  "Alist of digit keys of QWERY with corresponding chacters of Programmer Dvorak.")
 
 ;;; config.el ends here

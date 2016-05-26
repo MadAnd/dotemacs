@@ -15,7 +15,8 @@
 ;;; Code:
 
 (defun my-programmer-dvorak/loop-digit-keys (fun)
-  "Loop trough pairs from `my-programmer-dvorak-digit-keys-alist' calling FUN on each iteration.
+  "Loop trough pairs from `my-programmer-dvorak-digit-keys-alist' calling FUN on
+ each iteration.
 
 The FUN is called like (fun qwerty-key dvp-key) where:
  * QWERTY-KEY is a string with a digit of QWERTY layout
