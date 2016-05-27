@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -eu
+
+if [ $# -lt 2 ]; then
+    cmd=$(basename $0)
+    printf 'USAGE: %s PROJECT-PATH OUTPUT-FILE\n' $cmd
+    exit 1
+fi
+
+project_dir="$1"
+output_file="$2"
+
+grep -EIro "^namespace [^[:space:]]+;" "$project_dir" |
+    sed -r -e 's#[[:print:]]+/([^/]+).php:namespace ([^;]+);#\2\\\1#' |
+    grep -iv "test" |
+    sort -f | uniq >"$output_file"

@@ -83,6 +83,8 @@ values."
      vimscript
      xkcd
      ;; Private layers:
+     (my-web-dev :variables
+                 my-web-dev-php-fill-column 100)
      my-programmer-dvorak
      )
    ;; List of additional packages that will be installed without being
@@ -333,9 +335,6 @@ you should place your code here."
    delete-by-moving-to-trash nil
    ;; Clojure
    cider-repl-display-help-banner nil
-   ;; JS
-   js2-strict-trailing-comma-warning nil
-   js2-strict-missing-semi-warning nil)
 
   (spacemacs/set-google-translate-languages "en" "uk")
 
@@ -355,36 +354,7 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
                    (list host "\\`root\\'" "/ssh:%h:"))))
   (my-tramp-add-root-proxies "s1" "rudno_pc")
 
-  ;; PHP-related config
-  (with-eval-after-load 'php-mode
-    (defun my-php-search-web-documentation-in-default-browser (word)
-      "Search documentation on PHP web site in default browser.
 
-The value of `php-search-documentation-browser-function' will be ignored
-and `browse-url-browser-function' will be used instead."
-      (interactive (php--search-documentation-read-arg))
-      (let ((php-search-documentation-browser-function nil))
-        (php-search-web-documentation word)))
-    (setq flycheck-phpcs-standard "PSR2"
-          phpcbf-standard "PSR2"
-          php-template-compatibility nil
-          php-manual-path "/usr/share/doc/php/php-chunked-xhtml"
-          php-search-documentation-browser-function 'browse-url-eww
-          flycheck-php-phpcs-executable "~/.composer/vendor/bin/phpcs")
-    (evil-define-key 'insert php-mode-map
-      (kbd "M-s") "->"
-      (kbd "M--") " => "
-      (kbd "M-d") "$")
-    (spacemacs/declare-prefix-for-mode 'php-mode "mh" "documentation")
-    (spacemacs/set-leader-keys-for-major-mode 'php-mode
-      "hh" 'php-search-documentation
-      "hH" 'my-php-search-web-documentation-in-default-browser)
-    (add-hook 'php-mode-hook 'php-enable-psr2-coding-style)
-    (add-hook 'php-mode-hook
-              (lambda ()
-                (set-fill-column 100))
-              t)
-    )
 
   ;; Avy setup
   ;; (require 'avy)
@@ -509,8 +479,6 @@ nil. Otherwise return t."
   (add-hook 'ediff-before-setup-hook 'new-frame)
   (add-hook 'ediff-quit-hook 'delete-frame)
 
-  (defun browse-url-eww (url &optional new-window)
-    (eww url))
   ;; Use Palemoon as the external browser
   (defun browse-url-palemoon (url &optional new-window)
     (interactive (browse-url-interactive-arg "URL: "))
