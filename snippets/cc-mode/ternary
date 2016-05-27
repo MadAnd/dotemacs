@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: ternary
+# key: ?
+# condition: (not (eq major-mode 'php-mode))
+# --
+(${1:cond}) ? ${2:then} : ${3:else};
