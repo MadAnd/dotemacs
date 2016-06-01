@@ -356,13 +356,6 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
 
 
 
-  ;; Avy setup
-  ;; (require 'avy)
-  (setq avy-dispatch-alist '((?k . avy-action-kill-move)
-                             (?K . avy-action-kill-stay)
-                             (?m . avy-action-mark)
-                             (?c . avy-action-copy)
-                             (?i . avy-action-ispell)))
   (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
   (define-key evil-motion-state-map (kbd "s") 'avy-goto-char-timer)
   (evil-define-key 'visual evil-surround-mode-map "s" 'avy-goto-char-timer)

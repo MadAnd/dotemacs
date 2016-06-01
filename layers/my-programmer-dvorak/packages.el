@@ -25,7 +25,12 @@
 (defun my-programmer-dvorak/pre-init-avy ()
   (spacemacs|use-package-add-hook avy
     :post-init
-    (setq avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?d))))
+    (setq avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?d)
+          avy-dispatch-alist '((?k . avy-action-kill-move)
+                               (?K . avy-action-kill-stay)
+                               (?m . avy-action-mark)
+                               (?c . avy-action-copy)
+                               (?i . avy-action-ispell)))))
 
 (defun my-programmer-dvorak/pre-init-ace-window ()
   (spacemacs|use-package-add-hook ace-window
