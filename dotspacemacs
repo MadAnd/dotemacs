@@ -70,8 +70,9 @@ values."
      ranger
      search-engine
      (shell :variables
+            shell-default-shell 'eshell
             shell-default-height 30
-            shell-default-position 'bottom)
+            shell-default-position 'full)
      spell-checking
      (syntax-checking :variables
                       syntax-checking-enable-tooltips nil)
