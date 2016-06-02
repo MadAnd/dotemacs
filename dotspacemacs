@@ -456,13 +456,16 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
 
   (use-package simple-mpc
     :commands simple-mpc-view-current-playlist
+    :diminish simple-mpc-current-playlist-mode
     :init
     (spacemacs/set-leader-keys "am" (lambda ()
                                       (interactive)
                                       (simple-mpc-view-current-playlist)))
     :config
     (progn
-      (setq simple-mpc-mpd-playlist-directory "~/.config/mpd/playlists/")
+      (setq simple-mpc-mpd-playlist-directory "~/.config/mpd/playlists/"
+            simple-mpc-playlist-auto-refresh t
+            simple-mpc-playlist-auto-refresh-interval 2)
       (evilified-state-evilify-map simple-mpc-mode-map
         :mode simple-mpc-mode
         :bindings (kbd "RET") (kbd "<return>"))))
