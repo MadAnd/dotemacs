@@ -50,12 +50,14 @@ values."
      emacs-lisp
      fasd
      finance
+     games
      (git :variables
           git-magit-status-fullscreen t)
      gtags
      (ibuffer :variables
               ibuffer-group-buffers-by 'projects)
      javascript
+     helm
      html
      lua
      markdown
@@ -87,13 +89,13 @@ values."
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(crontab-mode
+                                      clojure-cheatsheet
                                       editorconfig
                                       simple-mpc
                                       nginx-mode
                                       keyfreq
                                       speed-type
                                       string-inflection
-                                      typit
                                       yaml-mode)
    ;; A list of packages that will not be install and loaded.
    dotspacemacs-excluded-packages '(evil-escape)
