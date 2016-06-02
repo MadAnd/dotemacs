@@ -46,6 +46,8 @@ values."
      (colors :variables
              colors-enable-rainbow-identifiers t)
      csv
+     (dash :variables
+           dash-helm-dash-docset-path "~/.local/share/Zeal/Zeal/docsets")
      emacs-lisp
      emoji
      erc
@@ -501,6 +503,7 @@ nil. Otherwise return t."
  '(ahs-idle-interval 0.25)
  '(erc-hide-list (quote ("JOIN" "NICK" "PART" "QUIT")))
  '(evil-want-Y-yank-to-eol t)
+ '(helm-dash-browser-func (quote eww))
  '(magit-pull-arguments nil)
  '(magit-rebase-arguments (quote ("--autosquash")))
  '(org-pomodoro-length 45)
