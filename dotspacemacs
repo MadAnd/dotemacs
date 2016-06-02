@@ -49,8 +49,6 @@ values."
      (dash :variables
            dash-helm-dash-docset-path "~/.local/share/Zeal/Zeal/docsets")
      emacs-lisp
-     emoji
-     erc
      fasd
      finance
      (git :variables
@@ -59,7 +57,6 @@ values."
      (ibuffer :variables
               ibuffer-group-buffers-by 'projects)
      javascript
-     haskell
      html
      lua
      markdown
@@ -69,9 +66,7 @@ values."
      php
      (python :variables
              python-enable-yapf-format-on-save t)
-     racket
      ranger
-     ruby
      search-engine
      (shell :variables
             shell-default-height 30
@@ -80,7 +75,6 @@ values."
      (syntax-checking :variables
                       syntax-checking-enable-tooltips nil)
      sql
-     vagrant
      version-control
      vimscript
      xkcd
@@ -328,7 +322,6 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (setq-default
-   erc-default-port 6697
    magit-expand-staged-on-commit t
    powerline-default-separator 'alternate
    scroll-margin 2
@@ -501,7 +494,6 @@ nil. Otherwise return t."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ahs-idle-interval 0.25)
- '(erc-hide-list (quote ("JOIN" "NICK" "PART" "QUIT")))
  '(evil-want-Y-yank-to-eol t)
  '(helm-dash-browser-func (quote eww))
  '(magit-pull-arguments nil)
