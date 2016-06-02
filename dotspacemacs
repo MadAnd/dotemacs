@@ -68,6 +68,7 @@ values."
      (python :variables
              python-enable-yapf-format-on-save t)
      ranger
+     (rcirc :variables rcirc-enable-authinfo-support t)
      search-engine
      (shell :variables
             shell-default-shell 'eshell
@@ -237,7 +238,7 @@ values."
    dotspacemacs-loading-progress-bar nil
    ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup t
+   dotspacemacs-fullscreen-at-startup nil
    ;; If non nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
    dotspacemacs-fullscreen-use-non-native nil
@@ -331,14 +332,17 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (setq-default
+   auth-sources '("~/.authinfo.gpg")
+   auth-source-gpg-encrypt-to "ak@madand.net"
    magit-expand-staged-on-commit t
    powerline-default-separator 'alternate
-   scroll-margin 2
+   scroll-margin 3
    scroll-conservatively 1000
-   paradox-github-token t
    delete-by-moving-to-trash nil
    ;; Clojure
    cider-repl-display-help-banner nil
+   ;; ranger
+   ranger-cleanup-eagerly t)
 
   (spacemacs/set-google-translate-languages "en" "uk")
 
@@ -349,24 +353,51 @@ you should place your code here."
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)
 
-  (defun my-tramp-add-root-proxies (&rest host-names)
-    "Add each of the HOST-NAMES to `tramp-default-proxies-alist'.
+  (with-eval-after-load 'org
+    (setq org-special-ctrl-a/e t
+          org-special-ctrl-k t
+          ))
+
+  (with-eval-after-load 'helm
+    (setq ace-jump-helm-line-style 'pre)
+    (define-key helm-map (kbd "C-a") (lambda ()
+                                       (interactive)
+                                       (ace-jump-helm-line-and-select))))
+
+  (with-eval-after-load 'term
+    (define-key term-raw-escape-map (kbd "ESC") 'term-send-esc))
+
+  (with-eval-after-load 'with-editor
+    ;; Workaround for FreeBSD: https://github.com/magit/magit/issues/2672
+    (setq with-editor-sleeping-editor "\
+bash -c '\
+echo \"WITH-EDITOR: $$ OPEN $0\"; \
+sleep 604800 & sleep=$!; \
+trap \"kill $sleep; exit 0\" USR1; \
+trap \"kill $sleep; exit 1\" USR2; \
+wait $sleep'"
+    ))
+
+  ;; TRAMP
+  (with-eval-after-load 'tramp
+    (defun my-tramp-add-root-proxies (&rest host-names)
+      "Add each of the HOST-NAMES to `tramp-default-proxies-alist'.
 
 Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
-    (dolist (host host-names)
-      (add-to-list 'tramp-default-proxies-alist
-                   (list host "\\`root\\'" "/ssh:%h:"))))
-  (my-tramp-add-root-proxies "s1" "rudno_pc")
+      (dolist (host host-names)
+        (add-to-list 'tramp-default-proxies-alist
+                     (list host "\\`root\\'" "/ssh:%h:"))))
+    (my-tramp-add-root-proxies "s1" "rudno_pc" "s2m" "ubuntu"))
 
 
-
+  ;; Avy on s in Normal and Visual. Evil-surround on S in Visual.
   (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
   (define-key evil-motion-state-map (kbd "s") 'avy-goto-char-timer)
   (evil-define-key 'visual evil-surround-mode-map "s" 'avy-goto-char-timer)
   (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region)
 
   (with-eval-after-load 'company
-    (setq-default company-gtags-insert-arguments nil)
+    (setq company-gtags-insert-arguments nil)
     (define-key company-active-map [C-i] 'company-complete-common-or-cycle)
     (define-key company-active-map (kbd "M-t") (lambda ()
                                                  (interactive)
@@ -451,6 +482,7 @@ nil. Otherwise return t."
   (spacemacs/set-leader-keys
     ";" 'evil-avy-goto-line
     "o SPC" 'redraw-display
+    "o s" 'save-buffer
     "w O" 'delete-other-windows)
 
   ;; Make C-i work like Tab in Insert state
@@ -471,6 +503,12 @@ nil. Otherwise return t."
   (define-key evil-evilified-state-map (kbd "Q") 'kill-buffer-and-window)
   (define-key evil-emacs-state-map (kbd "Q") 'kill-buffer-and-window)
   (define-key evil-motion-state-map (kbd "Q") 'kill-buffer-and-window)
+  ;; C-e - go to end of line
+  (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
+  ;; C-y - yank
+  (define-key evil-insert-state-map (kbd "C-y") 'yank)
+  ;; Unbind some useless Vim bindings, so useful Emacs ones come into play.
+  (define-key evil-motion-state-map (kbd "C-e") nil)
 
   ;; Show ediff in a new frame
   (add-hook 'ediff-before-setup-hook 'new-frame)
