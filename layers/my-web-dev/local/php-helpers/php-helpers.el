@@ -105,15 +105,17 @@ If called interactively, prefix argument forces refresh."
   "Add a class to the use declarations in the current file.
 With prefix argument refresh cache before listing candidates."
   (interactive "P")
-  (save-excursion
-    (let ((class (helm-comp-read
-                  "Class: "
-                  (php-helpers/class-candidates refresh)
-                  :must-match t)))
-      (php-helpers/go-to-last-use-statement)
-      (end-of-line)
-      (newline)
-      (insert (concat "use " class ";")))))
+  (save-restriction
+    (save-excursion
+      (widen)
+      (let ((class (helm-comp-read
+                    "Class: "
+                    (php-helpers/class-candidates refresh)
+                    :must-match t)))
+        (php-helpers/go-to-last-use-statement)
+        (end-of-line)
+        (newline)
+        (insert (concat "use " class ";"))))))
 
 (defun php-helpers/insert-class (&optional refresh)
   "Insert a class name from the current projectile project.
