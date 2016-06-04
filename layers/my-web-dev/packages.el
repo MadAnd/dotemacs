@@ -84,8 +84,7 @@ if set, and `browse-url-browser-function' will be used instead."
     (kbd "M-o") (lambda ()
                   (interactive)
                   (end-of-line)
-                  (insert ";")
-                  (newline-and-indent)))
+                  (insert ";")))
 
   (spacemacs/declare-prefix-for-mode 'php-mode "mh" "documentation")
   (spacemacs/set-leader-keys-for-major-mode 'php-mode
