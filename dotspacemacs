@@ -464,8 +464,7 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
     :config
     (progn
       (setq simple-mpc-mpd-playlist-directory "~/.config/mpd/playlists/"
-            simple-mpc-playlist-auto-refresh t
-            simple-mpc-playlist-auto-refresh-interval 2)
+            simple-mpc-playlist-auto-refresh 2)
       (evilified-state-evilify-map simple-mpc-mode-map
         :mode simple-mpc-mode
         :bindings (kbd "RET") (kbd "<return>"))))
