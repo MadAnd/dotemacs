@@ -43,7 +43,7 @@ values."
                       auto-completion-private-snippets-directory "~/.emacs/snippets")
      clojure
      (colors :variables
-             colors-enable-rainbow-identifiers t)
+             colors-colorize-identifiers 'all)
      csv
      (dash :variables
            dash-helm-dash-docset-path "~/.local/share/Zeal/Zeal/docsets")
@@ -162,8 +162,8 @@ values."
    dotspacemacs-themes '(solarized-dark solarized-light)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
-   ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
-   ;; size to make separators look not too crappy.
+   ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
+   ;;quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("not existent font")
    ;; The leader key
    dotspacemacs-leader-key "SPC"
@@ -191,6 +191,9 @@ values."
    ;; If non-nil, the shift mappings `<' and `>' retain visual state if used
    ;; there. (default t)
    dotspacemacs-retain-visual-state-on-shift t
+   ;; If non-nil, J and K move lines up and down when in visual mode.
+   ;; (default nil)
+   dotspacemacs-visual-line-move-text t
    ;; If non nil, inverse the meaning of `g' in `:substitute' Evil ex-command.
    ;; (default nil)
    dotspacemacs-ex-substitute-global t
