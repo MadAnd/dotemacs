@@ -81,6 +81,7 @@ values."
      version-control
      vimscript
      xkcd
+     yaml
      ;; Private layers:
      (my-web-dev :variables
                  my-web-dev-php-fill-column 100)
@@ -97,8 +98,7 @@ values."
                                       nginx-mode
                                       keyfreq
                                       speed-type
-                                      string-inflection
-                                      yaml-mode)
+                                      string-inflection)
    ;; A list of packages that will not be install and loaded.
    dotspacemacs-excluded-packages '(evil-escape)
    ;; Defines the behaviour of Spacemacs when downloading packages.
