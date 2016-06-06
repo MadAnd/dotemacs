@@ -561,7 +561,13 @@ nil. Otherwise return t."
  '(org-pomodoro-long-break-length 40)
  '(org-pomodoro-short-break-length 10)
  '(ring-bell-function (quote ignore) t)
- '(safe-local-variable-values (quote ((firestarter . ert-run-tests-interactively)))))
+ '(safe-local-variable-values
+   (quote
+    ((eval php-enable-drupal-coding-style)
+     (eval php-enable-psr2-coding-style)
+     (eval php-enable-symfony2-coding-style)
+     (checkdoc-minor-mode . t)
+     (firestarter . ert-run-tests-interactively)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
