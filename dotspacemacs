@@ -398,11 +398,15 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
     (my-tramp-add-root-proxies "s1" "rudno_pc" "s2m" "ubuntu"))
 
 
-  ;; Avy on s in Normal and Visual. Evil-surround on S in Visual.
-  (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
-  (define-key evil-motion-state-map (kbd "s") 'avy-goto-char-timer)
-  (evil-define-key 'visual evil-surround-mode-map "s" 'avy-goto-char-timer)
-  (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region)
+  ;; Bind avy to s and S in Normal and Visual.
+  ;; Move evil-surround-region to gs in Visual
+  (define-key evil-normal-state-map (kbd "s") 'avy-goto-word-1)
+  (define-key evil-motion-state-map (kbd "s") 'avy-goto-word-1)
+  (define-key evil-normal-state-map (kbd "S") 'avy-goto-char-timer)
+  (define-key evil-motion-state-map (kbd "S") 'avy-goto-char-timer)
+  (evil-define-key 'visual evil-surround-mode-map "s" 'avy-goto-word-1)
+  (evil-define-key 'visual evil-surround-mode-map "S" 'avy-goto-char-timer)
+  (evil-define-key 'visual evil-surround-mode-map "gs" 'evil-surround-region)
 
   (with-eval-after-load 'company
     (setq company-gtags-insert-arguments nil)
