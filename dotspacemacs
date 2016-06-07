@@ -165,6 +165,11 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;;quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("not existent font")
+   ;; dotspacemacs-default-font '("Droid Sans Mono Slashed For Powerline"
+   ;;                            :size 18
+   ;;                            :weight normal
+   ;;                            :width normal
+   ;;                            :powerline-scale 1.1)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
