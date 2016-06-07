@@ -46,7 +46,7 @@ values."
              colors-colorize-identifiers 'all)
      csv
      (dash :variables
-           dash-helm-dash-docset-path "~/.local/share/Zeal/Zeal/docsets")
+           helm-dash-docset-newpath "~/.local/share/Zeal/Zeal/docsets")
      emacs-lisp
      fasd
      finance
