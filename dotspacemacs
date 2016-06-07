@@ -426,7 +426,12 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
       (kbd "SPC") 'yas-expand)
     (define-key yas-keymap (kbd "M-h") 'yas-skip-and-clear-or-delete-char)
     (define-key yas-keymap (kbd "M-t") 'yas-prev-field)
-    (define-key yas-keymap (kbd "M-n") 'yas-next-field))
+    (define-key yas-keymap (kbd "M-n") 'yas-next-field)
+    ;; Spacemacs disables smartparens during the yasnippet expansion,
+    ;; but I still want auto pairing in certain snippets.
+    ;; As a workaround, I temporarily enable `electric-pair-mode'.
+    (add-hook 'yas-before-expand-snippet-hook 'electric-pair-mode)
+    (add-hook 'yas-after-exit-snippet-hook (lambda () (electric-pair-mode -1))))
 
   ;; Diminish gtags minor mode indicator
   (with-eval-after-load 'ggtags
