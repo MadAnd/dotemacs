@@ -24,6 +24,21 @@
     ("8" . ")")
     ("9" . "+")
     ("0" . "]"))
-  "Alist of digit keys of QWERY with corresponding chacters of Programmer Dvorak.")
+  "Alist of digit keys of QWERY to the corresponding keys of Programmer Dvorak.")
+
+(defvar my-programmer-dvorak-jump-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?d)
+  "List of keys for quick jump packages like `avy' and `ace-window'.
+
+Ensure that these keys not overlap with the ones from
+`my-programmer-dvorak-avy-dispatch-alist'.")
+
+(defvar my-programmer-dvorak-avy-dispatch-alist
+  '((?k . avy-action-kill-move)
+    (?K . avy-action-kill-stay)
+    (?m . avy-action-mark)
+    (?c . avy-action-copy)
+    (?i . avy-action-ispell))
+  "Override value of `avy-dispatch-alist' to prevent conflicts  with
+`my-programmer-dvorak-jump-keys'.")
 
 ;;; config.el ends here

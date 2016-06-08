@@ -25,21 +25,17 @@
 (defun my-programmer-dvorak/pre-init-avy ()
   (spacemacs|use-package-add-hook avy
     :post-init
-    (setq avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?d)
-          avy-dispatch-alist '((?k . avy-action-kill-move)
-                               (?K . avy-action-kill-stay)
-                               (?m . avy-action-mark)
-                               (?c . avy-action-copy)
-                               (?i . avy-action-ispell)))))
+    (setq avy-keys my-programmer-dvorak-jump-keys
+          avy-dispatch-alist my-programmer-dvorak-avy-dispatch-alist)))
 
 (defun my-programmer-dvorak/pre-init-ace-window ()
   (spacemacs|use-package-add-hook ace-window
     :post-init
-    (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?d))))
+    (setq aw-keys my-programmer-dvorak-jump-keys)))
 
 (defun my-programmer-dvorak/pre-init-eyebrowse ()
   (spacemacs|use-package-add-hook eyebrowse
-    :post-config
+    :post-init
     (or (boundp 'spacemacs-workspaces-transient-state-add-bindings)
         (setq spacemacs-workspaces-transient-state-add-bindings '()))
     (my-programmer-dvorak/loop-digit-keys
@@ -52,7 +48,7 @@
 
 (defun my-programmer-dvorak/pre-init-persp-mode ()
   (spacemacs|use-package-add-hook persp-mode
-    :post-config
+    :post-init
     (or (boundp 'spacemacs-layouts-transient-state-add-bindings)
         (setq spacemacs-layouts-transient-state-add-bindings'()))
     (my-programmer-dvorak/loop-digit-keys

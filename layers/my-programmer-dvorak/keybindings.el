@@ -13,10 +13,11 @@
 
 ;;; Code:
 
-;; Adapt Window switching to Programmer Dvorak
+;; Adapt Window switching to Programmer Dvorak.
 (my-programmer-dvorak/loop-digit-keys
  (lambda (qwerty-key dvp-key)
    (spacemacs/set-leader-keys
+     ;; Unset the QWERTY binding to prevent noise in the `which-key' output.
      qwerty-key nil
      dvp-key (my-programmer-dvorak//intern "select-window-%s" qwerty-key))))
 
