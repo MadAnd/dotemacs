@@ -26,7 +26,7 @@
     ("0" . "]"))
   "Alist of digit keys of QWERY to the corresponding keys of Programmer Dvorak.")
 
-(defvar my-programmer-dvorak-jump-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?d)
+(defvar my-programmer-dvorak-jump-keys '(?a ?o ?e ?u ?h ?t ?n ?s)
   "List of keys for quick jump packages like `avy' and `ace-window'.
 
 Ensure that these keys not overlap with the ones from
