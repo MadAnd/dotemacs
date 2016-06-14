@@ -31,7 +31,9 @@
 
 (defun my-web-dev/post-init-js2-mode ()
   (setq js2-strict-trailing-comma-warning nil
-        js2-strict-missing-semi-warning nil))
+        js2-strict-missing-semi-warning nil)
+  (add-hook 'js2-mode-hook #'my-web-dev/delayed-rainbow-identifiers-mode)
+  )
 
 (defun my-web-dev/init-php-doc ()
   (use-package php-doc
@@ -97,7 +99,8 @@ if set, and `browse-url-browser-function' will be used instead."
     (spacemacs/set-leader-keys-for-major-mode 'php-mode
       "id" #'evil-php-insert-doc-block))
 
-  (add-hook 'php-mode-hook #'my-web-dev/set-fill-column t))
+  (add-hook 'php-mode-hook #'my-web-dev/set-fill-column t)
+  (add-hook 'php-mode-hook #'my-web-dev/delayed-rainbow-identifiers-mode))
 
 (defun my-web-dev/pre-init-phpcbf ()
   (spacemacs|use-package-add-hook phpcbf
