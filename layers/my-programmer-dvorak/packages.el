@@ -18,6 +18,7 @@
     avy
     ace-window
     (default-helm-config :location built-in)
+    evil
     eyebrowse
     persp-mode
     ))
@@ -33,6 +34,12 @@
     :post-init
     (setq aw-keys my-programmer-dvorak-jump-keys)))
 
+(defun my-programmer-dvorak/pre-init-evil ()
+  ;; Setting `evil-intercept-esc' to t tells Evil not to translate C-[ into ESC
+  ;; in GUI, so we can use it for Programmer Dvorak remap of layout/workspace
+  ;; C-2 -> C-[.
+  (setq evil-intercept-esc t))
+
 (defun my-programmer-dvorak/pre-init-eyebrowse ()
   (spacemacs|use-package-add-hook eyebrowse
     :post-init
@@ -44,7 +51,11 @@
                    "eyebrowse-switch-to-window-config-%s"
                    qwerty-key)))
          (push (list dvp-key cmd :exit t)
-               spacemacs-workspaces-transient-state-add-bindings))))))
+               spacemacs-workspaces-transient-state-add-bindings)
+         ;; We can properly handle things like C-[ only in GUI.
+         (when (display-graphic-p)
+           (push (list (concat "C-" dvp-key) cmd)
+                 spacemacs-workspaces-transient-state-add-bindings)) )))))
 
 (defun my-programmer-dvorak/pre-init-persp-mode ()
   (spacemacs|use-package-add-hook persp-mode
@@ -57,6 +68,10 @@
                    "spacemacs/persp-switch-to-%s"
                    qwerty-key)))
          (push (list dvp-key cmd :exit t)
-               spacemacs-layouts-transient-state-add-bindings))))))
+               spacemacs-layouts-transient-state-add-bindings)
+         ;; We can properly handle things like C-[ only in GUI.
+         (when (display-graphic-p)
+           (push (list (concat "C-" dvp-key) cmd)
+                 spacemacs-layouts-transient-state-add-bindings)))))))
 
 ;;; packages.el ends here
