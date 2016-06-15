@@ -342,7 +342,6 @@ you should place your code here."
   (setq-default
    auth-sources '("~/.authinfo.gpg")
    auth-source-gpg-encrypt-to "ak@madand.net"
-   magit-expand-staged-on-commit t
    powerline-default-separator 'alternate
    scroll-margin 3
    scroll-conservatively 1000
@@ -354,23 +353,20 @@ you should place your code here."
 
   (spacemacs/set-google-translate-languages "en" "uk")
 
-  ;; Activate EditorConfig http://editorconfig.org/ support for all programming modes
-  (add-hook 'prog-mode-hook 'editorconfig-mode)
-
   ;; Global minor modes.
   (global-hungry-delete-mode 1)
-  (global-evil-mc-mode 1)
 
-  (with-eval-after-load 'org
-    (setq org-M-RET-may-split-line '((default))
-          org-agenda-files '("~/org")
-          org-catch-invisible-edits 'smart
-          org-pomodoro-length 40
-          org-pomodoro-long-break-length 40
-          org-pomodoro-short-break-length 10
-          org-special-ctrl-a/e t
-          org-special-ctrl-k t
-          ))
+  ;; Activate EditorConfig http://editorconfig.org/ support for all programming modes
+  (add-hook 'prog-mode-hook 'editorconfig-mode)
+  ;; Enable evil-mc where useful.
+  (add-hook 'prog-mode-hook 'turn-on-evil-mc-mode)
+  (add-hook 'text-mode-hook 'turn-on-evil-mc-mode)
+
+  ;; TODO: uncomment when compatibility with `evil-surround' is fixed
+  ;; (with-eval-after-load 'lisp-mode
+  ;;   (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode))
+  ;; (with-eval-after-load 'clojure-mode
+  ;;   (add-hook 'clojure-mode-hook #'evil-cleverparens-mode))
 
   (with-eval-after-load 'helm
     (setq ace-jump-helm-line-style 'pre)
@@ -554,6 +550,14 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
  '(helm-dash-browser-func (quote eww))
  '(magit-pull-arguments nil)
  '(magit-rebase-arguments (quote ("--autosquash")))
+ '(org-M-RET-may-split-line (quote ((default))))
+ '(org-agenda-files (quote ("~/org")))
+ '(org-catch-invisible-edits (quote smart))
+ '(org-pomodoro-length 40)
+ '(org-pomodoro-long-break-length 40)
+ '(org-pomodoro-short-break-length 10)
+ '(org-special-ctrl-a/e t)
+ '(org-special-ctrl-k t)
  '(ring-bell-function (quote ignore) t)
  '(safe-local-variable-values
    (quote
