@@ -357,7 +357,9 @@ you should place your code here."
   ;; Activate EditorConfig http://editorconfig.org/ support for all programming modes
   (add-hook 'prog-mode-hook 'editorconfig-mode)
 
-  (global-hungry-delete-mode)
+  ;; Global minor modes.
+  (global-hungry-delete-mode 1)
+  (global-evil-mc-mode 1)
 
   (with-eval-after-load 'org
     (setq org-M-RET-may-split-line '((default))
