@@ -548,6 +548,8 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
  '(ahs-idle-interval 0.25)
  '(evil-want-Y-yank-to-eol t)
  '(helm-dash-browser-func (quote eww))
+ '(magit-diff-refine-hunk (quote all))
+ '(magit-merge-arguments (quote ("--ff-only")))
  '(magit-pull-arguments nil)
  '(magit-rebase-arguments (quote ("--autosquash")))
  '(org-M-RET-may-split-line (quote ((default))))
@@ -558,6 +560,7 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
  '(org-pomodoro-short-break-length 10)
  '(org-special-ctrl-a/e t)
  '(org-special-ctrl-k t)
+ '(paradox-github-token t)
  '(ring-bell-function (quote ignore) t)
  '(safe-local-variable-values
    (quote
