@@ -48,8 +48,7 @@
     (my-programmer-dvorak/loop-digit-keys
      (lambda (qwerty-key dvp-key)
        (let ((cmd (my-programmer-dvorak//intern
-                   "eyebrowse-switch-to-window-config-%s"
-                   qwerty-key)))
+                   "eyebrowse-switch-to-window-config-%s" qwerty-key)))
          (push (list dvp-key cmd :exit t)
                spacemacs-workspaces-transient-state-add-bindings)
          ;; We can properly handle things like C-[ only in GUI.
@@ -65,8 +64,7 @@
     (my-programmer-dvorak/loop-digit-keys
      (lambda (qwerty-key dvp-key)
        (let ((cmd (my-programmer-dvorak//intern
-                   "spacemacs/persp-switch-to-%s"
-                   qwerty-key)))
+                   "spacemacs/persp-switch-to-%s" qwerty-key)))
          (push (list dvp-key cmd :exit t)
                spacemacs-layouts-transient-state-add-bindings)
          ;; We can properly handle things like C-[ only in GUI.
