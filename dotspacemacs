@@ -95,6 +95,8 @@ values."
                                       clojure-cheatsheet
                                       editorconfig
                                       simple-mpc
+                                      mustache
+                                      mustache-mode
                                       nginx-mode
                                       keyfreq
                                       speed-type
