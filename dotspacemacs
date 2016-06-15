@@ -75,6 +75,7 @@ values."
             shell-default-height 30
             shell-default-position 'full)
      spell-checking
+     (restclient :variables restclient-use-org t)
      (syntax-checking :variables
                       syntax-checking-enable-tooltips nil)
      sql
