@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: define
+# key: d
+# condition: (not (eq major-mode 'php-mode))
+# --
+#define $0

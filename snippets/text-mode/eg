@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: eg
+# key: eg
+# condition: 'force-in-comment
+# --
+e.g. $0

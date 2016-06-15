@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: preg-match
+# key: pm
+# --
+preg_match('~${1:pattern}~', ${2:subject}${3:, ${4:$matches}})$0

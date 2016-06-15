@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: $this->field
+# name: $this->field = ;
 # key: ta
 # --
 $this->$1 = $0;
