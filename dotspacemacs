@@ -375,8 +375,11 @@ you should place your code here."
     (define-key helm-map (kbd "C-a") 'ace-jump-helm-line-and-select)
     (define-key helm-map (kbd "C-h") 'delete-backward-char))
 
-  (with-eval-after-load 'term
-    (define-key term-raw-escape-map (kbd "ESC") 'term-send-esc))
+  ;; Make Term buffers start in Emacs state.
+  (setq evil-insert-state-modes (delq 'term-mode evil-insert-state-modes))
+  (push 'term-mode evil-emacs-state-modes)
+  (with-eval-after-load 'multi-term
+    (add-to-list 'term-bind-key-alist '("<escape>" . term-send-esc)))
 
   (with-eval-after-load 'with-editor
     ;; Workaround for FreeBSD: https://github.com/magit/magit/issues/2672
