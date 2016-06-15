@@ -78,15 +78,11 @@ if set, and `browse-url-browser-function' will be used instead."
                 )
 
   ;; Shortcuts for common tokens.
-  (evil-define-key 'insert php-mode-map
-    (kbd "M-s") (my-web-dev|inserting-command "->")
-    (kbd "M--") (my-web-dev|inserting-command " => ")
-    (kbd "M-d") (my-web-dev|inserting-command "$")
-    (kbd "M-'") (my-web-dev|inserting-command "::")
-    (kbd "M-o") (lambda ()
-                  (interactive)
-                  (end-of-line)
-                  (insert ";")))
+  (evil-define-key 'hybrid php-mode-map
+    (kbd "C-s") "->"
+    (kbd "C--") " => "
+    (kbd "C-'") "::"
+    (kbd "M-o") "<ESC>$i;")
 
   (spacemacs/declare-prefix-for-mode 'php-mode "mh" "documentation")
   (spacemacs/set-leader-keys-for-major-mode 'php-mode
