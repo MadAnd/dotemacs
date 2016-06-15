@@ -443,6 +443,8 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
     (spacemacs|diminish ggtags-mode))
 
   (with-eval-after-load 'info
+    (define-key Info-mode-map (kbd "s") 'avy-goto-word-1)
+    (define-key Info-mode-map (kbd "S") 'avy-goto-char-timer)
     (define-key Info-mode-map (kbd "S-SPC") 'Info-scroll-up))
 
   (with-eval-after-load 'ispell
