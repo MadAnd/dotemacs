@@ -48,6 +48,7 @@ values."
      (dash :variables
            helm-dash-docset-newpath "~/.local/share/Zeal/Zeal/docsets")
      emacs-lisp
+     evil-cleverparens
      fasd
      finance
      games
@@ -365,11 +366,23 @@ you should place your code here."
   (add-hook 'prog-mode-hook 'turn-on-evil-mc-mode)
   (add-hook 'text-mode-hook 'turn-on-evil-mc-mode)
 
-  ;; TODO: uncomment when compatibility with `evil-surround' is fixed
-  ;; (with-eval-after-load 'lisp-mode
-  ;;   (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode))
-  ;; (with-eval-after-load 'clojure-mode
-  ;;   (add-hook 'clojure-mode-hook #'evil-cleverparens-mode))
+  (with-eval-after-load 'lisp-mode
+    (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode))
+
+  (with-eval-after-load 'clojure-mode
+    (add-hook 'clojure-mode-hook #'evil-cleverparens-mode))
+
+  ;; evil-cleverparens
+  (setq evil-cleverparens-swap-move-by-word-and-symbol t)
+  (with-eval-after-load 'evil-cleverparens
+    (evil-define-key 'normal evil-cleverparens-mode-map
+      ;; I use s and S for Avy.
+      "s" nil
+      "S" nil
+      ;; TODO: delete these when compatibility with `evil-surround' is fixed.
+      "d" nil
+      "c" nil
+      "y" nil))
 
   (with-eval-after-load 'helm
     (setq ace-jump-helm-line-style 'pre)
