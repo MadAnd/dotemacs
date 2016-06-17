@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: defun-layer-package
+# key: dpf
+# --
+(defun `(madand/buffer-dir-name)`/${1:$$(yas-choose-value '("pre-init-" "post-init-" "init-"))} ()
+  $0)
