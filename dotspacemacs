@@ -83,6 +83,7 @@ values."
      xkcd
      yaml
      ;; Private layers:
+     madand-base
      madand-lisp
      (my-web-dev :variables
                  my-web-dev-php-fill-column 100)
@@ -93,7 +94,6 @@ values."
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(crontab-mode
-                                      editorconfig
                                       simple-mpc
                                       mustache
                                       mustache-mode
@@ -356,8 +356,6 @@ you should place your code here."
   ;; Global minor modes.
   (global-hungry-delete-mode 1)
 
-  ;; Activate EditorConfig http://editorconfig.org/ support for all programming modes
-  (add-hook 'prog-mode-hook 'editorconfig-mode)
   ;; Enable evil-mc where useful.
   (add-hook 'prog-mode-hook 'turn-on-evil-mc-mode)
   (add-hook 'text-mode-hook 'turn-on-evil-mc-mode)
@@ -489,12 +487,6 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
     (setq recentf-exclude (delete (expand-file-name package-user-dir) recentf-exclude)))
 
 
-  (spacemacs/set-leader-keys
-    ";" 'evil-avy-goto-line
-    "o SPC" 'redraw-display
-    "o s" 'save-buffer
-    "w O" 'delete-other-windows)
-
   ;; Serve a cup of Vim for the Hybrid state.
   (evil-global-set-key 'hybrid (kbd "C-o") 'evil-execute-in-normal-state)
   (evil-global-set-key 'hybrid [C-i] (kbd "<tab>"))
@@ -511,25 +503,7 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
   (evil-global-set-key 'evilified (kbd "Q") 'spacemacs/kill-this-buffer)
   ;; Unbind some Vim bindings, so Emacs' ones come into play.
   (evil-global-set-key 'motion (kbd "C-e") nil)
-
-  ;; Use Palemoon as the external browser
-  (defun browse-url-palemoon (url &optional new-window)
-    (interactive (browse-url-interactive-arg "URL: "))
-    (setq url (browse-url-encode-url url))
-    (let* ((process-environment (browse-url-process-environment)))
-      (apply 'start-process
-             (concat "palemoon " url) nil
-             "palemoon"
-             (append
-              browse-url-firefox-arguments
-              (unless (memq system-type '(windows-nt ms-dos))
-                (if (browse-url-maybe-new-window new-window)
-                    (if browse-url-firefox-new-window-is-tab
-                        '("-new-tab")
-                      '("-new-window"))))
-              (list url)))))
-  (with-eval-after-load 'browse-url
-    (setq browse-url-browser-function 'browse-url-palemoon)))
+  )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
