@@ -432,11 +432,6 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
   (with-eval-after-load 'ggtags
     (spacemacs|diminish ggtags-mode))
 
-  (with-eval-after-load 'info
-    (define-key Info-mode-map (kbd "s") 'avy-goto-word-1)
-    (define-key Info-mode-map (kbd "S") 'avy-goto-char-timer)
-    (define-key Info-mode-map (kbd "S-SPC") 'Info-scroll-up))
-
   (with-eval-after-load 'ispell
     ;; Replace ispell choice buffer with avy-powered one
     (defun ispell-command-loop (miss guess word start end)
@@ -468,41 +463,9 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
   (with-eval-after-load 'magit
     (add-hook 'magit-status-headers-hook 'magit-insert-repo-header t))
 
-  (use-package simple-mpc
-    :commands simple-mpc-view-current-playlist
-    :diminish simple-mpc-current-playlist-mode
-    :init
-    (spacemacs/set-leader-keys "am" (lambda ()
-                                      (interactive)
-                                      (simple-mpc-view-current-playlist)))
-    :config
-    (progn
-      (setq simple-mpc-mpd-playlist-directory "~/.config/mpd/playlists/"
-            simple-mpc-playlist-auto-refresh 2)
-      (evilified-state-evilify-map simple-mpc-mode-map
-        :mode simple-mpc-mode
-        :bindings (kbd "RET") (kbd "<return>"))))
-
   (with-eval-after-load 'recentf
     (setq recentf-exclude (delete (expand-file-name package-user-dir) recentf-exclude)))
 
-
-  ;; Serve a cup of Vim for the Hybrid state.
-  (evil-global-set-key 'hybrid (kbd "C-o") 'evil-execute-in-normal-state)
-  (evil-global-set-key 'hybrid [C-i] (kbd "<tab>"))
-  (evil-global-set-key 'hybrid (kbd "C-h") (kbd "DEL"))
-  (evil-global-set-key 'hybrid (kbd "C-S-h") help-map)
-  ;; Swap ; and :
-  (evil-global-set-key 'normal (kbd ";") 'evil-ex)
-  (evil-global-set-key 'visual (kbd ";") 'evil-ex)
-  (evil-global-set-key 'normal (kbd ":") 'evil-repeat-find-char)
-  (evil-global-set-key 'visual (kbd ":") 'evil-repeat-find-char)
-  ;; Make Q a buffer killer.
-  (evil-global-set-key 'normal (kbd "Q") 'spacemacs/kill-this-buffer)
-  (evil-global-set-key 'motion (kbd "Q") 'spacemacs/kill-this-buffer)
-  (evil-global-set-key 'evilified (kbd "Q") 'spacemacs/kill-this-buffer)
-  ;; Unbind some Vim bindings, so Emacs' ones come into play.
-  (evil-global-set-key 'motion (kbd "C-e") nil)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will

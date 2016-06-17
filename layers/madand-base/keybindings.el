@@ -27,4 +27,23 @@
   "o s" #'save-buffer
   "w O" #'delete-other-windows)
 
+;; We distinguish C-i and <tab> in GUI, but this distinction is not
+;; neded in Hybrid state.
+(evil-global-set-key 'hybrid [C-i] (kbd "<tab>"))
+;; Serve a cup of Vim for the Hybrid state.
+(evil-global-set-key 'hybrid (kbd "C-o") 'evil-execute-in-normal-state)
+(evil-global-set-key  'hybrid (kbd "C-h") (kbd "DEL"))
+(evil-global-set-key 'hybrid (kbd "C-S-h") help-map)
+;; Swap ; and :
+(evil-global-set-key 'normal (kbd ";") 'evil-ex)
+(evil-global-set-key 'visual (kbd ";") 'evil-ex)
+(evil-global-set-key 'normal (kbd ":") 'evil-repeat-find-char)
+(evil-global-set-key 'visual (kbd ":") 'evil-repeat-find-char)
+;; Make Q a buffer killer.
+(evil-global-set-key 'normal (kbd "Q") 'spacemacs/kill-this-buffer)
+(evil-global-set-key 'motion (kbd "Q") 'spacemacs/kill-this-buffer)
+(evil-global-set-key 'evilified (kbd "Q") 'spacemacs/kill-this-buffer)
+;; Unbind some Vim bindings, so Emacs' ones come into play.
+(evil-global-set-key 'motion (kbd "C-e") nil)
+
 ;;; keybindings.el ends here
