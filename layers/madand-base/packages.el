@@ -17,11 +17,19 @@
 
 (defconst madand-base-packages
   '(
+    ace-jump-helm-line
     (browse-url :location built-in)
     editorconfig
+    helm
     (info :location built-in)
     simple-mpc
     ))
+
+(defun madand-base/post-init-ace-jump-helm-line ()
+  (setq ace-jump-helm-line-style 'pre)
+
+  (with-eval-after-load 'helm
+    (define-key helm-map (kbd "C-a") #'ace-jump-helm-line-and-select)))
 
 (defun madand-base/init-browse-url ()
   (setq browse-url-browser-function #'madand/browse-url-palemoon))
@@ -31,6 +39,11 @@
     :defer t
     :init
     (add-hook 'prog-mode-hook #'editorconfig-mode)))
+
+(defun madand-base/post-init-helm ()
+  (with-eval-after-load 'helm
+    (define-key helm-map (kbd "C-h") 'delete-backward-char)
+    (define-key helm-map (kbd "C-u") #'helm-find-files-up-one-level)))
 
 (defun madand-base/init-info ()
   (with-eval-after-load 'info

@@ -360,10 +360,6 @@ you should place your code here."
   (add-hook 'prog-mode-hook 'turn-on-evil-mc-mode)
   (add-hook 'text-mode-hook 'turn-on-evil-mc-mode)
 
-  (with-eval-after-load 'helm
-    (setq ace-jump-helm-line-style 'pre)
-    (define-key helm-map (kbd "C-a") 'ace-jump-helm-line-and-select)
-    (define-key helm-map (kbd "C-h") 'delete-backward-char))
 
   ;; Make Term buffers start in Emacs state.
   (setq evil-insert-state-modes (delq 'term-mode evil-insert-state-modes))
