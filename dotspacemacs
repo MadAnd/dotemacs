@@ -391,10 +391,10 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
 
   ;; Bind avy to s and S in Normal and Visual.
   ;; Move evil-surround-region to gs in Visual
-  (evil-global-set-key 'normal (kbd "s") 'avy-goto-word-1)
-  (evil-global-set-key 'motion (kbd "s") 'avy-goto-word-1)
-  (evil-global-set-key 'normal (kbd "S") 'avy-goto-char-timer)
-  (evil-global-set-key 'motion (kbd "S") 'avy-goto-char-timer)
+  (define-key evil-normal-state-map (kbd "s") 'avy-goto-word-1)
+  (define-key evil-motion-state-map (kbd "s") 'avy-goto-word-1)
+  (define-key evil-normal-state-map (kbd "S") 'avy-goto-char-timer)
+  (define-key evil-motion-state-map (kbd "S") 'avy-goto-char-timer)
   (evil-define-key 'visual evil-surround-mode-map "s" 'avy-goto-word-1)
   (evil-define-key 'visual evil-surround-mode-map "S" 'avy-goto-char-timer)
   (evil-define-key 'visual evil-surround-mode-map "gs" 'evil-surround-region)
