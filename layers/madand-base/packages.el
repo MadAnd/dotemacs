@@ -18,6 +18,7 @@
 (defconst madand-base-packages
   '(
     ace-jump-helm-line
+    ace-popup-menu
     (browse-url :location built-in)
     editorconfig
     evil-evilified-state
@@ -32,6 +33,11 @@
 
   (with-eval-after-load 'helm
     (define-key helm-map (kbd "C-a") #'ace-jump-helm-line-and-select)))
+
+(defun madand-base/init-ace-popup-menu ()
+  (spacemacs/defer-until-after-user-config
+   (lambda ()
+     (ace-popup-menu-mode 1))))
 
 (defun madand-base/init-browse-url ()
   (setq browse-url-browser-function #'madand/browse-url-palemoon))
@@ -71,6 +77,15 @@
         :bindings (kbd "C-m") (kbd "<return>")))))
 
 (defun madand-base/post-init-yasnippet ()
+  ;; Force use of `ace-popup-menu'.
+  (setq yas-prompt-functions '(yas-x-prompt))
+  ;; Fall back to completing prompt for yasnippet functions with
+  ;; too many choices to be shown via `ace-popup-menu'.
+  (advice-add 'yas-visit-snippet-file :around
+               #'madand/yas-fallback-to-completing-prompt)
+  (advice-add 'yas-insert-snippet :around
+               #'madand/yas-fallback-to-completing-prompt)
+
   (with-eval-after-load 'yasnippet
     ;; Expand snippets with SPC.
     (evil-define-key 'hybrid yas-minor-mode-map (kbd "SPC") 'yas-expand)
