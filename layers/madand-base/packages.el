@@ -20,6 +20,7 @@
     ace-jump-helm-line
     (browse-url :location built-in)
     editorconfig
+    evil-evilified-state
     helm
     (info :location built-in)
     simple-mpc
@@ -39,6 +40,9 @@
     :defer t
     :init
     (add-hook 'prog-mode-hook #'editorconfig-mode)))
+
+(defun madand-base/post-init-evil-evilified-state ()
+  (define-key evil-evilified-state-map-original (kbd "Q") 'spacemacs/kill-this-buffer))
 
 (defun madand-base/post-init-helm ()
   (with-eval-after-load 'helm

@@ -42,7 +42,6 @@
 ;; Make Q a buffer killer.
 (evil-global-set-key 'normal (kbd "Q") 'spacemacs/kill-this-buffer)
 (evil-global-set-key 'motion (kbd "Q") 'spacemacs/kill-this-buffer)
-(evil-global-set-key 'evilified (kbd "Q") 'spacemacs/kill-this-buffer)
 ;; Unbind some Vim bindings, so Emacs' ones come into play.
 (evil-global-set-key 'motion (kbd "C-e") nil)
 
