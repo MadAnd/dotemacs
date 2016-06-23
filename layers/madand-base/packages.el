@@ -24,6 +24,7 @@
     helm
     (info :location built-in)
     simple-mpc
+    yasnippet
     ))
 
 (defun madand-base/post-init-ace-jump-helm-line ()
@@ -68,5 +69,19 @@
       (evilified-state-evilify-map simple-mpc-mode-map
         :mode simple-mpc-mode
         :bindings (kbd "C-m") (kbd "<return>")))))
+
+(defun madand-base/post-init-yasnippet ()
+  (with-eval-after-load 'yasnippet
+    ;; Expand snippets with SPC.
+    (evil-define-key 'hybrid yas-minor-mode-map (kbd "SPC") 'yas-expand)
+    ;; Snippet fields navigation.
+    (define-key yas-keymap (kbd "M-h") 'yas-skip-and-clear-or-delete-char)
+    (define-key yas-keymap (kbd "M-t") 'yas-prev-field)
+    (define-key yas-keymap (kbd "M-n") 'yas-next-field)
+    ;; Spacemacs disables smartparens during the yasnippet expansion, but
+    ;; auto-pairing is useful in certain snippets. As a workaround, we
+    ;; temporarily enable `electric-pair-mode'.
+    (add-hook 'yas-before-expand-snippet-hook 'electric-pair-mode)
+    (add-hook 'yas-after-exit-snippet-hook (lambda () (electric-pair-mode -1)))))
 
 ;;; packages.el ends here
