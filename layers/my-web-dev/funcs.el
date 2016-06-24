@@ -59,10 +59,10 @@ value."
   )
 
 (defun my-web-dev/delayed-rainbow-identifiers-mode ()
-  "Disable and then, after delay, enable `rainbow-identifiers-mode'.
+  "Disable and then, after a delay, enable `rainbow-identifiers-mode'.
 
 This is a workaround for colorized text inside of comments in some major modes,
-like php-mode, js2-mode."
+like `php-mode' and `js2-mode.'"
   (rainbow-identifiers-mode -1)
   (run-with-idle-timer 1 nil 'rainbow-identifiers-mode))
 

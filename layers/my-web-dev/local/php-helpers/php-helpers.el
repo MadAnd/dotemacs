@@ -153,6 +153,17 @@ With prefix argument refresh cache before listing candidates."
     butlast
     (s-join "\\")))
 
+(defun php-helpers/class-short-name-from-file-path (file-path)
+  "Guess a short class name from the FILE-PATH.
+
+This is done by stripping the directory part and the extension.
+If called interactively, the result will also be inserted at point."
+  (interactive (list (buffer-file-name)))
+  (let ((class-name (f-base file-path)))
+    (when (interactive-p)
+      (insert class-name))
+    class-name))
+
 (provide 'php-helpers)
 
 ;;; php-helpers.el ends here

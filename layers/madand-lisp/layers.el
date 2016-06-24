@@ -1,4 +1,4 @@
-;;; layers.el --- madand-base layer layers file for Spacemacs.
+;;; layers.el --- madand-lisp layer layers file for Spacemacs.
 ;;
 ;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
 ;;
@@ -11,7 +11,7 @@
 
 ;;; Commentary:
 
-;; Layers required by madand-base layer.
+;; Layers required by madand-lisp layer.
 
 ;;; Code:
 
