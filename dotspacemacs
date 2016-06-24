@@ -55,15 +55,12 @@ values."
      gtags
      (ibuffer :variables
               ibuffer-group-buffers-by 'projects)
-     javascript
      helm
-     html
      lua
      (markdown :variables markdown-live-preview-engine 'vmd)
      (org :variables
           org-enable-github-support t)
      pandoc
-     php
      (python :variables
              python-enable-yapf-format-on-save t)
      ranger
