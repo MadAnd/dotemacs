@@ -64,6 +64,9 @@ value."
 This is a workaround for colorized text inside of comments in some major modes,
 like `php-mode' and `js2-mode.'"
   (rainbow-identifiers-mode -1)
-  (run-with-idle-timer 1 nil 'rainbow-identifiers-mode))
+  (let ((current-buffer (current-buffer)))
+    (run-with-idle-timer 1 nil (lambda ()
+                                 (with-current-buffer current-buffer
+                                   (rainbow-identifiers-mode 1))))))
 
 ;;; funcs.el ends here
