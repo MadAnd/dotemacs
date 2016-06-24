@@ -39,10 +39,10 @@
                     '("-new-window"))))
             (list url)))))
 
-(defun madand/yas-fallback-to-completing-prompt (orig-fun)
+(defun madand/yas-fallback-to-completing-prompt (orig-fun &rest args)
   "Around advice that temporarily binds `yas-prompt-functions' to
 '(yas-completing-prompt)."
   (let ((yas-prompt-functions '(yas/completing-prompt)))
-    (funcall orig-fun)))
+    (apply orig-fun args)))
 
 ;;; funcs.el ends here
