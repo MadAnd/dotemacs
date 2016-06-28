@@ -396,6 +396,9 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
   (evil-define-key 'visual evil-surround-mode-map "S" 'avy-goto-char-timer)
   (evil-define-key 'visual evil-surround-mode-map "gs" 'evil-surround-region)
 
+  (spacemacs/set-leader-keys
+    "TAB"  'spacemacs/alternate-buffer-in-persp)
+
   (with-eval-after-load 'company
     (setq company-gtags-insert-arguments nil)
     (define-key company-active-map [C-i] 'company-complete-common-or-cycle)
