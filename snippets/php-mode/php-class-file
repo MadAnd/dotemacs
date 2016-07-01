@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: php-class-file
+# key: pcf
+# --
+<?php
+
+namespace `(php-helpers/current-file-namespace)`;
+
+class `(php-helpers/class-short-name-from-file-path buffer-file-name)`${1: extends ${2:ParentClass}}
+{
+  $0
+}

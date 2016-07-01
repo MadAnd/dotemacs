@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: public-property
+# key: pup
+# --
+public \$$0;
