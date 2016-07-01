@@ -410,9 +410,10 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
                                                    (company-abort)
                                                    (yas-prev-field))))
     (define-key company-active-map (kbd "M-n") (lambda ()
+                                                 (interactive)
                                                  (when (yas--active-field-overlay)
                                                    (company-abort)
-                                                   (yas-prev-field)))))
+                                                   (yas-next-field)))))
 
   ;; Diminish gtags minor mode indicator
   (with-eval-after-load 'ggtags
