@@ -131,13 +131,16 @@ With prefix argument refresh the class cache before listing candidates."
 (defun php-helpers/insert-use-class (class-fqn)
   "Add the fully qualified class name CLASS-FQN to the use declaration in the
   current file."
-  (save-excursion
-    (save-restriction
-      (widen)
-      (php-helpers/go-to-last-use-statement)
-      (end-of-line)
-      (newline)
-      (insert (concat "use " class-fqn ";")))))
+  (let ((window-start (window-start)))
+    (save-excursion
+     (save-restriction
+       (widen)
+       (php-helpers/go-to-last-use-statement)
+       (end-of-line)
+       (newline)
+       (insert (concat "use " class-fqn ";"))))
+    ;; Try to prevent vertical scrolling.
+    (set-window-start (frame-selected-window) (1- window-start))))
 
 (defun php-helpers/insert-class (&optional refresh)
   "Insert a class name from the current projectile project.
