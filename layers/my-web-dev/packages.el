@@ -54,7 +54,8 @@
   (with-eval-after-load 'php-mode
     (require 'php-helpers)
     (spacemacs/set-leader-keys-for-major-mode 'php-mode
-      "iu" #'php-helpers/insert-use-class
+      "iu" #'php-helpers/do-insert-use-class
+      "iU" #'php-helpers/do-insert-use-class-region-or-symbol
       "ic" #'php-helpers/insert-class
       "in" #'php-helpers/go-to-namespace)
     (add-hook 'php-mode-hook

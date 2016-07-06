@@ -101,21 +101,43 @@ If called interactively, prefix argument forces refresh."
                  php-helpers--project-php-classes
                  (php-helpers//load-php-class-list project-root refresh)))))
 
-(defun php-helpers/insert-use-class (&optional refresh)
+(defun php-helpers/do-insert-use-class (&optional refresh)
   "Add a class to the use declarations in the current file.
-With prefix argument refresh cache before listing candidates."
+
+Prompt for a class name with `helm'.
+With prefix argument refresh the class cache before listing candidates."
   (interactive "P")
-  (save-restriction
-    (save-excursion
+  (php-helpers/insert-use-class
+   (helm-comp-read
+    "Class: "
+    (php-helpers/class-candidates refresh)
+    :must-match t)))
+
+(defun php-helpers/do-insert-use-class-region-or-symbol (&optional refresh)
+  "Add a class to the use declarations in the current file.
+
+Prompt for a class name with `helm' with region or symbol at point pre-filled.
+With prefix argument refresh the class cache before listing candidates."
+  (interactive "P")
+  (php-helpers/insert-use-class
+   (helm-comp-read
+    "Class: "
+    (php-helpers/class-candidates refresh)
+    :must-match t
+    :initial-input (if (use-region-p)
+                       (buffer-substring-no-properties (region-beginning) (region-end))
+                     (symbol-name (symbol-at-point))))))
+
+(defun php-helpers/insert-use-class (class-fqn)
+  "Add the fully qualified class name CLASS-FQN to the use declaration in the
+  current file."
+  (save-excursion
+    (save-restriction
       (widen)
-      (let ((class (helm-comp-read
-                    "Class: "
-                    (php-helpers/class-candidates refresh)
-                    :must-match t)))
-        (php-helpers/go-to-last-use-statement)
-        (end-of-line)
-        (newline)
-        (insert (concat "use " class ";"))))))
+      (php-helpers/go-to-last-use-statement)
+      (end-of-line)
+      (newline)
+      (insert (concat "use " class-fqn ";")))))
 
 (defun php-helpers/insert-class (&optional refresh)
   "Insert a class name from the current projectile project.
@@ -144,7 +166,7 @@ With prefix argument refresh cache before listing candidates."
    ((s-contains? "/app/" buffer-file-name)
     (php-helpers/namespace-from-path buffer-file-name "/app/"))
    (t (php-helpers/namespace-from-path buffer-file-name
-                                           (projectile-project-root)))))
+                                       (projectile-project-root)))))
 
 (defun php-helpers/namespace-from-path (path substr)
   "Extract a namespace from a path name that contains `substr`."
