@@ -21,6 +21,7 @@
     ace-popup-menu
     (browse-url :location built-in)
     editorconfig
+    flyspell
     evil-evilified-state
     helm
     (info :location built-in)
@@ -50,6 +51,10 @@
 
 (defun madand-base/post-init-evil-evilified-state ()
   (define-key evil-evilified-state-map-original (kbd "Q") 'spacemacs/kill-this-buffer))
+
+(defun madand-base/post-init-flyspell ()
+  (with-eval-after-load 'flyspell
+    (define-key evil-normal-state-map (kbd "zi") 'flyspell-correct-word-before-point)))
 
 (defun madand-base/post-init-helm ()
   (with-eval-after-load 'helm
