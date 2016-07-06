@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: \Yii::$app->formatter->
+# name: Yii::$app->formatter->
 # key: yapf
 # --
-\Yii::\$app->formatter->$0
+Yii::\$app->formatter->$0

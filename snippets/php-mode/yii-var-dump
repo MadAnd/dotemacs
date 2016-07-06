@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: yii-var-dump
+# key: yvd
+# --
+\yii\helpers\VarDumper::dump($0, 10, true);

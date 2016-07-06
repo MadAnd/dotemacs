@@ -2,4 +2,4 @@
 # name: throw
 # key: thr
 # --
-throw new ${1:\Exception}($0);
+throw ${1:new ${2:\Exception}($0)};

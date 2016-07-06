@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: is-not-null
+# key: isnn
+# --
+!== null$0

@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: \Yii::$app->params[]
+# name: Yii::$app->params[]
 # key: yapp
 # --
-\Yii::$app->params['${1:param_name}']$0
+Yii::$app->params['${1:param_name}']$0

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: embedded-if
+# key: eif
+# --
+<?php if ($1): ?>
+      $0
+<?php endif ?>

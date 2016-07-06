@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: protected-property
+# key: ptp
+# --
+protected \$$0;
