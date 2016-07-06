@@ -33,7 +33,7 @@
   (setq ace-jump-helm-line-style 'pre)
 
   (with-eval-after-load 'helm
-    (define-key helm-map (kbd "C-a") #'ace-jump-helm-line-and-select)))
+    (define-key helm-map (kbd "C-'") #'ace-jump-helm-line-and-select)))
 
 (defun madand-base/init-ace-popup-menu ()
   (spacemacs/defer-until-after-user-config
@@ -63,7 +63,7 @@
 
 (defun madand-base/init-info ()
   (with-eval-after-load 'info
-    (define-key Info-mode-map (kbd "s") 'avy-goto-word-1)
+    (define-key Info-mode-map (kbd "s") 'avy-goto-word-or-subword-1)
     (define-key Info-mode-map (kbd "S") 'avy-goto-char-timer)
     (define-key Info-mode-map (kbd "S-SPC") 'Info-scroll-up)))
 

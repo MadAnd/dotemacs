@@ -32,6 +32,7 @@
 (define-key evil-hybrid-state-map [C-i] (kbd "<tab>"))
 ;; Serve a cup of Vim for the Hybrid state.
 (define-key evil-hybrid-state-map (kbd "C-o") 'evil-execute-in-normal-state)
+(define-key evil-hybrid-state-map (kbd "C-r") 'evil-paste-from-register)
 (define-key  evil-hybrid-state-map (kbd "C-h") (kbd "DEL"))
 (define-key evil-hybrid-state-map (kbd "C-S-h") help-map)
 ;; Swap ; and :
