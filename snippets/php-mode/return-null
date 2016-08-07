@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: return-null
+# key: rn
+# --
+return null;$0

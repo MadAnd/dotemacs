@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: yii-log-trace
+# key: ylt
+# --
+Yii::trace('${1:message}'${2:, '${3:category}'});$0

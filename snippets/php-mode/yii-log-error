@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: yii-log-error
+# key: yle
+# --
+Yii::error('${1:message}'${2:, '${3:category}'});$0

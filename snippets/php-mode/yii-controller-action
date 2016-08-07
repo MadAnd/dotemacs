@@ -6,5 +6,5 @@ public function action${1:Name}(${2:args})
 {
   $0
 
-  return $this->render('viewName');
+  return $this->render('viewName', ['model' => $model]);
 }

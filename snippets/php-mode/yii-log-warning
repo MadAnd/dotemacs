@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: yii-log-warning
+# key: ylw
+# --
+Yii::warning('${1:message}'${2:, '${3:category}'});$0
