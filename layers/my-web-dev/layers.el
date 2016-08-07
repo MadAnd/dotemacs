@@ -15,8 +15,8 @@
 
 ;;; Code:
 
-(configuration-layer/declare-layer 'javascript)
-(configuration-layer/declare-layer 'html)
-(configuration-layer/declare-layer 'php)
+(configuration-layer/declare-used-layer 'javascript)
+(configuration-layer/declare-used-layer 'html)
+(configuration-layer/declare-used-layer 'php)
 
 ;;; layers.el ends here

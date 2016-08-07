@@ -15,7 +15,7 @@
 
 ;;; Code:
 
-(configuration-layer/declare-layer 'clojure)
-(configuration-layer/declare-layer 'evil-cleverparens)
+(configuration-layer/declare-used-layer 'clojure)
+(configuration-layer/declare-used-layer 'evil-cleverparens)
 
 ;;; layers.el ends here
