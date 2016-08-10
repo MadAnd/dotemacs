@@ -45,4 +45,19 @@
   (let ((yas-prompt-functions '(yas/completing-prompt)))
     (apply orig-fun args)))
 
+(defun madand/sudo-async-shell-command ()
+  "Wrapper for `async-shell-command' which invokes TRAMP sudo before
+the actual command."
+  (interactive)
+  (with-temp-buffer
+    (cd "/sudo::/")
+    (call-interactively #'async-shell-command)))
+
+(defun madand/file-set-executable ()
+  "Make current file executable."
+  (interactive)
+  (let* ((filename (buffer-file-name))
+         (orig-mode (or (file-modes filename) (error "File not found."))))
+    (chmod filename (file-modes-symbolic-to-number "+x" orig-mode))))
+
 ;;; funcs.el ends here
