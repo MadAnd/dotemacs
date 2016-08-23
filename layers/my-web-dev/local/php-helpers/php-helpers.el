@@ -131,16 +131,14 @@ With prefix argument refresh the class cache before listing candidates."
 (defun php-helpers/insert-use-class (class-fqn)
   "Add the fully qualified class name CLASS-FQN to the use declaration in the
   current file."
-  (let ((window-start (window-start)))
-    (save-excursion
+  (php-helpers/save-window-scroll
+   (save-excursion
      (save-restriction
        (widen)
        (php-helpers/go-to-last-use-statement)
        (end-of-line)
        (newline)
-       (insert (concat "use " class-fqn ";"))))
-    ;; Try to prevent vertical scrolling.
-    (set-window-start (frame-selected-window) (1- window-start))))
+       (insert (concat "use " class-fqn ";"))))))
 
 (defun php-helpers/insert-class (&optional refresh)
   "Insert a class name from the current projectile project.
@@ -188,6 +186,22 @@ If called interactively, the result will also be inserted at point."
     (when (interactive-p)
       (insert class-name))
     class-name))
+
+;; Borrowed this macro from `evil-mc'.
+(defmacro php-helpers/save-window-scroll (&rest forms)
+  "Saves and restores the window scroll position"
+  (let ((p (make-symbol "p"))
+        (s (make-symbol "start"))
+        (h (make-symbol "hscroll")))
+    `(let ((,p (set-marker (make-marker) (point)))
+           (,s (set-marker (make-marker) (window-start)))
+           (,h (window-hscroll)))
+       ,@forms
+       (goto-char ,p)
+       (set-window-start nil ,s t)
+       (set-window-hscroll nil ,h)
+       (set-marker ,p nil)
+       (set-marker ,s nil))))
 
 (provide 'php-helpers)
 
