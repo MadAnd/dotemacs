@@ -60,4 +60,11 @@ the actual command."
          (orig-mode (or (file-modes filename) (error "File not found."))))
     (chmod filename (file-modes-symbolic-to-number "+x" orig-mode))))
 
+
+(defun madand/evil-select-pasted ()
+  (interactive)
+  (let ((start-marker (evil-get-marker ?[))
+                      (end-marker (evil-get-marker ?])))
+    (evil-visual-select start-marker end-marker)))
+
 ;;; funcs.el ends here

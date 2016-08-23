@@ -23,6 +23,7 @@
     editorconfig
     flyspell
     evil-evilified-state
+    evil
     helm
     (info :location built-in)
     simple-mpc
@@ -51,6 +52,9 @@
 
 (defun madand-base/post-init-evil-evilified-state ()
   (define-key evil-evilified-state-map-original (kbd "Q") 'spacemacs/kill-this-buffer))
+
+(defun madand-base/post-init-evil ()
+  (define-key evil-normal-state-map (kbd "gp") #'madand/evil-select-pasted))
 
 (defun madand-base/post-init-flyspell ()
   (with-eval-after-load 'flyspell
