@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: this-property
+# key: tp
+# --
+this.$0

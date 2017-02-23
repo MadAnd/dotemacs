@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: yii-t
+# key: yit
+# --
+Yii::t('${1:app}', '$2')$0

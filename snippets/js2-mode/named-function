@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: named-function
+# key: nf
+# --
+function $1($2) {
+      $0
+}

@@ -17,6 +17,7 @@
 
 (spacemacs/set-leader-keys
   ";" #'evil-avy-goto-line
+  "id" #'madand/insert-date
   "ij" (lambda (count)
          (interactive "p")
          (evil-save-state (evil-open-below count)))
@@ -24,8 +25,12 @@
          (interactive "p")
          (evil-save-state (evil-open-above count)))
   "o SPC" #'redraw-display
-  "o s" #'save-buffer
-  "w O" #'delete-other-windows)
+  "os" #'save-buffer
+  "oS" #'scroll-all-mode
+  "ogp" #'madand/magit-tag-create-prefixed
+  "ogt" #'madand/magit-tag-create-tbreverted
+  "ogd" #'madand/magit-tag-create-done
+  "wO" #'delete-other-windows)
 
 ;; We distinguish C-i and <tab> in GUI, but this distinction is not
 ;; neded in Hybrid state.

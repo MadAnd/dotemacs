@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: yii-pjax-begin
+# key: ypjb
+# --
+<?php Pjax::begin() ?>

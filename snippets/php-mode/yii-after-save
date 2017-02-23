@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: yii-after-save
+# key: yias
+# --
+public function afterSave($insert, $changedAttributes)
+{
+    parent::afterSave($insert, $changedAttributes);
+
+    $0
+}

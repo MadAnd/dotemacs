@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: yii-before-save
+# key: yibs
+# --
+public function beforeSave($insert)
+{
+    if (!parent::beforeSave($insert)) {
+        return false;
+    }
+
+    $0
+
+    return true;
+}

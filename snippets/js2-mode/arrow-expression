@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: arrow-expression
+# key: ae
+# --
+($1) => $0

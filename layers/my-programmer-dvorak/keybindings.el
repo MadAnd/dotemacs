@@ -19,6 +19,6 @@
    (spacemacs/set-leader-keys
      ;; Unset the QWERTY binding to prevent noise in the `which-key' output.
      qwerty-key nil
-     dvp-key (my-programmer-dvorak//intern "select-window-%s" qwerty-key))))
+     dvp-key (my-programmer-dvorak//intern "winum-select-window-%s" qwerty-key))))
 
 ;;; keybindings.el ends here

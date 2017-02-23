@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: not-isset
+# key: niss
+# --
+!isset($1)$0

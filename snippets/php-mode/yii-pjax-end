@@ -1,0 +1,4 @@
+# key: ypje
+# name: yii-pjax-end
+# --
+<?php Pjax::end() ?>

@@ -6,5 +6,5 @@ public function action${1:Name}(${2:args})
 {
   $0
 
-  return $this->render('viewName', ['model' => $model]);
+  return $this->render('${1:$(downcase yas-text)}', ['model' => $model]);
 }

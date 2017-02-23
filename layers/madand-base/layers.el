@@ -15,6 +15,6 @@
 
 ;;; Code:
 
-;; (configuration-layer/declare-layer 'evil-cleverparens)
+(configuration-layer/declare-layers '(clojure))
 
 ;;; layers.el ends here
