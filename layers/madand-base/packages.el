@@ -35,6 +35,7 @@
     magit
     persp-mode
     (python :location built-in)
+    (simple :location built-in)
     simple-mpc
     semantic
     (smerge-mode :location built-in)
@@ -132,6 +133,10 @@ CommitDate: %ci\n")
   (with-eval-after-load 'python
     (add-hook 'python-mode-hook (lambda ()
                                   (setq-local zeal-at-point-docset "python")))))
+
+(defun madand-base/init-simple ()
+  (with-eval-after-load 'simple
+    (add-hook 'find-file-hook #'madand-base/maybe-disable-fly-modes)))
 
 (defun madand-base/init-simple-mpc ()
   (use-package simple-mpc

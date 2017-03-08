@@ -326,5 +326,28 @@ New version has the .pacnew suffix in filename."
 (defun madand//company-maybe-turn-on-page-break-lines (&rest ignore)
   (when madand--company-page-break-lines-mode-on-p (page-break-lines-mode 1)))
 
+
+
+(defun madand-base/disable-modes (mode-list)
+  "Disable minor modes given in a list MODE-LIST."
+  (dolist (mode mode-list)
+    (and (boundp mode) (funcall mode -1))))
+
+(defun madand-base/maybe-disable-fly-modes ()
+  "Disable `flycheck-mode' (flyc) and/or `flyspell-mode' (flys) in the buffer,
+when certain conditions are met:
+
+* If the file is in node_modules sub-directory, disable both flyc and flys"
+  (madand-base/disable-modes
+   (catch 'disable-modes-list
+     (let ((file-name (buffer-file-name)))
+       ;; Check whether the file is in the node_modules sub-directory.
+       (when (and file-name
+                  (s-contains-p "node_modules" file-name))
+         (message "Disabling flycheck and flyspell, because the file is under node_modules")
+         (throw 'disable-modes-list '(flycheck-mode flyspell-mode)))
+       )
+     ;; The default return value - do not disable anything.
+     nil)))
 
 ;;; funcs.el ends here
