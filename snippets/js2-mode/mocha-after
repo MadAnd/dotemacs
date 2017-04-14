@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: mocha-after
+# key: ma
+# --
+after(function () {
+  $0
+})

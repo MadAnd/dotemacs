@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: this-property-assign
+# key: tpa
+# --
+this.$1 = $0

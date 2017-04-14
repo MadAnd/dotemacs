@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: nested-object
+# key: no
+# --
+$1: {
+  $2
+},$0

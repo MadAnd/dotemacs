@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: mocha-describe
+# key: md
+# --
+describe('$1', function () {
+  $0
+})

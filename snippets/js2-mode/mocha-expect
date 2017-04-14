@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: mocha-expect
+# key: me
+# --
+expect($1)$0
