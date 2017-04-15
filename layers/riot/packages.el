@@ -43,7 +43,7 @@
 
   (add-hook 'riot-mode-hook #'riot/use-eslint-from-node-modules)
 
-  (spacemacs/add-flycheck-hook 'riot-mode))
+  (spacemacs/enable-flycheck 'riot-mode))
 
 (defun riot/post-init-js-doc ()
   (add-hook 'riot-mode-hook 'spacemacs/js-doc-require)
