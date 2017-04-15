@@ -92,6 +92,9 @@
   (with-eval-after-load 'evil-magit
     (evil-magit-define-key 'normal 'magit-mode-map "yB" 'madand/magit-copy-section-value-short)))
 
+(defun madand-base/init-info ()
+  (setq Info-additional-directory-list (list (expand-file-name "~/.spacemacs.d/info/"))))
+
 (defun madand-base/post-init-evil-mc ()
   (add-hook 'prog-mode-hook 'evil-mc-mode)
   (add-hook 'text-mode-hook 'evil-mc-mode))

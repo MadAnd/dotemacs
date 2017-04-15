@@ -32,7 +32,7 @@ set -e
 # Configuration variables:
 DOTSPACEMACS=~/.spacemacs
 GIT_REPO="https://github.com/MadAnd/dotemacs.git"
-INSTALL_DIR=~/.emacs
+INSTALL_DIR=~/.spacemacs.d
 SPACEMACS_REPO="https://github.com/MadAnd/spacemacs.git"
 SPACEMACS_DIR=~/.emacs.d
 
