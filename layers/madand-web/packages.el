@@ -18,13 +18,18 @@
   '(ede-php-autoload
     (semantic-php :location local)
     flycheck
+    graphql-mode
     js2-mode
+    js-doc
+    mocha
     nodejs-repl
     (php-doc :location local)
     (php-helpers :location local)
     php-mode
     php-refactor-mode
+    projectile
     web-mode
+    web-beautify
     (drupal-mode :excluded t)))
 
 (defun madand-web/init-ede-php-autoload ()
@@ -45,16 +50,24 @@
   (setq flycheck-phpcs-standard "PSR2"
         flycheck-php-phpcs-executable "~/.composer/vendor/bin/phpcs"))
 
+(defun madand-web/init-graphql-mode ()
+  (use-package graphql-mode
+    :defer t))
+
 (defun madand-web/post-init-js2-mode ()
-  (setq js2-strict-trailing-comma-warning nil
-        js2-strict-missing-semi-warning nil)
-  ;; Shortcuts for common yet cumbersome things.
-  (evil-define-key 'hybrid js2-mode-map
-    (kbd "M-o") (kbd "C-o $;")
-    (kbd "M-e") (kbd "C-o $,"))
-  (add-hook 'js2-mode-hook #'madand-web/delayed-rainbow-identifiers-mode)
+  (with-eval-after-load 'js2-mode
+    (setq js2-basic-offset 2
+          js2-strict-missing-semi-warning nil)
+    ;; Shortcuts for common yet cumbersome things.
+    (evil-define-key 'hybrid js2-mode-map
+      (kbd "M-o") (kbd "C-o $;")
+      (kbd "M-e") (kbd "C-o $,")
+      (kbd "RET") (kbd "M-j")))
+
+  (add-hook 'js2-mode-hook #'madand-web/disable-rainbow-identifiers-mode)
 
   (spacemacs|define-micro-state string-inflection
+    :doc "Press [_i_] to cycle through available inflections."
     :execute-binding-on-enter t
     :use-minibuffer t
     :evil-leader "xi"
@@ -63,11 +76,25 @@
     ("i" madand/cameldash-variable-at-point))
   )
 
+(defun madand-web/post-init-js-doc ()
+  (evil-define-key 'hybrid js2-mode-map "@" #'js-doc-insert-tag))
+
+(defun madand-web/init-mocha ()
+  (use-package mocha
+    :init
+    (progn
+      (spacemacs/declare-prefix-for-mode 'js2-mode "mt" "test")
+      (spacemacs/set-leader-keys-for-major-mode 'js2-mode
+        "tt" #'mocha-test-file
+        "tT" #'mocha-test-at-point
+        "tp" #'mocha-test-project))))
+
 (defun madand-web/init-nodejs-repl ()
   (use-package nodejs-repl
     :defer t
     :init
     (progn
+      (setq nodejs-repl-arguments '("--require" "babel-register"))
       (spacemacs/register-repl 'nodejs-repl
                                'nodejs-repl
                                "nodejs")
@@ -144,12 +171,15 @@
   (add-hook 'php-mode-hook #'madand-web//php-imenu-create-index-use-semantic)
 
   (add-hook 'php-mode-hook #'madand-web/set-fill-column t)
-  (add-hook 'php-mode-hook #'madand-web/delayed-rainbow-identifiers-mode))
+  (add-hook 'php-mode-hook #'madand-web/disable-rainbow-identifiers-mode))
 
 (defun madand-web/pre-init-phpcbf ()
   (spacemacs|use-package-add-hook phpcbf
     :post-config
     (setq phpcbf-standard "PSR2")))
+
+(defun madand-web/post-init-web-beautify ()
+  (spacemacs/set-leader-keys-for-major-mode 'js2-mode  "=" #'madand-web/js-standard-fix-file))
 
 (defun madand-web/post-init-web-mode ()
   (spacemacs/set-leader-keys-for-major-mode 'web-mode
@@ -159,6 +189,13 @@
                '("/\\(views\\|common/mail\\)/.*\\.php\\'" . web-mode))
 
   (add-hook 'web-mode-hook #'madand-web/disable-rainbow-identifiers))
+
+(defun madand-web/post-init-projectile ()
+  (with-eval-after-load 'projectile
+    (projectile-register-project-type 'madand-nodeapp nil
+                                      "npm run build" "npm run test" "npm run start")
+    (setq projectile-test-suffix-function
+          (madand-web//projectile-test-suffix projectile-test-suffix-function))))
 
 (defun madand-web/init-php-refactor-mode ()
   (use-package php-refactor-mode

@@ -58,16 +58,10 @@ value."
   ;; (php-helpers//load-php-class-list (projectile-project-root) t)
   )
 
-(defun madand-web/delayed-rainbow-identifiers-mode ()
-  "Disable and then, after a delay, enable `rainbow-identifiers-mode'.
-
-This is a workaround for colorized text inside of comments in some major modes,
-like `php-mode' and `js2-mode.'"
+(defun madand-web/disable-rainbow-identifiers-mode ()
+  "Disable `rainbow-identifiers-mode' in the current buffer."
   (rainbow-identifiers-mode -1)
-  (let ((current-buffer (current-buffer)))
-    (run-with-idle-timer 1 nil (lambda ()
-                                 (with-current-buffer current-buffer
-                                   (rainbow-identifiers-mode 1))))))
+  )
 
 (defun madand-web//disable-semantic-idle-summary-mode ()
   "Disable semantic-idle-summary in PHP mode.
@@ -114,6 +108,14 @@ to the project root."
   (nodejs-repl-switch-to-repl)
   (evil-insert-state))
 
+(defun madand-web/nodejs-repl-load ()
+  "Load file repl.js form project root, if any."
+  (interactive)
+  (let ((repl-file (concat (projectile-project-root) "repl.js")))
+    (if (file-exists-p repl-file)
+        (nodejs-repl-load-file repl-file)
+      (nodejs-repl-switch-to-repl))))
+
 (defun madand-web/register-nodejs-repl-bindings ()
   "Register `nodejs-repl' keybindings."
   (interactive)
@@ -125,7 +127,7 @@ to the project root."
     "eE" nil
     "sb" 'nodejs-repl-send-buffer
     "sB" 'madand-web/nodejs-repl-send-buffer-and-focus
-    "si" nil
+    "si" 'madand-web/nodejs-repl-load
     "sf" nil
     "sF" nil
     "sr" 'nodejs-repl-send-region
@@ -164,5 +166,31 @@ Valid values are: nodejs and skewer.")
         (setq madand-web-js-repl 'nodejs))
     (madand-web/register-skewer-repl-bindings)
     (setq madand-web-js-repl 'skewer)))
+
+
+
+(defun madand-web/js-standard-fix-file ()
+  "Run 'standard --fix' on the current file."
+  (interactive)
+  (let ((file (buffer-file-name))
+        (standard-js-program "standard"))
+    (unless file
+      (user-error "Current buffer is not visiting a file"))
+    (save-buffer)
+    (when (zerop
+           (call-process standard-js-program nil nil nil "--fix" file))
+      ;; (fundamental-mode)
+      (revert-buffer t t t)
+      (js2-mode))))
+
+(defun madand-web//projectile-test-suffix (current-suffix-function)
+  "Custom test suffix function adding support of .test.js files
+for nodeapp project type.
+
+Fall back to CURRENT-SUFFIX-FUNCTION for other project types."
+  (lambda (project-type)
+    (cond
+     ((member project-type '(madand-nodeapp)) ".test")
+     (t (funcall current-suffix-function project-type)))))
 
 ;;; funcs.el ends here

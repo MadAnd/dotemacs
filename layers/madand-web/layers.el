@@ -15,6 +15,6 @@
 
 ;;; Code:
 
-(configuration-layer/declare-layers '(javascript html php semantic))
+(configuration-layer/declare-layers '(javascript html php))
 
 ;;; layers.el ends here
