@@ -28,4 +28,12 @@ The FUN is called like (fun qwerty-key dvp-key) where:
   "`intern-soft' a result of passing FORMAT-STR with ARGS trough `format'."
   (intern-soft (apply 'format format-str args)))
 
+(defun my-programmer-dvorak//company-complete-number (n)
+  "Generate a wrapped version of `company-complete-number'.
+`company-complete-number' will be called with the value of N, if N is positive.
+Otherwise it will be called with argument 10."
+  (lambda ()
+    (interactive)
+    (company-complete-number (if (plusp n) n 10))))
+
 ;;; funcs.el ends here

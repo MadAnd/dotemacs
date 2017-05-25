@@ -16,6 +16,7 @@
 (defconst my-programmer-dvorak-packages
   '(
     avy
+    company
     evil
     eyebrowse
     persp-mode
@@ -23,6 +24,14 @@
 
 (defun my-programmer-dvorak/post-init-avy ()
   (setq avy-dispatch-alist my-programmer-dvorak-avy-dispatch-alist))
+
+(defun my-programmer-dvorak/post-init-company ()
+  (with-eval-after-load 'company
+    (my-programmer-dvorak/loop-digit-keys
+     (lambda (qwerty-key dvp-key)
+       (define-key company-active-map
+         (kbd (format "M-%s" dvp-key))
+         (my-programmer-dvorak//company-complete-number (string-to-int qwerty-key)))))))
 
 (defun my-programmer-dvorak/post-init-evil ()
   ;; Setting `evil-inhibit-esc' to t tells Evil not to translate C-[ into ESC,
