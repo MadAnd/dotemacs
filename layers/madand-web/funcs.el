@@ -14,7 +14,7 @@
 
 ;;; Code:
 
-(defun evil-php-insert-doc-block ()
+(defun madand-web/php-insert-doc-block ()
   "Insert php-doc block for current function, class or variable."
   (interactive)
   (evil-with-state emacs
@@ -22,7 +22,7 @@
     (php-insert-doc-block))
   (evil-append-line nil))
 
-(defun browse-url-eww (url &optional new-window)
+(defun madand-web/browse-url-eww (url &optional new-window)
   "`browse-url' compatible function to use EWW as a browser."
   (eww url))
 

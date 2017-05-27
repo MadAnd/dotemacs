@@ -136,7 +136,7 @@
 (defun madand-web/post-init-php-mode ()
   (setq-default php-template-compatibility nil
                 php-manual-path "/usr/share/doc/php/php-chunked-xhtml"
-                php-search-documentation-browser-function #'browse-url-eww
+                php-search-documentation-browser-function #'madand-web/browse-url-eww
                 php-mode-coding-style 'psr2
                 )
 
@@ -163,7 +163,7 @@
   (when (configuration-layer/package-usedp 'php-doc)
     (spacemacs/declare-prefix-for-mode 'php-mode "mi" "insert")
     (spacemacs/set-leader-keys-for-major-mode 'php-mode
-      "id" #'evil-php-insert-doc-block))
+      "id" #'madand-web/php-insert-doc-block))
 
   (add-hook 'php-mode-hook
             #'madand-web//disable-semantic-idle-summary-mode t)
