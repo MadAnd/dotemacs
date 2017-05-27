@@ -60,9 +60,6 @@ values."
      (ibuffer :variables
               ibuffer-group-buffers-by 'projects)
      ivy
-     (keyboard-layout :variables
-                      kl-layout 'dvorak
-                      kl-enabled-configurations '(avy ace-window))
      lua
      (markdown :variables markdown-live-preview-engine 'vmd)
      mu4e
@@ -98,7 +95,7 @@ values."
                 madand-web-php-fill-column 114)
      my-programmer-dvorak
      riot
-     )
+     madand-dvorak)
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the

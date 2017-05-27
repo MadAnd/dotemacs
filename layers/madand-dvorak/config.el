@@ -1,4 +1,4 @@
-;;; config.el --- my-programmer-dvorak layer config file for Spacemacs.
+;;; config.el --- madand-dvorak layer config file for Spacemacs.
 ;;
 ;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
 ;;
@@ -13,7 +13,7 @@
 
 ;;; Code:
 
-(defvar my-programmer-dvorak-digit-keys-alist
+(defvar madand-dvorak-digit-keys-alist
   '(("1" . "&")
     ("2" . "[")
     ("3" . "{")
@@ -26,7 +26,7 @@
     ("0" . "]"))
   "Alist of digit keys of QWERY to the corresponding keys of Programmer Dvorak.")
 
-(defvar my-programmer-dvorak-avy-dispatch-alist
+(defvar madand-dvorak-avy-dispatch-alist
   '((?k . avy-action-kill-move)
     (?K . avy-action-kill-stay)
     (?m . avy-action-mark)

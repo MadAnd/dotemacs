@@ -1,4 +1,4 @@
-;;; keybindings.el --- my-programmer-dvorak layer keybindings file for Spacemacs.
+;;; keybindings.el --- madand-dvorak layer keybindings file for Spacemacs.
 ;;
 ;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
 ;;
@@ -14,11 +14,11 @@
 ;;; Code:
 
 ;; Adapt Window switching to Programmer Dvorak.
-(my-programmer-dvorak/loop-digit-keys
+(madand-dvorak/loop-digit-keys
  (lambda (qwerty-key dvp-key)
    (spacemacs/set-leader-keys
      ;; Unset the QWERTY binding to prevent noise in the `which-key' output.
      qwerty-key nil
-     dvp-key (my-programmer-dvorak//intern "winum-select-window-%s" qwerty-key))))
+     dvp-key (madand-dvorak//intern "winum-select-window-%s" qwerty-key))))
 
 ;;; keybindings.el ends here
