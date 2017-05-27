@@ -460,20 +460,6 @@ you should place your code here."
          (get-buffer-process (current-buffer))
          nil "_"))))
 
-  ;; Make Term buffers start in Emacs state.
-  (setq evil-insert-state-modes (delq 'term-mode evil-insert-state-modes))
-  (add-to-list 'evil-emacs-state-modes 'term-mode)
-  ;; Force Emacs state in term whenever Insert state was meant.
-  ;; (defvar madand-replace-insert-with-emacs-modes-list '(term-mode)
-  ;;   "List of major modes where the Emacs state will be forced
-  ;;   instead of the Insert state.")
-  ;; (add-hook 'evil-insert-state-entry-hook
-  ;;           (lambda ()
-  ;;             (evil-emacs-state 1)))
-  (with-eval-after-load 'multi-term
-    (add-to-list 'term-bind-key-alist '("C-c z" . term-stop-subjob))
-    (add-to-list 'term-bind-key-alist '("<escape>" . term-send-esc)))
-
   (with-eval-after-load 'with-editor
     ;; Workaround for FreeBSD: https://github.com/magit/magit/issues/2672
     (setq with-editor-sleeping-editor "\
@@ -492,36 +478,8 @@ wait $sleep'"))
 Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
       (dolist (host host-names)
         (add-to-list 'tramp-default-proxies-alist
-                     (list host "\\`root\\'" "/ssh:%h:"))))
-    (my-tramp-add-root-proxies "s1" "rudno_pc" "s2m" "ubuntu"))
-
-
-  ;; Bind avy to s and S in Normal and Visual.
-  ;; Move evil-surround-region to gs in Visual
-  (define-key evil-normal-state-map (kbd "s") 'avy-goto-word-1)
-  (define-key evil-motion-state-map (kbd "s") 'avy-goto-word-1)
-  (define-key evil-normal-state-map (kbd "S") 'avy-goto-char-timer)
-  (define-key evil-motion-state-map (kbd "S") 'avy-goto-char-timer)
-  (evil-define-key 'visual evil-surround-mode-map "s" 'avy-goto-word-1)
-  (evil-define-key 'visual evil-surround-mode-map "S" 'avy-goto-char-timer)
-  (evil-define-key 'visual evil-surround-mode-map "gs" 'evil-surround-region)
-
-  ;; (spacemacs/set-leader-keys
-  ;;   "TAB"  'spacemacs/alternate-buffer-in-persp)
-
-  (with-eval-after-load 'company
-    (setq company-gtags-insert-arguments nil)
-    (define-key company-active-map [C-i] 'company-complete-common-or-cycle)
-    (define-key company-active-map (kbd "M-t") (lambda ()
-                                                 (interactive)
-                                                 (when (yas--active-field-overlay)
-                                                   (company-abort)
-                                                   (yas-prev-field))))
-    (define-key company-active-map (kbd "M-n") (lambda ()
-                                                 (interactive)
-                                                 (when (yas--active-field-overlay)
-                                                   (company-abort)
-                                                   (yas-next-field)))))
+                     (list host "root" "/ssh:%h:"))))
+    (my-tramp-add-root-proxies "s1" "rudno_pc"))
 
   ;; Diminish gtags minor mode indicator
   (with-eval-after-load 'ggtags
