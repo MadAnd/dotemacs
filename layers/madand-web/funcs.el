@@ -14,7 +14,7 @@
 
 ;;; Code:
 
-(defun madand-web/php-insert-doc-block ()
+(defun madand/php-insert-doc-block ()
   "Insert php-doc block for current function, class or variable."
   (interactive)
   (evil-with-state emacs
@@ -22,11 +22,11 @@
     (php-insert-doc-block))
   (evil-append-line nil))
 
-(defun madand-web/browse-url-eww (url &optional new-window)
+(defun madand/browse-url-eww (url &optional new-window)
   "`browse-url' compatible function to use EWW as a browser."
   (eww url))
 
-(defmacro madand-web|inserting-command (str)
+(defmacro madand|gen-insert-command (str)
   "Return lambda which is an interactive command that inserts STR at point.
 
 Note: this is a workaround for evil-iedit, since straightforward
@@ -35,45 +35,45 @@ approach like (define-key map (kbd \"M-d\") \"$\") did not work properly!"
      (interactive)
      (insert ,str)))
 
-(defun madand-web/disable-rainbow-identifiers ()
+(defun madand/disable-rainbow-identifiers ()
   "Disable `rainbow-identifiers-mode'."
   (rainbow-identifiers-mode -1))
 
-(defun madand-web/toggle-php-web-mode ()
+(defun madand/toggle-php-web-mode ()
   "Toggle between `php-mode' and `web-mode'."
   (interactive)
   (if (eq major-mode 'web-mode)
       (php-mode)
     (web-mode)))
 
-(defun madand-web/set-fill-column ()
+(defun madand/set-fill-column ()
   "If value of `madand-web-php-fill-column' is not nil, set fill column to that
 value."
   (interactive)
   (when madand-web-php-fill-column
     (set-fill-column madand-web-php-fill-column)))
 
-(defun madand-web/php-after-save ()
+(defun madand/php-after-save ()
   "Regenerate PHP classes cache for the current projectile project."
   ;; (php-helpers//load-php-class-list (projectile-project-root) t)
   )
 
-(defun madand-web/disable-rainbow-identifiers-mode ()
+(defun madand/disable-rainbow-identifiers-mode ()
   "Disable `rainbow-identifiers-mode' in the current buffer."
   (rainbow-identifiers-mode -1)
   )
 
-(defun madand-web//disable-semantic-idle-summary-mode ()
+(defun madand//disable-semantic-idle-summary-mode ()
   "Disable semantic-idle-summary in PHP mode.
 PHP Mode provides more useful information but can not do it properly
 when this mode is enabled since the minibuffer is cleared all the time."
   (semantic-idle-summary-mode -1))
 
-(defun madand-web//php-imenu-create-index-use-semantic ()
+(defun madand//php-imenu-create-index-use-semantic ()
   "Use semantic if the layer is enabled."
   (setq imenu-create-index-function 'semantic-create-imenu-index))
 
-(defun madand-web/php-search-web-documentation-in-default-browser (word)
+(defun madand/php-search-web-documentation-in-default-browser (word)
   "Search documentation on PHP website in the default browser.
 
 The value of `php-search-documentation-browser-function' will be ignored,
@@ -84,7 +84,7 @@ if set, and `browse-url-browser-function' will be used instead."
 
 
 
-(defun madand-web/nodejs-repl-project-root ()
+(defun madand/nodejs-repl-project-root ()
   "Start NodeJS REPL. If inside a project, change the Node process working dir
 to the project root."
   (interactive)
@@ -94,21 +94,21 @@ to the project root."
      (format "process.chdir('%s')\n" (projectile-project-root))))
   (evil-insert-state))
 
-(defun madand-web/nodejs-repl-send-region-and-focus (beg end)
+(defun madand/nodejs-repl-send-region-and-focus (beg end)
   "Send region to NodeJS REPL and focus the REPL buffer."
   (interactive "r")
   (nodejs-repl-send-region beg end)
   (nodejs-repl-switch-to-repl)
   (evil-insert-state))
 
-(defun madand-web/nodejs-repl-send-buffer-and-focus ()
+(defun madand/nodejs-repl-send-buffer-and-focus ()
   "Send buffer to NodeJS REPL and focus the REPL buffer."
   (interactive)
   (nodejs-repl-send-buffer)
   (nodejs-repl-switch-to-repl)
   (evil-insert-state))
 
-(defun madand-web/nodejs-repl-load ()
+(defun madand/nodejs-repl-load ()
   "Load file repl.js form project root, if any."
   (interactive)
   (let ((repl-file (concat (projectile-project-root) "repl.js")))
@@ -116,25 +116,25 @@ to the project root."
         (nodejs-repl-load-file repl-file)
       (nodejs-repl-switch-to-repl))))
 
-(defun madand-web/register-nodejs-repl-bindings ()
+(defun madand/register-nodejs-repl-bindings ()
   "Register `nodejs-repl' keybindings."
   (interactive)
   (spacemacs/declare-prefix-for-mode 'js2-mode "ms" "nodejs")
   (spacemacs/declare-prefix-for-mode 'js2-mode "me" "eval")
   (spacemacs/set-leader-keys-for-major-mode 'js2-mode
-    "'" 'madand-web/nodejs-repl-project-root
+    "'" 'madand/nodejs-repl-project-root
     "ee" nil
     "eE" nil
     "sb" 'nodejs-repl-send-buffer
-    "sB" 'madand-web/nodejs-repl-send-buffer-and-focus
-    "si" 'madand-web/nodejs-repl-load
+    "sB" 'madand/nodejs-repl-send-buffer-and-focus
+    "si" 'madand/nodejs-repl-load
     "sf" nil
     "sF" nil
     "sr" 'nodejs-repl-send-region
-    "sR" 'madand-web/nodejs-repl-send-region-and-focus
-    "ss" 'madand-web/nodejs-repl-project-root))
+    "sR" 'madand/nodejs-repl-send-region-and-focus
+    "ss" 'madand/nodejs-repl-project-root))
 
-(defun madand-web/register-skewer-repl-bindings ()
+(defun madand/register-skewer-repl-bindings ()
   "Register `nodejs-repl' keybindings."
   (interactive)
   (spacemacs/declare-prefix-for-mode 'js2-mode "ms" "skewer")
@@ -157,19 +157,19 @@ to the project root."
 
 Valid values are: nodejs and skewer.")
 
-(defun madand-web/toggle-skewer-and-nodejs-repl ()
+(defun madand/toggle-skewer-and-nodejs-repl ()
   "Toggle between `skewer-mode' and `nodejs-repl' keybindings."
   (interactive)
   (if (eq 'skewer madand-web-js-repl)
       (progn
-        (madand-web/register-nodejs-repl-bindings)
+        (madand/register-nodejs-repl-bindings)
         (setq madand-web-js-repl 'nodejs))
-    (madand-web/register-skewer-repl-bindings)
+    (madand/register-skewer-repl-bindings)
     (setq madand-web-js-repl 'skewer)))
 
 
 
-(defun madand-web/js-standard-fix-file ()
+(defun madand/js-standard-fix-file ()
   "Run 'standard --fix' on the current file."
   (interactive)
   (let ((file (buffer-file-name))
@@ -183,7 +183,7 @@ Valid values are: nodejs and skewer.")
       (revert-buffer t t t)
       (js2-mode))))
 
-(defun madand-web//projectile-test-suffix (current-suffix-function)
+(defun madand//projectile-test-suffix (current-suffix-function)
   "Custom test suffix function adding support of .test.js files
 for nodeapp project type.
 

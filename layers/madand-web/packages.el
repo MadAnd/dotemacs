@@ -64,7 +64,7 @@
       (kbd "M-e") (kbd "C-o $,")
       (kbd "RET") (kbd "M-j")))
 
-  (add-hook 'js2-mode-hook #'madand-web/disable-rainbow-identifiers-mode)
+  (add-hook 'js2-mode-hook #'madand/disable-rainbow-identifiers-mode)
 
   (spacemacs|define-micro-state string-inflection
     :doc "Press [_i_] to cycle through available inflections."
@@ -77,7 +77,7 @@
   )
 
 (defun madand-web/post-init-js-doc ()
-  (evil-define-key 'hybrid js2-mode-map "@" #'js-doc-insert-tag))
+  (evil-define-key 'hybrid js2-mode-map "@" 'js-doc-insert-tag))
 
 (defun madand-web/init-mocha ()
   (use-package mocha
@@ -99,7 +99,7 @@
                                'nodejs-repl
                                "nodejs")
       (spacemacs/set-leader-keys-for-major-mode 'js2-mode
-        "st" #'madand-web/toggle-skewer-and-nodejs-repl))))
+        "st" #'madand/toggle-skewer-and-nodejs-repl))))
 
 (defun madand-web/init-php-doc ()
   (use-package php-doc
@@ -131,12 +131,12 @@
       (kbd "C-c iv") #'php-helpers/insert-var-doc-comment)
     (add-hook 'php-mode-hook
               (lambda ()
-                (add-hook 'after-save-hook #'madand-web/php-after-save nil t)))))
+                (add-hook 'after-save-hook #'madand/php-after-save nil t)))))
 
 (defun madand-web/post-init-php-mode ()
   (setq-default php-template-compatibility nil
                 php-manual-path "/usr/share/doc/php/php-chunked-xhtml"
-                php-search-documentation-browser-function #'madand-web/browse-url-eww
+                php-search-documentation-browser-function #'madand/browse-url-eww
                 php-mode-coding-style 'psr2
                 )
 
@@ -157,21 +157,21 @@
   (spacemacs/declare-prefix-for-mode 'php-mode "mh" "documentation")
   (spacemacs/set-leader-keys-for-major-mode 'php-mode
     "hh" #'php-search-documentation
-    "hH" #'madand-web/php-search-web-documentation-in-default-browser
-    "w" #'madand-web/toggle-php-web-mode)
+    "hH" #'madand/php-search-web-documentation-in-default-browser
+    "w" #'madand/toggle-php-web-mode)
 
   (when (configuration-layer/package-usedp 'php-doc)
     (spacemacs/declare-prefix-for-mode 'php-mode "mi" "insert")
     (spacemacs/set-leader-keys-for-major-mode 'php-mode
-      "id" #'madand-web/php-insert-doc-block))
+      "id" #'madand/php-insert-doc-block))
 
   (add-hook 'php-mode-hook
-            #'madand-web//disable-semantic-idle-summary-mode t)
+            #'madand//disable-semantic-idle-summary-mode t)
   (add-hook 'php-mode-hook #'semantic-mode)
-  (add-hook 'php-mode-hook #'madand-web//php-imenu-create-index-use-semantic)
+  (add-hook 'php-mode-hook #'madand//php-imenu-create-index-use-semantic)
 
-  (add-hook 'php-mode-hook #'madand-web/set-fill-column t)
-  (add-hook 'php-mode-hook #'madand-web/disable-rainbow-identifiers-mode))
+  (add-hook 'php-mode-hook #'madand/set-fill-column t)
+  (add-hook 'php-mode-hook #'madand/disable-rainbow-identifiers-mode))
 
 (defun madand-web/pre-init-phpcbf ()
   (spacemacs|use-package-add-hook phpcbf
@@ -179,23 +179,23 @@
     (setq phpcbf-standard "PSR2")))
 
 (defun madand-web/post-init-web-beautify ()
-  (spacemacs/set-leader-keys-for-major-mode 'js2-mode  "=" #'madand-web/js-standard-fix-file))
+  (spacemacs/set-leader-keys-for-major-mode 'js2-mode  "=" #'madand/js-standard-fix-file))
 
 (defun madand-web/post-init-web-mode ()
   (spacemacs/set-leader-keys-for-major-mode 'web-mode
-    "w" #'madand-web/toggle-php-web-mode)
+    "w" #'madand/toggle-php-web-mode)
 
   (add-to-list 'auto-mode-alist
                '("/\\(views\\|common/mail\\)/.*\\.php\\'" . web-mode))
 
-  (add-hook 'web-mode-hook #'madand-web/disable-rainbow-identifiers))
+  (add-hook 'web-mode-hook #'madand/disable-rainbow-identifiers))
 
 (defun madand-web/post-init-projectile ()
   (with-eval-after-load 'projectile
     (projectile-register-project-type 'madand-nodeapp nil
                                       "npm run build" "npm run test" "npm run start")
     (setq projectile-test-suffix-function
-          (madand-web//projectile-test-suffix projectile-test-suffix-function))))
+          (madand//projectile-test-suffix projectile-test-suffix-function))))
 
 (defun madand-web/init-php-refactor-mode ()
   (use-package php-refactor-mode
