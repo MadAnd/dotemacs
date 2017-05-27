@@ -17,14 +17,17 @@
 
 (spacemacs/set-leader-keys
   ";" #'evil-avy-goto-line
+  "fF" #'find-file-at-point
   "id" #'madand/insert-date
   "o SPC" #'redraw-display
-  "os" #'save-buffer
   "oS" #'scroll-all-mode
+  "ogd" #'madand/magit-tag-create-done
   "ogp" #'madand/magit-tag-create-prefixed
   "ogt" #'madand/magit-tag-create-tbreverted
-  "ogd" #'madand/magit-tag-create-done
-  "wO" #'delete-other-windows)
+  "os" #'save-buffer
+  "ot" #'google-translate-at-point
+  "wO" #'delete-other-windows
+  "qz" #'spacemacs/frame-killer)
 
 ;; We distinguish C-i and <tab> in GUI, but this distinction is not
 ;; desired in Hybrid state.
@@ -39,5 +42,8 @@
 (define-key evil-motion-state-map (kbd "Q") 'spacemacs/kill-this-buffer)
 ;; Unbind some Vim bindings, so that Emacs ones come into play.
 (define-key evil-motion-state-map (kbd "C-e") nil)
+;; Vim-ish Minibuffer
+(define-key minibuffer-local-map (kbd "C-h") (kbd "DEL"))
+(define-key minibuffer-local-map (kbd "C-S-h") help-map)
 
 ;;; keybindings.el ends here
