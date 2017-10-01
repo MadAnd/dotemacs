@@ -78,6 +78,7 @@
  '(ediff-fine-diff-A ((t (:background "#8B2C02" :foreground "light steel blue"))))
  '(ediff-fine-diff-B ((t (:background "#546E00" :foreground "LightSteelBlue3"))))
  '(font-lock-comment-face ((t (:background "#073642" :foreground "#586e75"))))
+ '(ivy-current-match ((t (:background "#0a5d43" :weight bold))))
  '(magit-blame-date ((t (:background "#93a1a1" :foreground "firebrick4"))))
  '(magit-blame-name ((t (:background "#93a1a1" :foreground "firebrick4"))))
  '(smerge-refined-added ((t (:inherit diff-refine-added))))

@@ -59,7 +59,6 @@ values."
      (gtags :disabled-for emacs-lisp clojure)
      (ibuffer :variables
               ibuffer-group-buffers-by 'projects)
-     ivy
      lua
      (markdown :variables markdown-live-preview-engine 'vmd)
      mu4e
@@ -95,6 +94,7 @@ values."
                 madand-web-php-fill-column 114)
      my-programmer-dvorak
      riot
+     madand-ivy
      madand-dvorak)
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -442,9 +442,6 @@ you should place your code here."
     ;; Iedit terminates whenever keyboard macro is executed, so we can only use
     ;; explicit commands.
     (define-key evil-iedit-insert-state-map (kbd "C-h") 'evil-delete-backward-char))
-
-  (with-eval-after-load 'ivy
-    (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit))
 
   ;; Hotfix until Emacs 25.2 realeased.
   (with-eval-after-load 'python
