@@ -7,6 +7,8 @@
 
 namespace `(php-helpers/current-file-namespace)`;
 
+use Yii;
+
 /**
  * Class `class-name` $3.
  *
