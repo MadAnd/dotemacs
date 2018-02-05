@@ -1,0 +1,20 @@
+# -*- mode: snippet -*-
+# expand-env: ((class-name (php-helpers/class-short-name-from-file-path buffer-file-name)))
+# name: yii-class-file
+# key: ycf
+# --
+<?php
+
+namespace `(php-helpers/current-file-namespace)`;
+
+use Yii;
+
+/**
+ * Class `class-name` $3.
+ *
+ * @author Andriy Kmit' <dev@madand.net>
+ */
+class `class-name`${1: extends ${2:ParentClass}}
+{
+  $0
+}

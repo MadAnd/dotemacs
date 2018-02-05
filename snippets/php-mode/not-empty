@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: not-empty
+# key: nem
+# --
+!empty($1)$0
