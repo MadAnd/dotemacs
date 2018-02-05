@@ -1,11 +1,12 @@
-;;; -*- lexical-binding: t -*-
-;;; php-helpers.el --- Helper functions for PHP editing in Emacs.
+;;; php-helpers.el --- Helper functions for PHP editing in Emacs.  -*- lexical-binding: t -*-
 ;;
 ;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
 ;;
 ;; Author: Andriy Kmit' <dev@madand.net>
 ;; URL: https://github.com/syl20bnr/spacemacs
 ;; Based on: https://github.com/glynnforrest/emacs.d
+;; Version: 0.1.0
+;; Package-Requires: ((emacs "24.3") (dash "2.13.0") (f "0.19.0") (s "1.12.0"))
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -121,18 +122,20 @@ Prompt for a class name with `helm' with region or symbol at point pre-filled.
 With prefix argument refresh the class cache before listing candidates."
   (interactive "P")
   (php-helpers/insert-use-class
-   (helm-comp-read
+   (ivy-completing-read
     "Class: "
     (php-helpers/class-candidates refresh)
-    :must-match t
-    :initial-input (if (use-region-p)
-                       (buffer-substring-no-properties (region-beginning) (region-end))
-                     (symbol-name (symbol-at-point))))))
+    nil t
+    (if (use-region-p)
+        (buffer-substring-no-properties (region-beginning) (region-end))
+      (if-let (symbol (symbol-at-point))
+          (symbol-name (symbol-at-point))
+        "")))))
 
 (defun php-helpers/insert-use-class (class-fqn)
   "Add the fully qualified class name CLASS-FQN to the use declaration in the
   current file."
-  (php-helpers/save-window-scroll
+  (php-helpers|save-window-scroll
    (save-excursion
      (save-restriction
        (widen)
@@ -145,15 +148,46 @@ With prefix argument refresh the class cache before listing candidates."
   "Insert a class name from the current projectile project.
 With prefix argument refresh cache before listing candidates."
   (interactive "P")
-  (let ((class (helm-comp-read "Class: "
-                               (php-helpers/class-candidates refresh)
-                               :must-match t)))
+  (let ((class (ivy-completing-read "Class: "
+                                    (php-helpers/class-candidates refresh)
+                                    nil t)))
     (insert (concat "\\" class))))
 
 (defun php-helpers/insert-namespace (&optional do-not-guess)
   "Insert a namespace guessed from current file path."
   (interactive)
   (insert (format "namespace %s;\n" (php-helpers/current-file-namespace))))
+
+(defvar php-helpers-sort-uses-on-save nil
+  "Whether use-statements should be automatically sorted on each buffer save.")
+(put 'php-helpers-sort-uses-on-save 'safe-local-variable #'booleanp)
+
+(defun php-helpers/sort-uses ()
+  "Sort file use-statements alphabetically."
+  (interactive)
+  (php-helpers|save-window-scroll
+   (save-excursion
+     (save-restriction
+       (widen)
+       (beginning-of-buffer)
+       (when (and (derived-mode-p 'php-mode)
+                  (re-search-forward "^use" nil t))
+         (beginning-of-line)
+         (let ((sort-fold-case t)
+               (sort-start (point)))
+           (forward-paragraph)
+           (sort-lines nil sort-start (point))))))))
+
+(defun php-helpers/sort-uses-after-save-handler ()
+  "Handler for `after-save-hook' to automatically sort use-statements, iff
+  `php-helpers-sort-uses-on-save' is t."
+  (when php-helpers-sort-uses-on-save
+    (php-helpers/sort-uses)))
+
+(defun php-helpers/register-sort-uses-after-save ()
+  "Register `php-helpers/sort-uses-after-save-handler' in buffer local
+  `after-save-hook'."
+  (add-hook 'after-save-hook #'php-helpers/sort-uses-after-save-handler nil t))
 
 
 
@@ -165,8 +199,8 @@ With prefix argument refresh cache before listing candidates."
     (php-helpers/namespace-from-path buffer-file-name "/src/"))
    ((s-contains? "/tests/" buffer-file-name)
     (php-helpers/namespace-from-path buffer-file-name "/tests/"))
-   ((s-contains? "/app/" buffer-file-name)
-    (php-helpers/namespace-from-path buffer-file-name "/app/"))
+   ;; ((s-contains? "/app/" buffer-file-name)
+   ;;  (php-helpers/namespace-from-path buffer-file-name "/app/"))
    (t (php-helpers/namespace-from-path buffer-file-name
                                        (projectile-project-root)))))
 
@@ -202,7 +236,7 @@ If called interactively, the result will also be inserted at point."
       (evil-insert-state))))
 
 ;; Borrowed this macro from `evil-mc'.
-(defmacro php-helpers/save-window-scroll (&rest forms)
+(defmacro php-helpers|save-window-scroll (&rest forms)
   "Saves and restores the window scroll position"
   (let ((p (make-symbol "p"))
         (s (make-symbol "start"))

@@ -15,36 +15,46 @@
 ;;; Code:
 
 (defconst madand-web-packages
-  '(ede-php-autoload
-    (semantic-php :location local)
+  '(company-php
+    ;; ede-php-autoload
     flycheck
+    geben
     graphql-mode
     js2-mode
     js-doc
     mocha
     nodejs-repl
+    popwin
     (php-doc :location local)
     (php-helpers :location local)
+    (php-extras :excluded t)
     php-mode
     php-refactor-mode
-    projectile
+    ;; projectile
     web-mode
     web-beautify
     (drupal-mode :excluded t)))
 
+(defun madand-web/post-init-company-php ()
+  (pop company-backends-php-mode)
+  (push '(company-ac-php-backend company-keywords company-dabbrev-code)
+        company-backends-php-mode))
+
 (defun madand-web/init-ede-php-autoload ()
   (use-package ede-php-autoload
-    :after php-mode
-    :config
-    (require 'ede-php-autoload-mode))
-
+    :defer t
+    :after php-mode)
   (add-hook 'php-mode-hook #'ede-php-autoload-mode))
 
-(defun madand-web/init-semantic-php ()
-  (use-package semantic-php
+(defun madand-web/init-geben ()
+  (use-package geben
+    :defer t
     :after php-mode
     :config
-    (require 'loaddefs)))
+    (progn
+      (setq geben-display-window-function 'popwin:display-buffer
+            geben-path-mappings  '(("/home/madand/dev/php/rentling/app" "/app")))
+      (evil-set-initial-state 'geben-mode 'emacs))))
 
 (defun madand-web/post-init-flycheck ()
   (setq flycheck-phpcs-standard "PSR2"
@@ -57,7 +67,8 @@
 (defun madand-web/post-init-js2-mode ()
   (with-eval-after-load 'js2-mode
     (setq js2-basic-offset 2
-          js2-strict-missing-semi-warning nil)
+          js2-strict-missing-semi-warning nil
+          js2-strict-inconsistent-return-warning nil)
     ;; Shortcuts for common yet cumbersome things.
     (evil-define-key 'hybrid js2-mode-map
       (kbd "M-o") (kbd "C-o $;")
@@ -66,14 +77,14 @@
 
   (add-hook 'js2-mode-hook #'madand/disable-rainbow-identifiers-mode)
 
-  (spacemacs|define-micro-state string-inflection
-    :doc "Press [_i_] to cycle through available inflections."
-    :execute-binding-on-enter t
-    :use-minibuffer t
-    :evil-leader "xi"
-    :persistent t
-    :bindings
-    ("i" madand/cameldash-variable-at-point))
+  ;; (spacemacs|define-micro-state string-inflection
+  ;;   :doc "Press [_i_] to cycle through available inflections."
+  ;;   :execute-binding-on-enter t
+  ;;   :use-minibuffer t
+  ;;   :evil-leader "xi"
+  ;;   :persistent t
+  ;;   :bindings
+  ;;   ("i" madand/cameldash-variable-at-point))
   )
 
 (defun madand-web/post-init-js-doc ()
@@ -100,6 +111,15 @@
                                "nodejs")
       (spacemacs/set-leader-keys-for-major-mode 'js2-mode
         "st" #'madand/toggle-skewer-and-nodejs-repl))))
+
+(defun madand-web/post-init-popwin ()
+  (with-eval-after-load 'popwin
+    (push
+     '(".*backtrace\*" :regexp t :position bottom)
+     popwin:special-display-config)
+    (push
+     '(".*context\*" :regexp t :position left :stick t :noselect t :width 80)
+     popwin:special-display-config)))
 
 (defun madand-web/init-php-doc ()
   (use-package php-doc
@@ -129,6 +149,7 @@
       (kbd "C-c iu") #'php-helpers/do-insert-use-class-region-or-symbol
       (kbd "C-c ic") #'php-helpers/insert-class
       (kbd "C-c iv") #'php-helpers/insert-var-doc-comment)
+    (add-hook 'php-mode-hook #'php-helpers/register-sort-uses-after-save)
     (add-hook 'php-mode-hook
               (lambda ()
                 (add-hook 'after-save-hook #'madand/php-after-save nil t)))))
@@ -165,11 +186,6 @@
     (spacemacs/set-leader-keys-for-major-mode 'php-mode
       "id" #'madand/php-insert-doc-block))
 
-  (add-hook 'php-mode-hook
-            #'madand//disable-semantic-idle-summary-mode t)
-  (add-hook 'php-mode-hook #'semantic-mode)
-  (add-hook 'php-mode-hook #'madand//php-imenu-create-index-use-semantic)
-
   (add-hook 'php-mode-hook #'madand/set-fill-column t)
   (add-hook 'php-mode-hook #'madand/disable-rainbow-identifiers-mode))
 
@@ -193,7 +209,9 @@
 (defun madand-web/post-init-projectile ()
   (with-eval-after-load 'projectile
     (projectile-register-project-type 'madand-nodeapp nil
-                                      "npm run build" "npm run test" "npm run start")
+                                      :compile "npm run build"
+                                      :test "npm run test"
+                                      :run "npm run start")
     (setq projectile-test-suffix-function
           (madand//projectile-test-suffix projectile-test-suffix-function))))
 

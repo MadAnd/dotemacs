@@ -45,10 +45,9 @@ values."
      (colors :variables
              colors-colorize-identifiers 'all)
      csv
-     common-lisp
      (dash :variables
            helm-dash-docset-newpath "~/.local/share/Zeal/Zeal/docsets")
-     emacs-lisp
+     docker
      rcirc
      fasd
      finance
@@ -56,7 +55,6 @@ values."
      (git :variables
           git-magit-status-fullscreen t)
      github
-     (gtags :disabled-for emacs-lisp clojure)
      (ibuffer :variables
               ibuffer-group-buffers-by 'projects)
      lua
@@ -64,16 +62,12 @@ values."
      mu4e
      (org :variables
           org-enable-github-support t)
-     pandoc
-     ;; parinfer
-     purescript
-     ;; pdf-tools
      (python :variables
              python-enable-yapf-format-on-save t)
      ranger
-     racket
+     rebox
      search-engine
-     (semantic :enabled-for php madand-web)
+     (semantic :enabled-for phpplus madand-web)
      (shell :variables
             shell-default-shell 'eshell
             shell-default-height 30
@@ -84,36 +78,31 @@ values."
      (syntax-checking :variables
                       syntax-checking-enable-tooltips nil)
      sql
+     treemacs
      version-control
      vimscript
      xkcd
      yaml
      ;; Private layers:
      madand-base
-    (madand-web :variables
-                madand-web-php-fill-column 114)
-     my-programmer-dvorak
-     riot
      madand-ivy
      madand-lisp
+     (madand-web :variables
+                 madand-web-php-fill-column 114)
      madand-dvorak)
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(crontab-mode
-                                      dtrt-indent
-                                      simple-mpc
+   dotspacemacs-additional-packages '(dtrt-indent
                                       mustache
                                       ;; mustache-mode
                                       nginx-mode
-                                      keyfreq
-                                      speed-type
-                                      string-inflection)
+                                      speed-type)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '(evil-escape)
+   dotspacemacs-excluded-packages '(evil-escape magithub yasnippet-snippets)
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
    ;; `used-only' installs only explicitly used packages and deletes any unused
@@ -384,6 +373,11 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+  ;; Install bleeding edge packages.
+  (setq configuration-layer--elpa-archives '(("melpa" . "melpa.org/packages/")
+                                             ("org" . "orgmode.org/elpa/")
+                                             ("gnu" . "elpa.gnu.org/packages/")))
+
   ;; Load Custom settings from custom.el
   (setq custom-file (expand-file-name "~/.spacemacs.d/custom.el"))
   (load custom-file)
@@ -413,10 +407,11 @@ explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (setq-default
    ange-ftp-netrc-filename "~/.authinfo.gpg"
-   auth-source-gpg-encrypt-to "ak@madand.net"
+   auth-source-gpg-encrypt-to "dev@madand.net"
    auth-sources '("~/.authinfo.gpg")
    create-lockfiles nil
    delete-by-moving-to-trash nil
+   ivy-use-virtual-buffers nil
    powerline-default-separator 'alternate
    ranger-cleanup-eagerly t
    rcirc-server-alist '(("irc.freenode.net" :encryption tls :port 6697
@@ -426,7 +421,7 @@ you should place your code here."
    scroll-conservatively 1000
    scroll-margin 2)
 
-  ;; Enable disabled-by-default Emacs features.
+  ;; Enable some Emacs features that are disabled by default.
   (put 'set-goal-column 'disabled nil)
 
   (spacemacs/set-google-translate-languages "en" "uk")
@@ -438,22 +433,6 @@ you should place your code here."
   ;; Treat more buffer types as "useful".
   (dolist (pattern '("\\*info.*\\*" "\\*Man.+\\*" "\\*magit.+" "\\*multiterm.+" "\\*helm-ag-edit\\*"))
     (pushnew pattern spacemacs-useful-buffers-regexp))
-
-  (with-eval-after-load 'evil-iedit-state
-    ;; Iedit terminates whenever keyboard macro is executed, so we can only use
-    ;; explicit commands.
-    (define-key evil-iedit-insert-state-map (kbd "C-h") 'evil-delete-backward-char))
-
-  ;; Hotfix until Emacs 25.2 realeased.
-  (with-eval-after-load 'python
-    (defun python-shell-completion-native-try ()
-      "Return non-nil if can trigger native completion."
-      (let ((python-shell-completion-native-enable t)
-            (python-shell-completion-native-output-timeout
-             python-shell-completion-native-try-output-timeout))
-        (python-shell-completion-native-get-completions
-         (get-buffer-process (current-buffer))
-         nil "_"))))
 
   (with-eval-after-load 'with-editor
     ;; Workaround for FreeBSD: https://github.com/magit/magit/issues/2672
@@ -475,13 +454,6 @@ Each added entry has form (HOST \"root\" \"/ssh:%h:\")."
         (add-to-list 'tramp-default-proxies-alist
                      (list host "root" "/ssh:%h:"))))
     (my-tramp-add-root-proxies "s1" "rudno_pc"))
-
-  ;; Diminish gtags minor mode indicator
-  (with-eval-after-load 'ggtags
-    (spacemacs|hide-lighter ggtags-mode))
-
-  (with-eval-after-load 'helm-gtags
-    (spacemacs|hide-lighter helm-gtags-mode))
 
   (with-eval-after-load 'recentf
     (setq recentf-exclude (delete (expand-file-name package-user-dir) recentf-exclude))))

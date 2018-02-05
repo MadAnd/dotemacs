@@ -44,7 +44,9 @@ approach like (define-key map (kbd \"M-d\") \"$\") did not work properly!"
   (interactive)
   (if (eq major-mode 'web-mode)
       (php-mode)
-    (web-mode)))
+    (web-mode))
+  (hack-dir-local-variables)
+  (hack-local-variables-apply))
 
 (defun madand/set-fill-column ()
   "If value of `madand-web-php-fill-column' is not nil, set fill column to that
@@ -62,16 +64,6 @@ value."
   "Disable `rainbow-identifiers-mode' in the current buffer."
   (rainbow-identifiers-mode -1)
   )
-
-(defun madand//disable-semantic-idle-summary-mode ()
-  "Disable semantic-idle-summary in PHP mode.
-PHP Mode provides more useful information but can not do it properly
-when this mode is enabled since the minibuffer is cleared all the time."
-  (semantic-idle-summary-mode -1))
-
-(defun madand//php-imenu-create-index-use-semantic ()
-  "Use semantic if the layer is enabled."
-  (setq imenu-create-index-function 'semantic-create-imenu-index))
 
 (defun madand/php-search-web-documentation-in-default-browser (word)
   "Search documentation on PHP website in the default browser.

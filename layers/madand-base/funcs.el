@@ -15,13 +15,10 @@
 
 ;;; Code:
 
-                                        ; (require 'dash)
-                                        ; (require 's)
-
 (defun madand/buffer-dir-name ()
   "Get the name of a directory where the current buffer's file is located. "
   (require 'f)
-  (-> (buffer-file-name) f-dirname f-filename))
+  (thread-first (buffer-file-name) f-dirname f-filename))
 
 (defun madand/browse-url-palemoon (url &optional new-window)
   "Use Palemoon as the external browser."
@@ -46,13 +43,13 @@
   (let ((yas-prompt-functions '(yas/completing-prompt)))
     (apply orig-fun args)))
 
-(defun madand/sudo-async-shell-command ()
+(defun madand/sudo-async-shell-command (command &optional output-buffer error-buffer)
   "Wrapper for `async-shell-command' which invokes TRAMP sudo before
 the actual command."
-  (interactive)
+  (interactive "MShell command (root): ")
   (with-temp-buffer
-    (cd "/sudo::/")
-    (call-interactively #'async-shell-command)))
+    (cd "/sudo:root@localhost:/")
+    (async-shell-command command output-buffer error-buffer)))
 
 (defun madand/file-set-executable ()
   "Make current file executable."
@@ -74,110 +71,24 @@ the actual command."
              (spacemacs/toggle-rainbow-identifier-on))))))))
 
 
-;; Translation between variable naming stysels:
-;; CamelCase, underscore_case, dash-case, colon::case.
-;; The following defuns are form https://www.emacswiki.org/emacs/CamelCase
 
-(defun madand/split-name (s)
-  "Split the string S into words. Supports UpperCamelCase and
-lowerCamelCase formats."
-  (split-string
-   (let ((case-fold-search nil))
-     (downcase
-      (replace-regexp-in-string "\\([a-z]\\)\\([A-Z]\\)" "\\1 \\2" s)))
-   "[^A-Za-z0-9]+"))
-
-(defun madand/ucamelcase (s)
-  "Transform the string S to UpperCamelCase."
-  (mapconcat 'capitalize (madand/split-name s) ""))
-
-(defun madand/underscore (s)
-  "Transform the string S to underscore_splitted_form."
-  (mapconcat 'downcase   (madand/split-name s) "_"))
-
-(defun madand/dasherize (s)
-  "Transform the string S to dash-splitted-form."
-  (mapconcat 'downcase   (madand/split-name s) "-"))
-
-(defun madand/colonize (s)
-  "Transform the string S to double::colon::splitted::form."
-  (mapconcat 'capitalize (madand/split-name s) "::"))
-
-(defun madand/lcamelcase  (s)
-  "Transform the string S to lowerCamelCase."
-  (let ((words (madand/split-name s)))
-    (concat
-     (car words)
-     (mapconcat 'capitalize (cdr words) ""))))
-
-(defun madand/camelscore (s)
-  (let ((case-fold-search nil))
-    (cond ((string-match-p "\\(?:[a-z]+_\\)+[a-z]+" s)	(madand/dasherize  s))
-          ((string-match-p "\\(?:[a-z]+-\\)+[a-z]+" s)	(madand/ucamelcase  s))
-          ((string-match-p "\\(?:[A-Z][a-z]+\\)+$"  s)	(madand/colonize   s))
-          (t  (madand/underscore s)))))
-
-(defun madand/cameldash (s)
-  "Transform the string S depending on its current form:
-- dash-delimited-text into lowerCamelCase
-- underscore_delimited_text into lowerCamelCase
-- lowerCamelCase into UpperCamelCase
-- *anything other* into underscore_delimited_text"
-  (let ((case-fold-search nil))
-    (cond ((string-match-p "\\(?:[a-z]+-\\)+[a-z]+" s)	(madand/lcamelcase s))
-          ((string-match-p "^[a-z].+\\(?:[A-Z][a-z]+\\)+$"  s)	(madand/ucamelcase s))
-          ((string-match-p "\\(?:[A-Z][a-z]+\\)+$"  s)	(madand/underscore s))
-          (t  (madand/dasherize s)))))
-
-(cl-defun madand/variable-at-point (&optional (var-regex "[:alnum:]_-"))
-  "Get the whole \"variable\" at point.
-
-Optional argument VAR-REGEX defines a regexp of what will be
-considered a variable."
-  (save-excursion
-    (let* ((beg (and (skip-chars-backward var-regex) (point)))
-           (end (and (skip-chars-forward  var-regex) (point)))
-           (txt (buffer-substring beg end)))
-      (cl-values txt beg end))))
-
-(defun madand/transform-variable-at-point (transformer)
-  "Transform a variable at point into another form by applying TRANSFORMER.
-
-TRANSFORMER must be a defun of one argument, the input string.
-
-Variable at point is determined by `madand/variable-at-point'."
-  (let ((point (point)))
-    (cl-multiple-value-bind (txt beg end) (madand/variable-at-point)
-      (let ((cml (funcall transformer txt)))
-        (when cml
-          (delete-region beg end)
-          (insert cml)
-          (set-window-point nil point))))))
-
-(defun madand/camelscore-variable-at-point ()
-  (interactive)
-  (madand/transform-variable-at-point #'madand/camelscore))
-
-(defun madand/cameldash-variable-at-point ()
-  (interactive)
-  (madand/transform-variable-at-point #'madand/cameldash))
-
-
 (defun madand/evil-select-pasted ()
+  "Visually select the most recently pasted region."
   (interactive)
-  (let ((start-marker (evil-get-marker ?[))
-                      (end-marker (evil-get-marker ?])))
+  (let ((start-marker (evil-get-marker (string-to-char "[")))
+        (end-marker (evil-get-marker (string-to-char "]"))))
     (evil-visual-select start-marker end-marker)))
 
 (defun madand/insert-date (prefix)
-  "Insert the current date. With prefix-argument, use ISO format. With
-   two prefix arguments, write out the day and month name."
+  "Insert the current date.
+With a universal-argument, use ISO format.
+With double universal-argument, write out the day and month name."
   (interactive "P")
   (let ((format (cond
                  ((not prefix) "%d.%m.%Y")
                  ((equal prefix '(4)) "%Y-%m-%d")
                  ((equal prefix '(16)) "%A, %d. %B %Y")))
-        (system-time-locale "de_DE"))
+        (system-time-locale "en_US"))
     (insert (format-time-string format))))
 
 
@@ -207,6 +118,8 @@ Auto-increment number will be appended after the prefix.
 
 If called with prefix argument, other tags will be deleted from the commit."
   (interactive "s\nP")
+  (require 'dash)
+  (require 's)
   (when delete-other-tags?
     (madand/magit-tag-delete-all))
   (let* ((similar-tags (--filter (s-starts-with? prefix it) (magit-list-tags)))
@@ -328,17 +241,17 @@ New version has the .pacnew suffix in filename."
 
 
 
-(defun madand-base/disable-modes (mode-list)
-  "Disable minor modes given in a list MODE-LIST."
+(defun madand/disable-modes (mode-list)
+  "Disable modes given in a list MODE-LIST."
   (dolist (mode mode-list)
     (and (boundp mode) (funcall mode -1))))
 
-(defun madand-base/maybe-disable-fly-modes ()
+(defun madand//maybe-disable-fly-modes ()
   "Disable `flycheck-mode' (flyc) and/or `flyspell-mode' (flys) in the buffer,
 when certain conditions are met:
 
 * If the file is in node_modules sub-directory, disable both flyc and flys"
-  (madand-base/disable-modes
+  (madand/disable-modes
    (catch 'disable-modes-list
      (let ((file-name (buffer-file-name)))
        ;; Check whether the file is in the node_modules sub-directory.
@@ -349,5 +262,60 @@ when certain conditions are met:
        )
      ;; The default return value - do not disable anything.
      nil)))
+
+(defun madand/inside-multilne-c-comment-p ()
+  "Return t if the point is inside of a mutilne C style \"/** … **/\" comment.
+Rturns nil if point is on the comment closing part \"**/\"."
+  (save-excursion
+    (back-to-indentation)
+    (and (sp-point-in-string-or-comment)
+         (looking-at-p (rxt-pcre-to-elisp "/\\*{2}|\\*[^/]+")))))
+
+(defun madand/evil-open-above-maybe-continue-comment (count)
+  "Call `evil-open-above' then continue multi-line C-style comment (/**)
+if we were inside of one."
+  (interactive "p")
+  (let ((should-continue-comment (madand/inside-multilne-c-comment-p)))
+    (evil-open-above count)
+    (when should-continue-comment
+      (insert "* "))))
+
+(defun madand/evil-open-below-maybe-continue-comment (count)
+  "Call `evil-open-below' then continue multi-line C-style comment (/**)
+if we were inside of one."
+  (interactive "p")
+  (let ((should-continue-comment (madand/inside-multilne-c-comment-p)))
+    (evil-open-below count)
+    (when should-continue-comment
+      (insert "* "))))
+
+
+
+(defun madand//rcirc-connect (f server &optional port nick user-name
+                                full-name startup-channels password
+                                encryption)
+  "Get SERVER credentials from ~/.authinfo.gpg and pass them to `rcirc-connect'."
+  (require 'auth-source)
+  (when-let ((search-result (auth-source-search
+                             :host server
+                             :port '("nickserv" "bitlbee" "quakenet")
+                             :require '(:port :user :secret)
+                             :max 1))
+             (auth-item (first search-result)))
+    (setq user-name (plist-get auth-item :user))
+    (setq password (funcall (plist-get auth-item :secret))))
+  (funcall f server port nick user-name full-name startup-channels password
+           encryption))
+
+
+
+(defun madand//ajb-sort-function (b1 b2)
+  "Sort function for `ajb-sort-function'.
+
+If in perspective, use `bs--sort-by-name'. Otherwise, use
+`bs--sort-by-recentf'."
+  (if (get-current-persp)
+      (bs--sort-by-name b1 b2)
+    nil))
 
 ;;; funcs.el ends here
