@@ -215,7 +215,8 @@ CommitDate: %ci\n")
     (progn
       (spacemacs|hide-lighter simple-mpc-current-playlist-mode)
       (setq simple-mpc-mpd-playlist-directory "~/.config/mpd/playlists/"
-            simple-mpc-playlist-auto-refresh 2)
+            simple-mpc-playlist-auto-refresh 2
+            simple-mpc-playlist-format "[%track%. ][%name%: ][%title%][ - %%artist%][ - %album%]")
       (evilified-state-evilify-map simple-mpc-mode-map
         :mode simple-mpc-mode
         :bindings (kbd "C-m") (kbd "<return>")))))
