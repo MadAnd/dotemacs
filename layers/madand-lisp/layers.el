@@ -16,7 +16,6 @@
 ;;; Code:
 
 (configuration-layer/declare-layers '(common-lisp
-                                      clojure
                                       emacs-lisp))
 
 ;;; layers.el ends here

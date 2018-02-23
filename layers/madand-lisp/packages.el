@@ -14,27 +14,7 @@
 ;;; Code:
 
 (defconst madand-lisp-packages
-  '(cider
-    clj-refactor
-    slime))
-
-(defun madand-lisp/post-init-cider ()
-  (with-eval-after-load 'cider
-    (setq cider-repl-display-help-banner nil
-          cider-offer-to-open-cljs-app-in-browser nil)
-    (dolist (m '(clojure-mode
-                 clojurec-mode
-                 clojurescript-mode
-                 clojurex-mode
-                 cider-repl-mode
-                 cider-clojure-interaction-mode))
-      (spacemacs/set-leader-keys-for-major-mode m
-        "el" #'madand/cider-eval-sexp-end-of-line)
-      (spacemacs|hide-lighter cider-mode))))
-
-(defun madand-lisp/post-init-clj-refactor ()
-  (with-eval-after-load 'clj-refactor
-    (spacemacs|hide-lighter clj-refactor-mode)))
+  '(slime))
 
 (defun madand-lisp/post-init-slime ()
   (with-eval-after-load 'slime

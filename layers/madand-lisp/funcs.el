@@ -13,13 +13,6 @@
 
 ;;; Code:
 
-(defun madand/cider-eval-sexp-end-of-line (&optional prefix)
-  "Evaluate the last sexp at the end of the current line."
-  (interactive "P")
-  (save-excursion
-    (end-of-line)
-    (cider-eval-last-sexp prefix)))
-
 (defun madand/slime-show-description (string package)
   "Overriding function for `slime-show-description'. It displays description
 buffer with `help-mode', instead of default implementation's
