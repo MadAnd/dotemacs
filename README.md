@@ -4,9 +4,9 @@ My Emacs configuration on top of [Spacemacs](https://github.com/syl20bnr/spacema
 
 ## Requirements
 
-* Emacs 24.3+
+* Emacs 25.1+
 * Git
-* Bash (for installation script)
+* Bash (only for installation script)
 
 
 ## Installation
