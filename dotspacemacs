@@ -53,7 +53,6 @@ This function should only modify configuration layer settings."
      docker
      rcirc
      fasd
-     finance
      games
      (git :variables
           git-magit-status-fullscreen t)
