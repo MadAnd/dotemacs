@@ -234,7 +234,9 @@ CommitDate: %ci\n")
 
     (setq yas-prompt-functions '(yas-x-prompt) ; Force use of `ace-popup-menu'.
           ;; Unconditionally disable snippet expansion in strings and comments.
-          yas-buffer-local-condition '(not (sp-point-in-string-or-comment))
+          yas-buffer-local-condition '(if (sp-point-in-string-or-comment)
+                                          '(require-snippet-condition . force-in-comment)
+                                        t)
           ;; Don't load snippets shipped with Yasnippet.
           yas-snippet-dirs (remove 'yas-installed-snippets-dir yas-snippet-dirs))
     ;; Fall back to completing prompt for yasnippet functions with
