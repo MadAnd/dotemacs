@@ -19,6 +19,8 @@
    (spacemacs/set-leader-keys
      ;; Unset the QWERTY binding to prevent noise in the `which-key' output.
      qwerty-key nil
-     dvp-key (madand-dvorak//intern "winum-select-window-%s" qwerty-key))))
+     dvp-key (if (string= qwerty-key "0")
+                 #'treemacs-select-window
+               (madand-dvorak//intern "winum-select-window-%s" qwerty-key)))))
 
 ;;; keybindings.el ends here
