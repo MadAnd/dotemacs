@@ -14,15 +14,19 @@
 
 ;;; Code:
 
-(defun madand-dvorak/loop-digit-keys (fun)
-  "Loop trough pairs from `madand-dvorak-digit-keys-alist' calling FUN on
- each iteration.
+(defmacro* madand-dvorak/loop-digit-keys ((qwerty-key dvp-key) &rest body)
+  "Loop trough pairs in `madand-dvorak-digit-keys-alist'
+evaluating BODY forms on each iteration.
 
-The FUN is called like (fun qwerty-key dvp-key) where:
- * QWERTY-KEY is a string with a digit of QWERTY layout
- * DVP-KEY is a string with the corresponding character of Programmer Dvorak"
-  (dolist (el madand-dvorak-digit-keys-alist)
-    (funcall fun (car el) (cdr el))))
+QWERTY-KEY and DVP-KEY must be symbols that BODY forms can use to access
+the current QWERTY/Dvorak key pair on each loop iteration."
+  (declare (debug ((symbolp symbolp) &rest form))
+           (indent defun))
+  (let ((key-pair (gensym)))
+    `(dolist (,key-pair madand-dvorak-digit-keys-alist)
+       (let ((,qwerty-key (car ,key-pair))
+             (,dvp-key (cdr ,key-pair)))
+         ,@body))))
 
 (defun madand-dvorak//intern (format-str &rest args)
   "`intern-soft' a result of passing FORMAT-STR with ARGS trough `format'."
