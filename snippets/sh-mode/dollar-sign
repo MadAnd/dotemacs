@@ -2,4 +2,4 @@
 # name: $
 # condition: 'force-in-comment
 # --
-\$$0
+\${$0}
