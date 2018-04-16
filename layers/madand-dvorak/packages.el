@@ -14,13 +14,14 @@
 ;;; Code:
 
 (defconst madand-dvorak-packages
-  '(
-    avy
+  '(avy
     company
     evil
     eyebrowse
+    neotree
     persp-mode
-    ))
+    treemacs
+    winum))
 
 (defun madand-dvorak/post-init-avy ()
   (setq avy-dispatch-alist madand-dvorak-avy-dispatch-alist))
@@ -48,6 +49,16 @@
          `(,(list dvp-key cmd :exit t)
            ,(list (concat "C-" dvp-key) cmd)))))))
 
+(defun madand-dvorak/pre-init-neotree ()
+  (spacemacs|use-package-add-hook neotree
+    :post-init
+    (madand-dvorak/loop-digit-keys
+     (lambda (qwerty-key dvp-key)
+       (when (string= qwerty-key "0")
+         (spacemacs/set-leader-keys
+           qwerty-key nil
+           dvp-key #'neotree-show))))))
+
 (defun madand-dvorak/post-init-persp-mode ()
   (madand-dvorak/loop-digit-keys
    (lambda (qwerty-key dvp-key)
@@ -56,5 +67,27 @@
        (spacemacs/transient-state-register-add-bindings "layouts"
          `(,(list dvp-key cmd :exit t)
            ,(list (concat "C-" dvp-key) cmd)))))))
+
+(defun madand-dvorak/pre-init-treemacs ()
+  (spacemacs|use-package-add-hook treemacs
+    :post-init
+    (madand-dvorak/loop-digit-keys
+     (lambda (qwerty-key dvp-key)
+       (when (string= qwerty-key "0")
+         (spacemacs/set-leader-keys
+           qwerty-key nil
+           dvp-key #'treemacs-select-window))))))
+
+(defun madand-dvorak/pre-init-winum ()
+  (spacemacs|use-package-add-hook winum
+    :post-init
+    (madand-dvorak/loop-digit-keys
+     (lambda (qwerty-key dvp-key)
+       ;; SPC 0 is reserved for neotree/treemacs window.
+       (unless (string= qwerty-key "0")
+         (spacemacs/set-leader-keys
+           ;; Unset the QWERTY binding to prevent noise in the `which-key' output.
+           qwerty-key nil
+           dvp-key (madand-dvorak//intern "winum-select-window-%s" qwerty-key)))))))
 
 ;;; packages.el ends here
