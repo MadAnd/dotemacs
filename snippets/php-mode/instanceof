@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: instanceof
+# key: iof
+# --
+instanceof $0
