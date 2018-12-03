@@ -1,6 +1,3 @@
-[submodule "layers/my-web-dev/local/ede-php-autoload"]
-	path = layers/my-web-dev/local/ede-php-autoload
-	url = https://github.com/stevenremot/ede-php-autoload.git
 [submodule "layers/my-web-dev/local/semantic-php"]
 	path = layers/my-web-dev/local/semantic-php
 	url = https://github.com/jorissteyn/semantic-php.git
