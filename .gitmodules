@@ -1,3 +1,0 @@
-[submodule "layers/my-web-dev/local/semantic-php"]
-	path = layers/my-web-dev/local/semantic-php
-	url = https://github.com/jorissteyn/semantic-php.git
