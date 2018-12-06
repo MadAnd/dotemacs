@@ -292,8 +292,8 @@ if we were inside of one."
 
 
 (defun madand//rcirc-connect (f server &optional port nick user-name
-                                full-name startup-channels password
-                                encryption)
+                                full-name startup-channels password encryption
+                                server-alias)
   "Get SERVER credentials from ~/.authinfo.gpg and pass them to `rcirc-connect'."
   (require 'auth-source)
   (when-let ((search-result (auth-source-search
@@ -305,7 +305,7 @@ if we were inside of one."
     (setq user-name (plist-get auth-item :user))
     (setq password (funcall (plist-get auth-item :secret))))
   (funcall f server port nick user-name full-name startup-channels password
-           encryption))
+           encryption server-alias))
 
 
 
