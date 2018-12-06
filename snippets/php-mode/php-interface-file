@@ -8,7 +8,7 @@
 namespace `(php-helpers/current-file-namespace)`;
 
 /**
- * Interface `class-name` $3.
+ * `class-name` is the interface that should be implemented by $3.
  *
  * @author Andriy Kmit' <dev@madand.net>
  */

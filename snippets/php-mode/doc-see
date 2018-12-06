@@ -1,0 +1,5 @@
+# key: docsee
+# name: doc-see
+# condition: 'force-in-comment
+# --
+{@see $1} $0

@@ -1,5 +1,6 @@
 # -*- mode: snippet -*-
 # name: $
 # key: d
+# condition: 'force-in-comment
 # --
 \$$0
