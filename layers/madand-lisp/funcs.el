@@ -22,7 +22,19 @@ buffer with `help-mode', instead of default implementation's
                                       :connection t
                                       :select slime-description-autofocus
                                       :mode 'help-mode)
-                             (princ string)
-                             (goto-char (point-min)))))
+      (princ string)
+      (goto-char (point-min)))))
+
+(defun slime-qlot-exec (directory)
+  (interactive (list
+                (read-directory-name "Project directory: ")))
+  (slime-start :program "qlot"
+               :program-args '("exec" "ros" "-S" "." "run")
+               :directory directory
+               :name 'qlot
+               :env (list (concat "PATH="
+                                  (mapconcat 'identity exec-path ":"))
+                          (concat "QUICKLISP_HOME="
+                                  (file-name-as-directory directory) "quicklisp/"))))
 
 ;;; funcs.el ends here

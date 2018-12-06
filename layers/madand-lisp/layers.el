@@ -16,6 +16,7 @@
 ;;; Code:
 
 (configuration-layer/declare-layers '(common-lisp
-                                      emacs-lisp))
+                                      emacs-lisp
+                                      parinfer))
 
 ;;; layers.el ends here
