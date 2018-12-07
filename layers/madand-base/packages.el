@@ -33,7 +33,7 @@
     multi-term
     org-pomodoro
     persp-mode
-    (prog-inflection :location (recipe :fetcher local))
+    ;; (prog-inflection :location (recipe :fetcher local))
     projectile
     (python :location built-in)
     (rcirc :location built-in)
