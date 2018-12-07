@@ -268,7 +268,7 @@ when certain conditions are met:
 Rturns nil if point is on the comment closing part \"**/\"."
   (save-excursion
     (back-to-indentation)
-    (and (sp-point-in-string-or-comment)
+    (and (madand/in-string-or-comment-p)
          (looking-at-p (rxt-pcre-to-elisp "/\\*{2}|\\*[^/]+")))))
 
 (defun madand/evil-open-above-maybe-continue-comment (count)
@@ -317,5 +317,43 @@ If in perspective, use `bs--sort-by-name'. Otherwise, use
   (if (get-current-persp)
       (bs--sort-by-name b1 b2)
     nil))
+
+(defun madand/turn-off-electric-pair-mode ()
+  "Turn off `electric-pair-mode'."
+  (interactive)
+  (electric-pair-mode -1))
+
+
+(defun madand/in-string-p ()
+  (nth 3 (syntax-ppss)))
+
+(defun madand/in-comment-p ()
+  (nth 4 (syntax-ppss)))
+
+(defun madand/in-string-or-comment-p ()
+  (nth 8 (syntax-ppss)))
+
+
+
+(defun madand/pomodoro-short-mode ()
+  "Configure Pomodoro to work in short mode:
+25 (mins) work, 5 - short brake, 30 - long brake after 4 pomodoros."
+  (interactive)
+  (setq
+   org-pomodoro-long-break-frequency 4
+   org-pomodoro-length 25
+   org-pomodoro-long-break-length 30
+   org-pomodoro-short-break-length 5))
+
+(defun madand/pomodoro-long-mode ()
+  "Configure Pomodoro to work in long mode:
+52 (mins) work, 17 - short brake, 30 - long brake after 4 pomodoros."
+  (interactive)
+  (setq
+   org-pomodoro-long-break-frequency 4
+   org-pomodoro-length 52
+   org-pomodoro-long-break-length 30
+   org-pomodoro-short-break-length 17))
+
 
 ;;; funcs.el ends here

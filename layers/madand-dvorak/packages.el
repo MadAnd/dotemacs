@@ -31,7 +31,7 @@
     (madand-dvorak/loop-digit-keys (qwerty-key dvp-key)
       (define-key company-active-map
         (kbd (format "M-%s" dvp-key))
-        (madand-dvorak//company-complete-number (string-to-int qwerty-key))))))
+        (madand-dvorak//company-complete-number (string-to-number qwerty-key))))))
 
 (defun madand-dvorak/post-init-evil ()
   ;; Setting `evil-inhibit-esc' to t tells Evil not to translate C-[ into ESC,

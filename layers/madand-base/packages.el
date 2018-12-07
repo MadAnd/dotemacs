@@ -31,15 +31,19 @@
     info+
     magithub
     multi-term
+    org-pomodoro
     persp-mode
     (prog-inflection :location (recipe :fetcher local))
+    projectile
     (python :location built-in)
     (rcirc :location built-in)
     rcirc-notify
     (simple :location built-in)
     simple-mpc
+    smartparens
     (smerge-mode :location built-in)
     treemacs
+    undo-tree
     ;; (sql-indent :location (recipe :fetcher github :repo "alex-hhh/emacs-sql-indent"))
     yasnippet))
 
@@ -58,6 +62,7 @@
 
 (defun madand-base/post-init-avy ()
   (with-eval-after-load 'avy
+    (setq avy-timeout-seconds 0.2)
     ;; Bind Avy commands to s and S in Normal and Visual.
     (define-key evil-normal-state-map (kbd "s") 'avy-goto-word-1)
     (define-key evil-motion-state-map (kbd "s") 'avy-goto-word-1)
@@ -75,7 +80,8 @@
           avy-buffer-menu-filter-fn #'spacemacs/useful-buffer-p)))
 
 (defun madand-base/init-browse-url ()
-  (setq browse-url-browser-function #'madand/browse-url-palemoon))
+  (setq browse-url-browser-function #'browse-url-firefox
+        browse-url-firefox-new-window-is-tab t))
 
 (defun madand-base/post-init-company ()
   (with-eval-after-load 'company
@@ -132,6 +138,10 @@
     (add-to-list 'term-bind-key-alist '("C-c z" . term-stop-subjob))
     (add-to-list 'term-bind-key-alist '("<escape>" . term-send-esc))))
 
+(defun madand-base/post-init-org-pomodoro ()
+  (with-eval-after-load 'org-pomodoro
+    (madand/pomodoro-long-mode)))
+
 (defun madand-base/init-info ()
   (setq Info-additional-directory-list (list (expand-file-name "~/.spacemacs.d/info/"))))
 
@@ -182,6 +192,10 @@ CommitDate: %ci\n")
   (use-package prog-inflection
     :defer nil))
 
+(defun madand-base/pre-init-projectile ()
+  (spacemacs|use-package-add-hook projectile
+    :post-init (setq projectile-dynamic-mode-line nil)))
+
 (defun madand-base/post-init-python ()
   (with-eval-after-load 'python
     (add-hook 'python-mode-hook (lambda ()
@@ -221,20 +235,29 @@ CommitDate: %ci\n")
         :mode simple-mpc-mode
         :bindings (kbd "C-m") (kbd "<return>")))))
 
+(defun madand-base/pre-init-smartparens ()
+  (spacemacs|use-package-add-hook smartparens
+    :post-config
+    (show-smartparens-global-mode -1)))
+
 (defun madand-base/post-init-smerge-mode ()
   (with-eval-after-load 'smerge-mode
     (add-hook 'smerge-mode-hook #'madand//smerge-disable-rainbow-identifiers)))
 
 (defun madand-base/post-init-treemacs ()
   (with-eval-after-load 'treemacs
-    (define-key evil-treemacs-state-map [C-i] #'treemacs-push-button)))
+    (define-key evil-treemacs-state-map [C-i] #'treemacs-TAB-action)))
+
+(defun madand-base/pre-init-undo-tree ()
+  (spacemacs|use-package-add-hook undo-tree
+    :post-init (setq undo-tree-enable-undo-in-region nil)))
 
 (defun madand-base/post-init-yasnippet ()
   (with-eval-after-load 'yasnippet
-
     (setq yas-prompt-functions '(yas-x-prompt) ; Force use of `ace-popup-menu'.
-          ;; Unconditionally disable snippet expansion in strings and comments.
-          yas-buffer-local-condition '(if (sp-point-in-string-or-comment)
+          ;; Disable snippet expansion in strings and comments, unless
+          ;; a snippet's condition evaluates to 'force-in-comment.
+          yas-buffer-local-condition '(if (madand/in-string-or-comment-p)
                                           '(require-snippet-condition . force-in-comment)
                                         t)
           ;; Don't load snippets shipped with Yasnippet.
@@ -253,10 +276,10 @@ CommitDate: %ci\n")
     (define-key yas-keymap (kbd "M-h") 'yas-skip-and-clear-or-delete-char)
     (define-key yas-keymap (kbd "M-t") 'yas-prev-field)
     (define-key yas-keymap (kbd "M-n") 'yas-next-field)
-    ;; Spacemacs disables smartparens during the yasnippet expansion, but
+    ;; Spacemacs disables Smartparens during the yasnippet expansion, but
     ;; auto-pairing is useful in certain snippets. As a workaround, we
     ;; temporarily enable `electric-pair-mode'.
     (add-hook 'yas-before-expand-snippet-hook #'electric-pair-mode)
-    (add-hook 'yas-after-exit-snippet-hook (lambda () (electric-pair-mode -1)))))
+    (add-hook 'yas-after-exit-snippet-hook #'madand/turn-off-electric-pair-mode)))
 
 ;;; packages.el ends here
