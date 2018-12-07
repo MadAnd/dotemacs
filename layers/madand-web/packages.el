@@ -16,7 +16,6 @@
 
 (defconst madand-web-packages
   '(company-php
-    ;; ede-php-autoload
     flycheck
     geben
     graphql-mode
@@ -29,8 +28,6 @@
     (php-helpers :location local)
     (php-extras :excluded t)
     php-mode
-    php-refactor-mode
-    ;; projectile
     web-mode
     web-beautify
     (drupal-mode :excluded t)))
@@ -40,21 +37,66 @@
   (push '(company-ac-php-backend company-keywords company-dabbrev-code)
         company-backends-php-mode))
 
-(defun madand-web/init-ede-php-autoload ()
-  (use-package ede-php-autoload
-    :defer t
-    :after php-mode)
-  (add-hook 'php-mode-hook #'ede-php-autoload-mode))
-
 (defun madand-web/init-geben ()
   (use-package geben
-    :defer t
     :after php-mode
-    :config
+    :init
     (progn
-      (setq geben-display-window-function 'popwin:display-buffer
-            geben-path-mappings  '(("/home/madand/dev/php/rentling/app" "/app")))
-      (evil-set-initial-state 'geben-mode 'emacs))))
+      (spacemacs/set-leader-keys
+        "Gg" #'geben
+        "Gp" #'geben-toggle-pause-at-entry-line-flag
+        "Gr" #'geben-run
+        "GR" #'geben-run-to-cursor
+        "Gs" #'geben-stop
+        "Gq" #'geben-end
+        "Gf" #'geben-find-file
+        "GF" #'geben-open-file
+        "Gj" #'geben-step-again
+        "Gk" #'geben-step-into
+        "Gh" #'geben-step-over
+        "Gl" #'geben-step-out
+        "Gt" #'geben-show-backtrace
+        "Gc" #'geben-display-context
+        "Ga" #'geben-set-breakpoint-line
+        "Gd" #'geben-set-breakpoint-call
+        "GD" #'geben-set-breakpoint-return
+        "Ge" #'geben-set-breakpoint-exception
+        "GA" #'geben-unset-breakpoint-line
+        "Gx" #'geben-clear-breakpoints)
+      (spacemacs|define-transient-state geben
+        :title "Geben Transient State"
+        :doc "\n
+ Breakpoints^^     Steps^^      Actions^^             Show^^
+ ───────────^^──── ─────^^───── ───────^^──────────── ────^^──────────
+ [_d_] call        [_j_] again  [_r_] run             [_t_] backtrace
+ [_D_] return      [_k_] over   [_s_] stop            [_c_] context
+ [_e_] exception   [_h_] into   [_p_] pause at entry
+ [_x_] clear       [_l_] out    [_q_] end\n"
+        :bindings
+        ("r" #'geben-run)
+        ("s" #'geben-stop :exit t)
+        ("p" #'geben-toggle-pause-at-entry-line-flag)
+        ("q" #'geben-end :exit t)
+        ("j" #'geben-step-again)
+        ("k" #'geben-step-over)
+        ("h" #'geben-step-into)
+        ("l" #'geben-step-out)
+        ("t" #'geben-show-backtrace)
+        ("c" #'geben-display-context :exit t)
+        ("d" #'geben-set-breakpoint-call)
+        ("D" #'geben-set-breakpoint-return)
+        ("e" #'geben-set-breakpoint-exception)
+        ("C" #'geben-set-breakpoint-condition)
+        ("x" #'geben-clear-breakpoints)
+        :on-enter
+        (geben 1))
+      (spacemacs/set-leader-keys "G." #'spacemacs/geben-transient-state/body))
+    :config
+    (setq geben-display-window-function #'popwin:display-buffer
+          geben-temporary-file-directory (concat spacemacs-cache-directory "geben/")
+          geben-path-mappings  '(("/home/madand/dev/php/rentling/app" "/app")
+                                 ("/home/madand/dev/php/tkanaua" "/app")))))
+
 
 (defun madand-web/post-init-flycheck ()
   (setq flycheck-phpcs-standard "PSR2"
@@ -74,18 +116,8 @@
       (kbd "M-o") (kbd "C-o $;")
       (kbd "M-e") (kbd "C-o $,")
       (kbd "RET") (kbd "M-j")))
+  (add-hook 'js2-mode-hook #'madand/disable-rainbow-identifiers-mode))
 
-  (add-hook 'js2-mode-hook #'madand/disable-rainbow-identifiers-mode)
-
-  ;; (spacemacs|define-micro-state string-inflection
-  ;;   :doc "Press [_i_] to cycle through available inflections."
-  ;;   :execute-binding-on-enter t
-  ;;   :use-minibuffer t
-  ;;   :evil-leader "xi"
-  ;;   :persistent t
-  ;;   :bindings
-  ;;   ("i" madand/cameldash-variable-at-point))
-  )
 
 (defun madand-web/post-init-js-doc ()
   (evil-define-key 'hybrid js2-mode-map "@" 'js-doc-insert-tag))
@@ -105,7 +137,7 @@
     :defer t
     :init
     (progn
-      (setq nodejs-repl-arguments '("--require" "babel-register"))
+      ;; (setq nodejs-repl-arguments '("--require" "babel-register"))
       (spacemacs/register-repl 'nodejs-repl
                                'nodejs-repl
                                "nodejs")
@@ -123,16 +155,19 @@
 
 (defun madand-web/init-php-doc ()
   (use-package php-doc
+    :after php-mode
     :commands php-insert-doc-block
     :init
-    (setq-default php-insert-doc-access-tag nil
-                  php-insert-doc-attribute-tags nil
-                  php-insert-doc-uses-tag nil
-                  php-insert-doc-varname-on-var nil
-                  php-insert-doc-copyright-name nil
-                  php-insert-doc-copyright-email nil
-                  php-insert-doc-author-name "Andiy Kmit'"
-                  php-insert-doc-author-email "dev@madand.net")))
+    (setq php-insert-doc-access-tag nil
+          php-insert-doc-attribute-tags nil
+          php-insert-doc-uses-tag nil
+          php-insert-doc-varname-on-var nil
+          php-insert-doc-copyright-name nil
+          php-insert-doc-copyright-email nil
+          php-insert-doc-author-name "Andiy Kmit'"
+          php-insert-doc-author-email "dev@madand.net")
+    (spacemacs/set-leader-keys-for-major-mode 'php-mode
+      "id" #'madand/php-insert-doc-block)))
 
 (defun madand-web/init-php-helpers ()
   (use-package php-helpers
@@ -155,11 +190,10 @@
                 (add-hook 'after-save-hook #'madand/php-after-save nil t)))))
 
 (defun madand-web/post-init-php-mode ()
-  (setq-default php-template-compatibility nil
-                php-manual-path "/usr/share/doc/php/php-chunked-xhtml"
-                php-search-documentation-browser-function #'madand/browse-url-eww
-                php-mode-coding-style 'psr2
-                )
+  (setq php-template-compatibility nil
+        php-manual-path "/usr/share/doc/php/php-chunked-xhtml"
+        php-search-documentation-browser-function #'madand/browse-url-eww
+        php-mode-coding-style 'psr2)
 
   (evil-define-key 'hybrid c-mode-map (kbd "RET") (kbd "M-j"))
   ;; Shortcuts for common yet cumbersome things.
@@ -180,18 +214,13 @@
     "hh" #'php-search-documentation
     "hH" #'madand/php-search-web-documentation-in-default-browser
     "w" #'madand/toggle-php-web-mode)
-
-  (when (configuration-layer/package-usedp 'php-doc)
-    (spacemacs/declare-prefix-for-mode 'php-mode "mi" "insert")
-    (spacemacs/set-leader-keys-for-major-mode 'php-mode
-      "id" #'madand/php-insert-doc-block))
+  (spacemacs/declare-prefix-for-mode 'php-mode "mi" "insert")
 
   (add-hook 'php-mode-hook #'madand/set-fill-column t)
   (add-hook 'php-mode-hook #'madand/disable-rainbow-identifiers-mode))
 
 (defun madand-web/pre-init-phpcbf ()
-  (spacemacs|use-package-add-hook phpcbf
-    :post-config
+  (with-eval-after-load 'phpcbf
     (setq phpcbf-standard "PSR2")))
 
 (defun madand-web/post-init-web-beautify ()
@@ -200,43 +229,8 @@
 (defun madand-web/post-init-web-mode ()
   (spacemacs/set-leader-keys-for-major-mode 'web-mode
     "w" #'madand/toggle-php-web-mode)
-
   (add-to-list 'auto-mode-alist
                '("/\\(views\\|common/mail\\)/.*\\.php\\'" . web-mode))
-
   (add-hook 'web-mode-hook #'madand/disable-rainbow-identifiers))
-
-(defun madand-web/post-init-projectile ()
-  (with-eval-after-load 'projectile
-    (projectile-register-project-type 'madand-nodeapp nil
-                                      :compile "npm run build"
-                                      :test "npm run test"
-                                      :run "npm run start")
-    (setq projectile-test-suffix-function
-          (madand//projectile-test-suffix projectile-test-suffix-function))))
-
-(defun madand-web/init-php-refactor-mode ()
-  (use-package php-refactor-mode
-    :defer t
-    :init
-    (progn
-      (setq
-       php-refactor-command (expand-file-name "~/.composer/vendor/bin/refactor"))
-
-      (dolist (prefix '(("mr" . "refactor")
-                        ("mrl" . "local variable")
-                        ("mrr" . "rename")
-                        ("mre" . "extract")
-                        ("mro" . "optimize")))
-        (spacemacs/declare-prefix-for-mode 'php-mode (car prefix) (cdr prefix)))
-      (spacemacs/set-leader-keys-for-major-mode 'php-mode
-        "rli" #'php-refactor--convert-local-to-instance-variable
-        "rrv" #'php-refactor--rename-local-variable
-        "rem" #'php-refactor--extract-method
-        "rou" #'php-refactor--optimize-use)
-
-      (add-hook 'php-mode-hook #'php-refactor-mode))
-    :config
-    (spacemacs|hide-lighter php-refactor-mode)))
 
 ;;; packages.el ends here
