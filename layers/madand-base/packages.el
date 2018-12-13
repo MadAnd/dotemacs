@@ -143,7 +143,7 @@
     (madand/pomodoro-long-mode)))
 
 (defun madand-base/init-info ()
-  (setq Info-additional-directory-list (list (expand-file-name "~/.spacemacs.d/info/"))))
+  (setq Info-additional-directory-list (list (expand-file-name "~/.spacemacs.d/info"))))
 
 (defun madand-base/post-init-info+ ()
   (with-eval-after-load 'info+
