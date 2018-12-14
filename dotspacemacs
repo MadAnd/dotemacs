@@ -477,6 +477,16 @@ See the header of this file for more information."
   ;; (spacemacs/load-spacemacs-env)
   )
 
+(defun madand/maybe-update-frame-face (&optional frame)
+  "Set the font size depending on the current display width."
+  (when-let ((display-graphic-p)
+             (display-width (display-pixel-width)))
+    (cl-flet ((set-font-size (size-px)
+                (set-face-attribute 'default frame (font-spec :size size-px))))
+      (cond
+        ((>= display-width 1900) (set-font-size 16))
+        (t (set-font-size 17))))))
+
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
 This function is called immediately after `dotspacemacs/init', before layer
@@ -508,8 +518,12 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
    (set-fontset-font "fontset-startup" 'unicode my-font-default)
    ;; (set-fontset-font t 'unicode my-font-fallback1 nil 'append)
    ;; (set-fontset-font "fontset-startup" 'unicode my-font-fallback1 nil 'append)
+   (set-frame-font my-font-default nil t))
 
-   (set-frame-font my-font-default nil t)))
+  ;;; Setup dynamic font resize according to the current display width.
+  (spacemacs|do-after-display-system-init
+   (madand/maybe-update-frame-face)
+   (add-hook 'window-size-change-functions #'madand/maybe-update-frame-face)))
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
