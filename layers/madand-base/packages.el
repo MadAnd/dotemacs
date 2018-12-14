@@ -20,6 +20,7 @@
     ;; (avy-buffer-menu :location (recipe :fetcher local))
     (browse-url :location built-in)
     company
+    (cl-indent :location built-in)
     evil
     evil-evilified-state
     evil-iedit-state
@@ -108,6 +109,21 @@
     (add-hook 'company-completion-started-hook 'madand//company-turn-off-page-break-lines)
     (add-hook 'company-completion-finished-hook 'madand//company-maybe-turn-on-page-break-lines)
     (add-hook 'company-completion-cancelled-hook 'madand//company-maybe-turn-on-page-break-lines)))
+
+(defun madand-base/init-cl-indent ()
+  (setq lisp-indent-function 'common-lisp-indent-function)
+  (with-eval-after-load 'cl-indent
+    (put 'backquote 'common-lisp-indent-function-for-elisp 1)
+    (put 'defface 'common-lisp-indent-function-for-elisp 1)
+    (put 'define-key 'common-lisp-indent-function-for-elisp 1)
+    (put 'if 'common-lisp-indent-function-for-elisp 2)
+    (put 'evilified-state-evilify-map 'common-lisp-indent-function-for-elisp 1)
+    (put 'evil-with-state 'common-lisp-indent-function-for-elisp 1)
+    (put 'spacemacs/transient-state-register-add-bindings 'common-lisp-indent-function-for-elisp 1)
+    (put 'spacemacs/set-leader-keys 'common-lisp-indent-function-for-elisp 0)
+    (put 'spacemacs/set-leader-keys-for-major-mode 'common-lisp-indent-function-for-elisp 1)
+    (put 'spacemacs/set-leader-keys-for-minor-mode 'common-lisp-indent-function-for-elisp 1)
+    (put 'use-package 'common-lisp-indent-function-for-elisp 1)))
 
 (defun madand-base/post-init-evil ()
   (with-eval-after-load 'evil-states
@@ -257,8 +273,8 @@ CommitDate: %ci\n")
           ;; Disable snippet expansion in strings and comments, unless
           ;; a snippet's condition evaluates to 'force-in-comment.
           yas-buffer-local-condition '(if (madand/in-string-or-comment-p)
-                                          '(require-snippet-condition . force-in-comment)
-                                        t)
+                                       '(require-snippet-condition . force-in-comment)
+                                       t)
           ;; Don't load snippets shipped with Yasnippet.
           yas-snippet-dirs (remove 'yas-installed-snippets-dir yas-snippet-dirs))
     ;; Fall back to completing prompt for yasnippet functions with

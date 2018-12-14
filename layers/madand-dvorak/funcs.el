@@ -27,6 +27,7 @@ the current QWERTY/Dvorak key pair on each loop iteration."
        (let ((,qwerty-key (car ,key-pair))
              (,dvp-key (cdr ,key-pair)))
          ,@body))))
+(put 'madand-dvorak/loop-digit-keys 'common-lisp-indent-function-for-elisp 1)
 
 (defun madand-dvorak//intern (format-str &rest args)
   "`intern-soft' a result of passing FORMAT-STR with ARGS trough `format'."

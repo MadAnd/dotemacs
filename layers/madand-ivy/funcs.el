@@ -19,10 +19,10 @@
   "Improved version of `ivy-rich-switch-buffer-pad' that truncates long inputs."
   (let ((real-len (length str)))
     (cond
-     ((< real-len len) (if left
-                           (concat (make-string (- len real-len) ? ) str)
-                         (concat str (make-string (- len real-len) ? ))))
-     ((= len real-len) str)
-     (t (concat (substring str 0 (- len 1)) "…")))))
+      ((< real-len len) (if left
+                            (concat (make-string (- len real-len) ? ) str)
+                          (concat str (make-string (- len real-len) ? ))))
+      ((= len real-len) str)
+      (t (concat (substring str 0 (- len 1)) "…")))))
 
 ;;; funcs.el ends here

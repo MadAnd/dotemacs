@@ -85,9 +85,9 @@ With a universal-argument, use ISO format.
 With double universal-argument, write out the day and month name."
   (interactive "P")
   (let ((format (cond
-                 ((not prefix) "%d.%m.%Y")
-                 ((equal prefix '(4)) "%Y-%m-%d")
-                 ((equal prefix '(16)) "%A, %d. %B %Y")))
+                  ((not prefix) "%d.%m.%Y")
+                  ((equal prefix '(4)) "%Y-%m-%d")
+                  ((equal prefix '(16)) "%A, %d. %B %Y")))
         (system-time-locale "en_US"))
     (insert (format-time-string format))))
 
@@ -291,8 +291,9 @@ if we were inside of one."
 
 
 
-(defun madand//rcirc-connect (f server &optional port nick user-name
-                                full-name startup-channels password encryption
+(defun madand//rcirc-connect (f server
+                              &optional port nick user-name full-name
+                                startup-channels password encryption
                                 server-alias)
   "Get SERVER credentials from ~/.authinfo.gpg and pass them to `rcirc-connect'."
   (require 'auth-source)
