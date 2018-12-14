@@ -1,9 +1,9 @@
 ;;; php-helpers.el --- Helper functions for PHP editing in Emacs.  -*- lexical-binding: t -*-
 ;;
-;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
+;; Copyright (c) 2015-2018 Andriy Kmit'
 ;;
 ;; Author: Andriy Kmit' <dev@madand.net>
-;; URL: https://github.com/syl20bnr/spacemacs
+;; URL: https://github.com/madand/dotemacs
 ;; Based on: https://github.com/glynnforrest/emacs.d
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.3") (dash "2.13.0") (f "0.19.0") (s "1.12.0"))

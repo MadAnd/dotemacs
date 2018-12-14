@@ -1,9 +1,9 @@
 ;;; config.el --- madand-dvorak layer config file for Spacemacs.
 ;;
-;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
+;; Copyright (c) 2015-2018 Andriy Kmit'
 ;;
 ;; Author: Andriy Kmit' <dev@madand.net>
-;; URL: https://github.com/syl20bnr/spacemacs
+;; URL: https://github.com/madand/dotemacs
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
