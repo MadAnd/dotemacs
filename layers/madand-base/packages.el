@@ -73,8 +73,7 @@
   (use-package avy-buffer-menu
     :defer t
     :init
-    (spacemacs/set-leader-keys
-      "y" #'avy-buffer-menu)
+    (spacemacs/set-leader-keys "y" #'avy-buffer-menu)
     :config
     (setq avy-buffer-menu-buffer-list-fn #'persp-buffer-list
           avy-buffer-menu-filter-fn #'spacemacs/useful-buffer-p)))

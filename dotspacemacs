@@ -501,10 +501,11 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   ;; TODO: find fallback Unicode font that won't cause the CPU overheat.
   (defvar my-font-default (font-spec :name "Droid Sans Mono Slashed"
                                      :size 18))
+
   ;; (defvar my-font-fallback1 (font-spec :name "Droid Sans Fallback" :size 18))
   (spacemacs|do-after-display-system-init
-   (set-fontset-font t 'unicode my-font-default nil)
-   (set-fontset-font "fontset-startup" 'unicode my-font-default nil)
+   (set-fontset-font t 'unicode my-font-default)
+   (set-fontset-font "fontset-startup" 'unicode my-font-default)
    ;; (set-fontset-font t 'unicode my-font-fallback1 nil 'append)
    ;; (set-fontset-font "fontset-startup" 'unicode my-font-fallback1 nil 'append)
 
