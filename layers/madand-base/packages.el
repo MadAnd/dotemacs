@@ -30,6 +30,7 @@
     evil-mc
     evil-surround
     flyspell
+    (frame :location built-in)
     (info :location built-in)
     info+
     magithub
@@ -184,6 +185,11 @@
 (defun madand-base/post-init-flyspell ()
   (with-eval-after-load 'flyspell
     (define-key evil-normal-state-map (kbd "zi") 'flyspell-correct-word-before-point)))
+
+(defun madand-base/init-frame ()
+  ;;; Setup dynamic font resize according to the current display width.
+  (spacemacs|do-after-display-system-init
+   (add-hook 'window-size-change-functions #'madand/update-frame-font-size)))
 
 (defun madand-base/init-jit-lock ()
   (with-eval-after-load 'jit-lock

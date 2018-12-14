@@ -356,5 +356,29 @@ If in perspective, use `bs--sort-by-name'. Otherwise, use
    org-pomodoro-long-break-length 30
    org-pomodoro-short-break-length 17))
 
+
+
+(defun madand/update-frame-font-size (&optional frame)
+  "Set the font size depending on the current display width.
+
+This function is configured by the `madand-base-font-size-config' variable,
+which see.
+
+If FRAME is nil, set the attributes for all existing frames, as
+well as the default for new frames.  If FRAME is t, change the
+default for new frames only."
+  (unless madand-base-font-size-config
+    (message
+     (concat "(madand-base) Warning: `madand-base-font-size-config' is empty."
+             " Dynamic font size change will not work.")))
+  (cl-flet ((decide-font-size (font-size-config)
+              (let ((display-width (display-pixel-width)))
+                (dolist (cell font-size-config result)
+                  (when (>= display-width (car cell))
+                    (setq result (cdr cell))))))
+            (set-default-font-size (size &optional frame)
+              (set-face-attribute 'default frame :font (font-spec :size size))))
+    (set-default-font-size (decide-font-size madand-base-font-size-config)
+                           frame)))
 
 ;;; funcs.el ends here
