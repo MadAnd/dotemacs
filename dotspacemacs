@@ -86,7 +86,7 @@ This function should only modify configuration layer settings."
      xkcd
      yaml
      ;; Private layers:
-     (madand-base :variables madand-base-font-size-config '((0 . 17)
+     (madand-base :variables madand-base-font-size-config '((0 . 16)
                                                             (1900 . 15)))
      madand-ivy
      madand-lisp
