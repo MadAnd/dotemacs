@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: sharp-colon
+# key: sc
+# --
+#:$0

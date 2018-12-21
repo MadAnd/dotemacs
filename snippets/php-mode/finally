@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: finally
+# key: fnl
+# --
+finally {
+  `yas-selected-text`$0
+}
