@@ -45,7 +45,7 @@
                 "eyebrowse-switch-to-window-config-%s" qwerty-key)))
       (spacemacs/transient-state-register-add-bindings "workspaces"
         `(,(list dvp-key cmd :exit t)
-           ,(list (concat "C-" dvp-key) cmd))))))
+          ,(list (concat "C-" dvp-key) cmd))))))
 
 (defun madand-dvorak/pre-init-neotree ()
   (spacemacs|use-package-add-hook neotree
@@ -62,7 +62,7 @@
                 "spacemacs/persp-switch-to-%s" qwerty-key)))
       (spacemacs/transient-state-register-add-bindings "layouts"
         `(,(list dvp-key cmd :exit t)
-           ,(list (concat "C-" dvp-key) cmd))))))
+          ,(list (concat "C-" dvp-key) cmd))))))
 
 (defun madand-dvorak/pre-init-treemacs ()
   (spacemacs|use-package-add-hook treemacs

@@ -182,7 +182,7 @@ for nodeapp project type.
 Fall back to CURRENT-SUFFIX-FUNCTION for other project types."
   (lambda (project-type)
     (cond
-      ((member project-type '(madand-nodeapp)) ".test")
-      (t (funcall current-suffix-function project-type)))))
+     ((member project-type '(madand-nodeapp)) ".test")
+     (t (funcall current-suffix-function project-type)))))
 
 ;;; funcs.el ends here

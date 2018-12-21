@@ -281,8 +281,8 @@ CommitDate: %ci\n")
           ;; Disable snippet expansion in strings and comments, unless
           ;; a snippet's condition evaluates to 'force-in-comment.
           yas-buffer-local-condition '(if (madand/in-string-or-comment-p)
-                                       '(require-snippet-condition . force-in-comment)
-                                       t)
+                                          '(require-snippet-condition . force-in-comment)
+                                        t)
           ;; Don't load snippets shipped with Yasnippet.
           yas-snippet-dirs (remove 'yas-installed-snippets-dir yas-snippet-dirs))
     ;; Fall back to completing prompt for yasnippet functions with

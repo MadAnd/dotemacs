@@ -1,4 +1,4 @@
-;;; layers.el --- madand-lisp layer layers file for Spacemacs.
+;;; config.el --- madand-lisp layer configuration file for Spacemacs.
 ;;
 ;; Copyright (c) 2015-2018 Andriy Kmit'
 ;;
@@ -11,10 +11,9 @@
 
 ;;; Commentary:
 
-;; Layers required by madand-lisp layer.
-
 ;;; Code:
 
-(configuration-layer/declare-layers '(emacs-lisp))
+(defvar madand-lisp-common-lisp-fill-column 100
+  "`fill-column' value for `lisp-mode' buffers.")
 
-;;; layers.el ends here
+;;; config.el ends here

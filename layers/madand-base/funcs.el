@@ -20,23 +20,6 @@
   (require 'f)
   (thread-first (buffer-file-name) f-dirname f-filename))
 
-(defun madand/browse-url-palemoon (url &optional new-window)
-  "Use Palemoon as the external browser."
-  (interactive (browse-url-interactive-arg "URL: "))
-  (setq url (browse-url-encode-url url))
-  (let* ((process-environment (browse-url-process-environment)))
-    (apply 'start-process
-           (concat "palemoon " url) nil
-           "palemoon"
-           (append
-            browse-url-firefox-arguments
-            (unless (memq system-type '(windows-nt ms-dos))
-              (if (browse-url-maybe-new-window new-window)
-                  (if browse-url-firefox-new-window-is-tab
-                      '("-new-tab")
-                    '("-new-window"))))
-            (list url)))))
-
 (defun madand/yas-fallback-to-completing-prompt (orig-fun &rest args)
   "Around advice that temporarily binds `yas-prompt-functions' to
 '(yas-completing-prompt)."
@@ -85,9 +68,9 @@ With a universal-argument, use ISO format.
 With double universal-argument, write out the day and month name."
   (interactive "P")
   (let ((format (cond
-                  ((not prefix) "%d.%m.%Y")
-                  ((equal prefix '(4)) "%Y-%m-%d")
-                  ((equal prefix '(16)) "%A, %d. %B %Y")))
+                 ((not prefix) "%d.%m.%Y")
+                 ((equal prefix '(4)) "%Y-%m-%d")
+                 ((equal prefix '(16)) "%A, %d. %B %Y")))
         (system-time-locale "en_US"))
     (insert (format-time-string format))))
 
@@ -292,7 +275,7 @@ if we were inside of one."
 
 
 (defun madand//rcirc-connect (f server
-                              &optional port nick user-name full-name
+                                &optional port nick user-name full-name
                                 startup-channels password encryption
                                 server-alias)
   "Get SERVER credentials from ~/.authinfo.gpg and pass them to `rcirc-connect'."
