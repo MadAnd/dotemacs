@@ -34,6 +34,7 @@
     (info :location built-in)
     info+
     magithub
+    (man :location built-in)
     multi-term
     org-pomodoro
     persp-mode
@@ -170,6 +171,10 @@
 (defun madand-base/post-init-magithub ()
   (with-eval-after-load 'ghub
     (setq ghub-username "madand")))
+
+(defun madand-base/init-man ()
+  (with-eval-after-load 'man
+    (add-hook 'Man-mode-hook #'spacemacs/toggle-centered-point-on)))
 
 (defun madand-base/post-init-evil-mc ()
   (add-hook 'prog-mode-hook 'evil-mc-mode)
