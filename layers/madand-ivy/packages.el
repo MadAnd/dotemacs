@@ -28,6 +28,7 @@
 (defun madand-ivy/post-init-ivy ()
   (with-eval-after-load 'ivy
     (setq ivy-wrap t
+          ivy-use-virtual-buffers nil
           ivy-height 20)
     (spacemacs/set-leader-keys "hm" #'man)
     (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit)

@@ -16,19 +16,20 @@
 ;;; Code:
 
 (defun madand/buffer-dir-name ()
-  "Get the name of a directory where the current buffer's file is located. "
+  "Get the name of a directory where the current buffer's file is located."
   (require 'f)
   (thread-first (buffer-file-name) f-dirname f-filename))
 
-(defun madand/yas-fallback-to-completing-prompt (orig-fun &rest args)
+(defun madand//yas-fallback-to-completing-prompt (orig-fun &rest args)
   "Around advice that temporarily binds `yas-prompt-functions' to
 '(yas-completing-prompt)."
   (let ((yas-prompt-functions '(yas/completing-prompt)))
     (apply orig-fun args)))
 
-(defun madand/sudo-async-shell-command (command &optional output-buffer error-buffer)
-  "Wrapper for `async-shell-command' which invokes TRAMP sudo before
-the actual command."
+(defun madand/sudo-async-shell-command (command
+                                        &optional output-buffer error-buffer)
+  "Invoke command as root with TRAMP sudo.
+All arguments are passed to `async-shell-command', which see."
   (interactive "MShell command (root): ")
   (with-temp-buffer
     (cd "/sudo:root@localhost:/")
@@ -38,7 +39,7 @@ the actual command."
   "Make current file executable."
   (interactive)
   (let* ((filename (buffer-file-name))
-         (orig-mode (or (file-modes filename) (error "File not found."))))
+         (orig-mode (or (file-modes filename) (error "File not found"))))
     (chmod filename (file-modes-symbolic-to-number "+x" orig-mode))))
 
 (defun madand//smerge-disable-rainbow-identifiers ()
@@ -77,7 +78,8 @@ With double universal-argument, write out the day and month name."
 
 
 (defun madand/magit-copy-commit-date (&optional full)
-  "Copy commit date from Magit buffer."
+  "Copy commit date from Magit buffer.
+Optional argument FULL ."
   (interactive "P")
   (save-excursion
     (goto-char (point-min))
@@ -127,7 +129,7 @@ If called with prefix argument, other tags will be deleted from the commit."
   (interactive "p")
   ;; Prompt for confirmation if called interactively.
   (when (or (not ignore)
-            (y-or-n-p "Really delete all tags from the commit?"))
+            (y-or-n-p "Really delete all tags from the commit? "))
     (while (when-let (tag (magit-tag-at-point))
              (magit-tag-delete tag)
              tag))))
@@ -199,7 +201,7 @@ New version has the .pacnew suffix in filename."
     (ediff-files current-file pacnew-file)))
 
 (defun madand/delete-pacnew-file ()
-  "Delete a .pacnew file corresponding to current visited file, if any"
+  "Delete a .pacnew file corresponding to current visited file, if any."
   (interactive)
   (let ((pacnew-file (concat (buffer-file-name) ".pacnew")))
     (if (file-exists-p pacnew-file)
@@ -212,15 +214,29 @@ New version has the .pacnew suffix in filename."
 
 
 
-(defvar-local madand--company-page-break-lines-mode-on-p nil)
+(defvar-local madand--company-page-break-lines-mode-p nil
+  "Whether `page-break-lines-mode' was active before completion started.")
 
 (defun madand//company-turn-off-page-break-lines (&rest ignore)
-  (when (boundp 'page-break-lines-mode)
-    (setq madand--company-page-break-lines-mode-on-p page-break-lines-mode)
-    (when page-break-lines-mode (page-break-lines-mode -1))))
+  "Disable `page-break-lines-mode' mode if it's active.
+Also remember its original state."
+  (when (bound-and-true-p page-break-lines-mode)
+    (setq madand--company-page-break-lines-mode-p page-break-lines-mode)
+    (page-break-lines-mode -1)))
 
 (defun madand//company-maybe-turn-on-page-break-lines (&rest ignore)
-  (when madand--company-page-break-lines-mode-on-p (page-break-lines-mode 1)))
+  "Enable `page-break-lines-mode' if it was initially enabled."
+  (when (bound-and-true-p madand--company-page-break-lines-mode-p)
+    (page-break-lines-mode 1)))
+
+(defun madand//company-maybe-call-yas-command (command)
+  "During snippet expansion close company prompt and call COMMAND.
+This function returns lambda of 0 args."
+  (lambda ()
+    (interactive)
+    (when (yas--active-field-overlay)
+      (company-abort)
+      (funcall yas-prev-field))))
 
 
 
@@ -247,7 +263,7 @@ when certain conditions are met:
      nil)))
 
 (defun madand/inside-multilne-c-comment-p ()
-  "Return t if the point is inside of a mutilne C style \"/** … **/\" comment.
+  "Return t if point is inside of a mutilne C style \"/** … **/\" comment.
 Rturns nil if point is on the comment closing part \"**/\"."
   (save-excursion
     (back-to-indentation)
@@ -302,19 +318,22 @@ If in perspective, use `bs--sort-by-name'. Otherwise, use
       (bs--sort-by-name b1 b2)
     nil))
 
-(defun madand/turn-off-electric-pair-mode ()
-  "Turn off `electric-pair-mode'."
+(defun madand/turn-off-electric-pair-local-mode ()
+  "Turn off `electric-pair-local-mode'."
   (interactive)
-  (electric-pair-mode -1))
+  (electric-pair-local-mode -1))
 
 
 (defun madand/in-string-p ()
+  "Return non-nil if point is inside of a string literal."
   (nth 3 (syntax-ppss)))
 
 (defun madand/in-comment-p ()
+  "Return non-nil if point is inside of a comment."
   (nth 4 (syntax-ppss)))
 
 (defun madand/in-string-or-comment-p ()
+  "Return non-nil if point is inside of either a string literal or a comment."
   (nth 8 (syntax-ppss)))
 
 
@@ -344,11 +363,10 @@ If in perspective, use `bs--sort-by-name'. Otherwise, use
 (defun madand/update-frame-font-size (&optional frame)
   "Set the font size depending on the current display width.
 
-This function is configured by the `madand-base-font-size-config' variable,
-which see.
+This function reads config from the `madand-base-font-size-config', which see.
 
 If FRAME is nil, set the attributes for all existing frames, as
-well as the default for new frames.  If FRAME is t, change the
+well as the default for new frames. If FRAME is t, change the
 default for new frames only."
   (unless madand-base-font-size-config
     (message

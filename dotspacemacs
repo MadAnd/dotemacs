@@ -159,7 +159,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; Maximum allowed time in seconds to contact an ELPA repository.
    ;; (default 5)
-   dotspacemacs-elpa-timeout 5
+   dotspacemacs-elpa-timeout 10
 
    ;; Set `gc-cons-threshold' and `gc-cons-percentage' when startup finishes.
    ;; This is an advanced option and should not be changed unless you suspect
@@ -325,7 +325,7 @@ It should only modify the values of Spacemacs settings."
    ;; `right-then-bottom'. right-then-bottom tries to display the frame to the
    ;; right; if there is insufficient space it displays it at the bottom.
    ;; (default 'bottom)
-   dotspacemacs-which-key-position 'bottom
+   dotspacemacs-which-key-position 'right-then-bottom
 
    ;; Control where `switch-to-buffer' displays the buffer. If nil,
    ;; `switch-to-buffer' displays the buffer in the current window even if
@@ -366,7 +366,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-show-transient-state-title t
 
    ;; If non-nil show the color guide hint for transient state keys. (default t)
-   dotspacemacs-show-transient-state-color-guide t
+   dotspacemacs-show-transient-state-color-guide nil
 
    ;; If non-nil unicode symbols are displayed in the mode line.
    ;; If you use Emacs as a daemon and wants unicode characters only in GUI set
@@ -531,7 +531,6 @@ before packages are loaded."
    auth-sources '("~/.authinfo.gpg")
    create-lockfiles nil
    delete-by-moving-to-trash nil
-   ivy-use-virtual-buffers nil
    powerline-default-separator 'alternate
    ranger-cleanup-eagerly t
    rcirc-server-alist '(("irc.freenode.net" :encryption tls :port 6697
@@ -551,7 +550,7 @@ before packages are loaded."
   (global-hungry-delete-mode 1)
 
   ;; Treat more buffer types as "useful".
-  (dolist (pattern '("\\*info.*\\*" "\\*Man.+\\*" "\\*magit.+" "\\*multiterm.+" "\\*helm-ag-edit\\*"))
+  (dolist (pattern '("\\*info.*\\*" "\\*Man.+\\*" "\\*magit.+" "\\*multiterm.+"))
     (pushnew pattern spacemacs-useful-buffers-regexp))
 
   (with-eval-after-load 'with-editor

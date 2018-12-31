@@ -19,8 +19,9 @@
   '(ace-jump-buffer
     ace-popup-menu
     avy
-    ;; (avy-buffer-menu :location (recipe :fetcher local))
+    (auto-fill :location built-in)
     (browse-url :location built-in)
+    centered-cursor-mode
     company
     evil
     evil-evilified-state
@@ -33,7 +34,6 @@
     (info :location built-in)
     info+
     magithub
-    (man :location built-in)
     multi-term
     org-pomodoro
     persp-mode
@@ -48,7 +48,6 @@
     (smerge-mode :location built-in)
     treemacs
     undo-tree
-    ;; (sql-indent :location (recipe :fetcher github :repo "alex-hhh/emacs-sql-indent"))
     yasnippet))
 
 (defun madand-base/init-ace-jump-buffer ()
@@ -60,9 +59,10 @@
     (setq ajb-sort-function #'madand//ajb-sort-function)))
 
 (defun madand-base/init-ace-popup-menu ()
-  (spacemacs/defer-until-after-user-config
-   (lambda ()
-     (ace-popup-menu-mode 1))))
+  (use-package ace-popup-menu
+    :defer t
+    :init
+    (spacemacs/defer-until-after-user-config #'ace-popup-menu-mode)))
 
 (defun madand-base/post-init-avy ()
   (with-eval-after-load 'avy
@@ -72,6 +72,14 @@
     (define-key evil-motion-state-map (kbd "s") 'avy-goto-word-1)
     (define-key evil-normal-state-map (kbd "S") 'avy-goto-char-timer)
     (define-key evil-motion-state-map (kbd "S") 'avy-goto-char-timer)))
+
+(defun madand-base/init-auto-fill ()
+  ;; Activate `auto-fill-mode' by default in some major modes.
+  (spacemacs/add-to-hooks #'spacemacs/toggle-auto-fill-mode-on
+                          '(org-mode-hook
+                            emacs-lisp-mode-hook
+                            php-mode-hook
+                            lisp-mode-hook)))
 
 (defun madand-base/init-avy-buffer-menu ()
   (use-package avy-buffer-menu
@@ -86,6 +94,10 @@
   (setq browse-url-browser-function #'browse-url-firefox
         browse-url-firefox-new-window-is-tab t))
 
+(defun madand-base/post-init-centered-cursor-mode ()
+  (spacemacs/add-to-hooks #'spacemacs/toggle-centered-point-on
+                          '(Man-mode Info-mode)))
+
 (defun madand-base/post-init-company ()
   (with-eval-after-load 'company
     (setq company-gtags-insert-arguments nil
@@ -97,21 +109,18 @@
     (define-key company-active-map [C-i] 'company-complete-common-or-cycle)
     (define-key company-active-map (kbd "C-h") nil)
     (define-key company-active-map (kbd "C-t") 'company-show-doc-buffer)
-    ;; Compatibility with M-t and M-n for inside `yasnippet' snippets.
-    (define-key company-active-map (kbd "M-t") (lambda ()
-                                                 (interactive)
-                                                 (when (yas--active-field-overlay)
-                                                   (company-abort)
-                                                   (yas-prev-field))))
-    (define-key company-active-map (kbd "M-n") (lambda ()
-                                                 (interactive)
-                                                 (when (yas--active-field-overlay)
-                                                   (company-abort)
-                                                   (yas-next-field))))
-    ;; Workaround for `page-break-lines-mode'
-    (add-hook 'company-completion-started-hook 'madand//company-turn-off-page-break-lines)
-    (add-hook 'company-completion-finished-hook 'madand//company-maybe-turn-on-page-break-lines)
-    (add-hook 'company-completion-cancelled-hook 'madand//company-maybe-turn-on-page-break-lines)))
+    ;; Compatibility with M-t and M-n during yasnippet expansion.
+    (define-key company-active-map
+      (kbd "M-t") (madand//company-maybe-call-yas-command #'yas-prev-field))
+    (define-key company-active-map
+      (kbd "M-n") (madand//company-maybe-call-yas-command #'yas-next-field))
+    ;; Temporary disable page-break-lines-mode.
+    (add-hook 'company-completion-started-hook
+              #'madand//company-turn-off-page-break-lines)
+    (add-hook 'company-completion-finished-hook
+              #'madand//company-maybe-turn-on-page-break-lines)
+    (add-hook 'company-completion-cancelled-hook
+              #'madand//company-maybe-turn-on-page-break-lines)))
 
 (defun madand-base/post-init-evil ()
   (with-eval-after-load 'evil-states
@@ -155,10 +164,6 @@
 (defun madand-base/post-init-magithub ()
   (with-eval-after-load 'ghub
     (setq ghub-username "madand")))
-
-(defun madand-base/init-man ()
-  (with-eval-after-load 'man
-    (add-hook 'Man-mode-hook #'spacemacs/toggle-centered-point-on)))
 
 (defun madand-base/post-init-evil-mc ()
   (add-hook 'prog-mode-hook 'evil-mc-mode)
@@ -277,9 +282,9 @@ CommitDate: %ci\n")
     ;; Fall back to completing prompt for yasnippet functions with
     ;; too many choices to be shown via `ace-popup-menu'.
     (advice-add 'yas-visit-snippet-file :around
-                #'madand/yas-fallback-to-completing-prompt)
+                #'madand//yas-fallback-to-completing-prompt)
     (advice-add 'yas-insert-snippet :around
-                #'madand/yas-fallback-to-completing-prompt)
+                #'madand//yas-fallback-to-completing-prompt)
     ;; Expand snippets with SPC.
     (evil-define-key 'hybrid yas-minor-mode-map
       (kbd "SPC") yas-maybe-expand
@@ -291,7 +296,8 @@ CommitDate: %ci\n")
     ;; Spacemacs disables Smartparens during the yasnippet expansion, but
     ;; auto-pairing is useful in certain snippets. As a workaround, we
     ;; temporarily enable `electric-pair-mode'.
-    (add-hook 'yas-before-expand-snippet-hook #'electric-pair-mode)
-    (add-hook 'yas-after-exit-snippet-hook #'madand/turn-off-electric-pair-mode)))
+    (add-hook 'yas-before-expand-snippet-hook #'electric-pair-local-mode)
+    (add-hook 'yas-after-exit-snippet-hook
+              #'madand/turn-off-electric-pair-local-mode)))
 
 ;;; packages.el ends here
