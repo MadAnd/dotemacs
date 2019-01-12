@@ -360,7 +360,10 @@ If in perspective, use `bs--sort-by-name'. Otherwise, use
 
 
 
-(defun madand/update-frame-font-size (&optional frame)
+(defvar madand--base-font-size-config-warning-shown-p nil
+  "Whether a warning about empty `madand-base-font-size-config' was shown.")
+
+(cl-defun madand/update-frame-font-size (&optional frame)
   "Set the font size depending on the current display width.
 
 This function reads config from the `madand-base-font-size-config', which see.
@@ -369,16 +372,21 @@ If FRAME is nil, set the attributes for all existing frames, as
 well as the default for new frames. If FRAME is t, change the
 default for new frames only."
   (unless madand-base-font-size-config
-    (message
-     (concat "(madand-base) Warning: `madand-base-font-size-config' is empty."
-             " Dynamic font size change will not work.")))
+    (unless madand--base-font-size-config-warning-shown-p
+      (setq madand--base-font-size-config-warning-shown-p t)
+      (message
+       (concat "(madand-base) Warning: `madand-base-font-size-config' is empty."
+               " Dynamic font size change will not work.")))
+    (cl-return-from madand/update-frame-font-size))
   (cl-flet ((decide-font-size (font-size-config)
               (let ((display-width (display-pixel-width)))
                 (dolist (cell font-size-config result)
                   (when (>= display-width (car cell))
                     (setq result (cdr cell))))))
             (set-default-font-size (size &optional frame)
-              (set-face-attribute 'default frame :font (font-spec :size size))))
+              (let ((spec (font-spec :size size)))
+                (set-frame-font spec nil (list frame))
+                (set-face-attribute 'default frame :font spec))))
     (set-default-font-size (decide-font-size madand-base-font-size-config)
                            frame)))
 

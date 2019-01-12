@@ -504,13 +504,9 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   (defvar my-font-default (font-spec :name "Droid Sans Mono Slashed"
                                      :size 18))
 
-  ;; (defvar my-font-fallback1 (font-spec :name "Droid Sans Fallback" :size 18))
   (spacemacs|do-after-display-system-init
-   (set-fontset-font t 'unicode my-font-default)
-   (set-fontset-font "fontset-startup" 'unicode my-font-default)
-   ;; (set-fontset-font t 'unicode my-font-fallback1 nil 'append)
-   ;; (set-fontset-font "fontset-startup" 'unicode my-font-fallback1 nil 'append)
-   (set-frame-font my-font-default nil t)))
+   (set-face-attribute 'default nil :font my-font-default)
+   (set-frame-font my-font-default)))
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
