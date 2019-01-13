@@ -25,4 +25,7 @@ and can be used with the `window-size-change-functions' hook.
 
 Example: '((0 . 16) (1200 . 15) (1900 . 14)")
 
+(defvar madand-info-mode-text-scale 0.5
+  "Text scale factor for `Info-mode'. Will be passed to `text-scale-set'.")
+
 ;;; config.el ends here

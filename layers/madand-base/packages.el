@@ -32,7 +32,6 @@
     flyspell
     (frame :location built-in)
     (info :location built-in)
-    info+
     magithub
     multi-term
     org-pomodoro
@@ -96,7 +95,7 @@
 
 (defun madand-base/post-init-centered-cursor-mode ()
   (spacemacs/add-to-hooks #'spacemacs/toggle-centered-point-on
-                          '(Man-mode Info-mode)))
+                          '(Man-mode-hook Info-mode-hook)))
 
 (defun madand-base/post-init-company ()
   (with-eval-after-load 'company
@@ -155,11 +154,16 @@
     (madand/pomodoro-long-mode)))
 
 (defun madand-base/init-info ()
-  (setq Info-additional-directory-list (list (expand-file-name "~/.spacemacs.d/info"))))
-
-(defun madand-base/post-init-info+ ()
-  (with-eval-after-load 'info+
-    (define-key Info-mode-map (kbd "S-SPC") 'Info-scroll-up)))
+  (add-to-list 'Info-additional-directory-list (list (expand-file-name
+                                                      "~/.spacemacs.d/info")))
+  (spacemacs/add-all-to-hook 'Info-mode-hook
+                             #'spacemacs/toggle-centered-buffer
+                             (lambda ()
+                               (text-scale-set madand-info-mode-text-scale)))
+  (with-eval-after-load 'info
+    (evil-define-key 'motion Info-mode-map
+      "s" #'evil-avy-goto-char-timer
+      (kbd "S-SPC") #'Info-scroll-up)))
 
 (defun madand-base/post-init-magithub ()
   (with-eval-after-load 'ghub
