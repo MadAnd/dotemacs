@@ -108,11 +108,6 @@
     (define-key company-active-map [C-i] 'company-complete-common-or-cycle)
     (define-key company-active-map (kbd "C-h") nil)
     (define-key company-active-map (kbd "C-t") 'company-show-doc-buffer)
-    ;; Compatibility with M-t and M-n during yasnippet expansion.
-    (define-key company-active-map
-      (kbd "M-t") (madand//company-maybe-call-yas-command #'yas-prev-field))
-    (define-key company-active-map
-      (kbd "M-n") (madand//company-maybe-call-yas-command #'yas-next-field))
     ;; Temporary disable page-break-lines-mode.
     (add-hook 'company-completion-started-hook
               #'madand//company-turn-off-page-break-lines)
@@ -202,7 +197,8 @@ Author:     %aN <%aE>
 AuthorDate: %ai
 Commit:     %cN <%cE>
 CommitDate: %ci\n")
-    (evil-magit-define-key 'normal 'magit-revision-mode-map (kbd "yd") 'madand/magit-copy-commit-date)
+    (evil-magit-define-key 'normal 'magit-revision-mode-map
+                           (kbd "yd") 'madand/magit-copy-commit-date)
     (add-hook 'magit-status-headers-hook 'magit-insert-repo-header t)))
 
 (defun madand-base/post-init-persp-mode ()
@@ -297,6 +293,12 @@ CommitDate: %ci\n")
     (define-key yas-keymap (kbd "M-h") 'yas-skip-and-clear-or-delete-char)
     (define-key yas-keymap (kbd "M-t") 'yas-prev-field)
     (define-key yas-keymap (kbd "M-n") 'yas-next-field)
+    ;; Compatibility with M-t and M-n during yasnippet expansion.
+    (with-eval-after-load 'company
+      (define-key company-active-map
+        (kbd "M-t") (madand//company-maybe-call-yas-command #'yas-prev-field))
+      (define-key company-active-map
+        (kbd "M-n") (madand//company-maybe-call-yas-command #'yas-next-field)))
     ;; Spacemacs disables Smartparens during the yasnippet expansion, but
     ;; auto-pairing is useful in certain snippets. As a workaround, we
     ;; temporarily enable `electric-pair-mode'.

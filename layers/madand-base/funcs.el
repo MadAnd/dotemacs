@@ -231,7 +231,7 @@ Also remember its original state."
 
 (defun madand//company-maybe-call-yas-command (command)
   "During snippet expansion close company prompt and call COMMAND.
-This function returns lambda of 0 args."
+This function returns an interactive lambda of 0 args."
   (lambda ()
     (interactive)
     (when (yas--active-field-overlay)
