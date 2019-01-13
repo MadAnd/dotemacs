@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: sharp-quote
+# key: sc
+# --
+#'$0
