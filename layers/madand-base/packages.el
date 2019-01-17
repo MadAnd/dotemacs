@@ -33,6 +33,7 @@
     (frame :location built-in)
     (info :location built-in)
     magithub
+    (man :location built-in)
     multi-term
     org-pomodoro
     persp-mode
@@ -47,6 +48,7 @@
     (smerge-mode :location built-in)
     treemacs
     undo-tree
+    writeroom-mode
     yasnippet))
 
 (defun madand-base/init-ace-jump-buffer ()
@@ -164,6 +166,9 @@
   (with-eval-after-load 'ghub
     (setq ghub-username "madand")))
 
+(defun madand-base/init-man ()
+  (add-hook 'Man-mode-hook #'spacemacs/toggle-centered-buffer))
+
 (defun madand-base/post-init-evil-mc ()
   (add-hook 'prog-mode-hook 'evil-mc-mode)
   (add-hook 'text-mode-hook 'evil-mc-mode))
@@ -268,6 +273,9 @@ CommitDate: %ci\n")
 (defun madand-base/pre-init-undo-tree ()
   (spacemacs|use-package-add-hook undo-tree
     :post-init (setq undo-tree-enable-undo-in-region nil)))
+
+(defun madand-base/post-init-writeroom-mode ()
+  (add-hook 'writeroom-mode-hook #'madand//maybe-update-manpage t))
 
 (defun madand-base/post-init-yasnippet ()
   (with-eval-after-load 'yasnippet

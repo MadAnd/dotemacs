@@ -390,4 +390,11 @@ default for new frames only."
     (set-default-font-size (decide-font-size madand-base-font-size-config)
                            frame)))
 
+
+
+(defun madand//maybe-update-manpage ()
+  "If the current major mode is `Man-mode', call `Man-update-manpage'."
+  (when (eq major-mode 'Man-mode)
+    (Man-update-manpage)))
+
 ;;; funcs.el ends here
