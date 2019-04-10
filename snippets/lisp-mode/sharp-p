@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: sharp-p
+# key: sp
+# --
+#p"$1"$0
