@@ -30,12 +30,6 @@
 
 
 
-(defun madand//lisp-defaults ()
-  "Apply default config for `lisp-mode'.
-
-1. Set `fill-column' to a value of `madand-lisp-common-lisp-fill-column'."
-  (setq fill-column madand-lisp-common-lisp-fill-column))
-
 (defun madand/sly-show-description (string package)
   "Overriding function for `slime-show-description'. It displays description
 buffer with `help-mode'."
@@ -64,8 +58,8 @@ buffer with `help-mode'."
   "The path of the source files relative to the project root.")
 (put 'madand-lisp-src-dir 'safe-local-variable #'stringp)
 
-(defvar madand-lisp-test-dir "test/"
-  "The path of the test files relative to the project root.")
+(defvar madand-lisp-test-dir "tests/"
+  "The path of the test files relative to the (CL) project root.")
 (put 'madand-lisp-test-dir 'safe-local-variable #'stringp)
 
 (defun madand/project-type-common-lisp-p ()

@@ -17,7 +17,6 @@
   '((elisp-mode :location built-in)
     (evil-cleverparens :excluded t)
     lispy
-    (lisp-mode :location built-in)
     projectile
     (common-lisp-snippets :requires yasnippet)
     xterm-color
@@ -57,10 +56,6 @@
     :config
     (progn
       )))
-
-(defun madand-lisp/init-lisp-mode ()
-  (with-eval-after-load 'lisp-mode
-    (add-hook 'lisp-mode-hook #'madand//lisp-defaults)))
 
 (defun madand-lisp/post-init-projectile ()
   (with-eval-after-load 'projectile
