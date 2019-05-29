@@ -10,7 +10,7 @@ namespace `(php-helpers/current-file-namespace)`;
 use Yii;
 
 /**
- * Class `class-name` $3.
+ * $3.
  *
  * @author Andriy Kmit' <dev@madand.net>
  */

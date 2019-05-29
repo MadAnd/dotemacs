@@ -30,6 +30,7 @@
     php-mode
     web-mode
     web-beautify
+    yaml-mode
     (drupal-mode :excluded t)))
 
 (defun madand-web/post-init-company-php ()
@@ -217,7 +218,7 @@
   (spacemacs/declare-prefix-for-mode 'php-mode "mi" "insert")
 
   (add-hook 'php-mode-hook #'madand/set-fill-column t)
-  (add-hook 'php-mode-hook #'madand/disable-rainbow-identifiers-mode))
+  (add-hook 'php-mode-hook #'spacemacs/toggle-rainbow-identifier-off))
 
 (defun madand-web/pre-init-phpcbf ()
   (with-eval-after-load 'phpcbf
@@ -232,5 +233,9 @@
   (add-to-list 'auto-mode-alist
                '("/\\(views\\|common/mail\\)/.*\\.php\\'" . web-mode))
   (add-hook 'web-mode-hook #'madand/disable-rainbow-identifiers))
+
+(defun madand-web/post-init-yaml-mode ()
+  (with-eval-after-load 'yaml-mode
+    (setq yaml-indent-offset 4)))
 
 ;;; packages.el ends here

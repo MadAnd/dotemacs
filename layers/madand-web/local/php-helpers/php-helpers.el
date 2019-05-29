@@ -16,6 +16,7 @@
 
 ;;; Code:
 
+(require 'cl-lib)
 (require 'dash)
 (require 'f)
 (require 's)
@@ -238,18 +239,16 @@ If called interactively, the result will also be inserted at point."
 ;; Borrowed this macro from `evil-mc'.
 (defmacro php-helpers|save-window-scroll (&rest forms)
   "Saves and restores the window scroll position"
-  (let ((p (make-symbol "p"))
-        (s (make-symbol "start"))
-        (h (make-symbol "hscroll")))
-    `(let ((,p (set-marker (make-marker) (point)))
-           (,s (set-marker (make-marker) (window-start)))
-           (,h (window-hscroll)))
+  (let ((point (cl-gensym "point"))
+        (win-start (cl-gensym "win-start"))
+        (win-hscroll (cl-gensym "win-hscroll")))
+    `(let ((,point (set-marker (make-marker) (point)))
+           (,win-start (set-marker (make-marker) (window-start)))
+           (,win-hscroll (window-hscroll)))
        ,@forms
-       (goto-char ,p)
-       (set-window-start nil ,s t)
-       (set-window-hscroll nil ,h)
-       (set-marker ,p nil)
-       (set-marker ,s nil))))
+       (goto-char ,point)
+       (set-window-start nil ,win-start t)
+       (set-window-hscroll nil ,win-hscroll))))
 
 (provide 'php-helpers)
 

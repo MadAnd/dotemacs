@@ -60,11 +60,6 @@ value."
   ;; (php-helpers//load-php-class-list (projectile-project-root) t)
   )
 
-(defun madand/disable-rainbow-identifiers-mode ()
-  "Disable `rainbow-identifiers-mode' in the current buffer."
-  (rainbow-identifiers-mode -1)
-  )
-
 (defun madand/php-search-web-documentation-in-default-browser (word)
   "Search documentation on PHP website in the default browser.
 
