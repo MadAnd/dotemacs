@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: twig-verbatim
+# condition: (yas--web-mode-django-p)
+# key: tverbatim
+# --
+{% verbatim %}
+   $0
+{% endverbatim %}

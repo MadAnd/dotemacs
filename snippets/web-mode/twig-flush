@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: twig-flush
+# condition: (yas--web-mode-django-p)
+# key: tflush
+# --
+{% flush %}$0

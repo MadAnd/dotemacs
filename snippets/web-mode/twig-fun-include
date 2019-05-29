@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: twig-fun-include
+# condition: (yas--web-mode-django-p)
+# key: tfinclude
+# --
+{{ include(${1:str-or-arr-or-expr})$2 }}$0

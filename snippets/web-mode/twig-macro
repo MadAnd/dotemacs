@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: twig-macro
+# condition: (yas--web-mode-django-p)
+# key: tmacro
+# --
+{% macro ${1:name}($2) %}
+   $0
+{% endmacro $1 %}

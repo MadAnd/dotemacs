@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: twig-elseif
+# condition: (yas--web-mode-django-p)
+# key: telif
+# --
+{% elseif $1 %}
+   $0

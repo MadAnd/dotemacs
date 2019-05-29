@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: twig-spaceless
+# condition: (yas--web-mode-django-p)
+# key: tspaceless
+# --
+{% apply spaceless %}
+   $0
+{% endapply %}

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: twig-capturing-set
+# condition: (yas--web-mode-django-p)
+# key: tcset
+# --
+{% set ${1:var} %}
+   $0
+{% endset %}

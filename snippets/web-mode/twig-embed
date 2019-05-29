@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: twig-embed
+# condition: (yas--web-mode-django-p)
+# key: tembed
+# --
+{% embed "${1:file}.html.twig"$2 %}
+   $0
+{% endembed %}

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: twig-fun-block
+# condition: (yas--web-mode-django-p)
+# key: tfblock
+# --
+{{ block("${1:name}") }}$0

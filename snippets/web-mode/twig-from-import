@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: twig-from-import
+# condition: (yas--web-mode-django-p)
+# key: tfimport
+# --
+{% from "${1:file}.twig" import ${2:some_macro} %}$0

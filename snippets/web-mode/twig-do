@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: twig-do
+# condition: (yas--web-mode-django-p)
+# key: tdo
+# --
+{% do $1 %}$0

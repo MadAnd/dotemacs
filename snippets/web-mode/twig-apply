@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: twig-apply
+# condition: (yas--web-mode-django-p)
+# key: tapply
+# --
+{% apply ${1:filter} %}
+   $0
+{% endapply %}

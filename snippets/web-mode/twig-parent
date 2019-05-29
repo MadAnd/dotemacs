@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: twig-fun-parent
+# condition: (yas--web-mode-django-p)
+# key: tfparent
+# --
+{{ parent() }}$0

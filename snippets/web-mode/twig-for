@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: twig-for
+# condition: (yas--web-mode-django-p)
+# key: tfor
+# --
+{% for ${1:var} in ${2:expr} %}
+   $0
+{% endfor %}

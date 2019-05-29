@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: twig-interpolated-expression
+# condition: (when (yas--web-mode-django-p) 'force-in-comment)
+# key: tiexp
+# --
+#{$1}$0

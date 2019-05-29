@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: twig-if
+# condition: (yas--web-mode-django-p)
+# key: tif
+# --
+{% if $1 %}
+   $0
+{% endif %}

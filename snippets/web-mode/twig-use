@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: twig-use
+# condition: (yas--web-mode-django-p)
+# key: tuse
+# --
+{% use "${1:file}.html.twig"$2 %}$0

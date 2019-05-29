@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: twig-set
+# condition: (yas--web-mode-django-p)
+# key: tset
+# --
+{% set ${1:var} = $2 %}$0

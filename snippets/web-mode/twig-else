@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: twig-else
+# condition: (yas--web-mode-django-p)
+# key: telse
+# --
+{% else %}
+   $0

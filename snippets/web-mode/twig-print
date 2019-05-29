@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: twig-print
+# condition: (yas--web-mode-django-p)
+# key: tp
+# --
+{{ $1 }}$0

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: twig-with
+# condition: (yas--web-mode-django-p)
+# key: twith
+# --
+{% with$1 %}
+   $0
+{% endwith %}

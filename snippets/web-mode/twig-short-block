@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: twig-short-block
+# condition: (yas--web-mode-django-p)
+# key: tsblock
+# --
+{% block ${1:name} %}$0

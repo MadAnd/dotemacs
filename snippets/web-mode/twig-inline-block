@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: twig-inline-block
+# condition: (yas--web-mode-django-p)
+# key: tiblock
+# --
+{% block ${1:name} %}${2:content}{% endblock %}$0

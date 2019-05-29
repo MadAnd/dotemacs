@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: twig-import
+# condition: (yas--web-mode-django-p)
+# key: timport
+# --
+{% import "${1:file}.html.twig" as $1 %}$0

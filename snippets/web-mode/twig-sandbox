@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: twig-sandbox
+# condition: (yas--web-mode-django-p)
+# key: tsandbox
+# --
+{% sandbox %}
+   $0
+{% endsandbox %}
