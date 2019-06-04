@@ -5,7 +5,7 @@
 # --
 <?php
 
-namespace `(php-helpers/current-file-namespace)`;
+namespace `(php-helpers/infer-file-namespace)`;
 
 use Yii;
 
