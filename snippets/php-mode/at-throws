@@ -1,0 +1,5 @@
+# key: atthr
+# name: at-throws
+# condition: 'force-in-comment
+# --
+@throws $0

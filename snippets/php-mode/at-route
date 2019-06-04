@@ -1,0 +1,5 @@
+# key: atroute
+# name: at-route
+# condition: 'force-in-comment
+# --
+@Route("/$1", name="$2")$0
