@@ -262,15 +262,24 @@ Note: `nil' is neutral with respect to `concat', yet it is not `stringp'."
         (when (s-prefix? psr4-path file-relpath)
           (return (cons (symbol-name psr4-ns) psr4-path)))))))
 
-(defun php-helpers/infer-file-namespace (file-path)
+(defun php-helpers/file-path->psr4-namespace (file-path)
+  "Transform FILE-PATH into a PSR-4 compliant PHP namespace.
+FILE-PATH must be a string. Result is a string as well."
+  (s-with file-path
+    (s-chop-prefix "/")
+    (s-split "/")
+    butlast
+    (s-join "\\")))
+
+(cl-defun php-helpers/infer-file-namespace (&optional (file-path buffer-file-name))
   "Infer namespace from a path of the current file.
 
 Currently, the following heuristics are used:
 1. Project root is stripped off. See `projectile-project-root'.
 2. composer.json settings \"autoload\".\"psr-4\" and \"autoload-dev\".\"psr-4\"
-   are respected. See `php-helpers/parse-composer-psr4-autoloads'.
+   are processed. See `php-helpers/parse-composer-psr4-autoloads'.
 3. Should p.2 fail, defaults from `php-helpers-default-psr4-autoloads'
-   will also be tried in order."
+   will also be tried, in order."
   (let* ((project-root (projectile-project-root (file-name-directory file-path)))
          (relative-path (s-chop-prefix project-root file-path))
          (psr4-configs (append
@@ -284,15 +293,6 @@ Currently, the following heuristics are used:
               (php-helpers/file-path->psr4-namespace (s-chop-prefix
                                                       psr4-path
                                                       relative-path))))))
-
-(defun php-helpers/file-path->psr4-namespace (file-path)
-  "Transform FILE-PATH into a PSR-4 compliant PHP namespace.
-FILE-PATH must be a string. Result is a string as well."
-  (s-with file-path
-    (s-chop-prefix "/")
-    (s-split "/")
-    butlast
-    (s-join "\\")))
 
 ;;;###autoload
 (defun php-helpers/insert-inferred-file-namespace (file-path)
