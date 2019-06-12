@@ -12,7 +12,7 @@ namespace `(php-helpers/infer-file-namespace)`;
  *
  * @author Andriy Kmit' <dev@madand.net>
  */
-class `class-name`${1: extends ${2:ParentClass}}
+final class `class-name`${1: extends ${2:ParentClass}}
 {
   $0
 }

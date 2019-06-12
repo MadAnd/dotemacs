@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 *
 * @author Andriy Kmit' <dev@madand.net>
 */
-class $1Data
+final class $1Data
 {
   /**
   * @Assert\NotBlank()
