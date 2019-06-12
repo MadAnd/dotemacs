@@ -35,10 +35,6 @@ approach like (define-key map (kbd \"M-d\") \"$\") did not work properly!"
      (interactive)
      (insert ,str)))
 
-(defun madand/disable-rainbow-identifiers ()
-  "Disable `rainbow-identifiers-mode'."
-  (rainbow-identifiers-mode -1))
-
 (defun madand/toggle-php-web-mode ()
   "Toggle between `php-mode' and `web-mode'."
   (interactive)

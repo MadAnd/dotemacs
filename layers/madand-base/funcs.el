@@ -42,6 +42,26 @@ All arguments are passed to `async-shell-command', which see."
          (orig-mode (or (file-modes filename) (error "File not found"))))
     (chmod filename (file-modes-symbolic-to-number "+x" orig-mode))))
 
+(defvar madand--rainbow-identifiers-turn-on-delay 2
+  "Delay before turning on `rainbow-identifiers-mode' in the current buffer.
+The value represents seconds and can be `float'.
+
+See `madand//turn-on-rainbow-identifiers-with-delay'.")
+
+(defun madand//turn-on-rainbow-identifiers-with-delay ()
+  "Turn on `rainbow-identifiers-mode' after a delay.
+The delay is controlled by `madand--rainbow-identifiers-turn-on-delay'.
+
+This is a workaround for the issue with `js2-mode', where documentation strings
+and comments are colorized by Rainbow Identifiers, if turned on without a delay."
+  (let ((current-buffer (current-buffer)))
+    (run-with-idle-timer
+     madand--rainbow-identifiers-turn-on-delay nil
+     (lambda ()
+       (with-current-buffer current-buffer
+         (when (bound-and-true-p rainrainbow-identifiers-mode)
+           (rainbow-identifiers-mode 1)))))))
+
 (defun madand//smerge-disable-rainbow-identifiers ()
   "Disable `rainbow-identifiers-mode' while `smerge-mode' is active."
   (let ((current-buffer (current-buffer)))
@@ -49,10 +69,10 @@ All arguments are passed to `async-shell-command', which see."
      2 nil
      (lambda ()
        (with-current-buffer current-buffer
-         (when (bound-and-true-p 'rainrainbow-identifiers-mode)
-           (if (bound-and-true-p 'smerge-mode)
-               (spacemacs/toggle-rainbow-identifier-off)
-             (spacemacs/toggle-rainbow-identifier-on))))))))
+         (when (bound-and-true-p rainbow-identifiers-mode)
+           (if (bound-and-true-p smerge-mode)
+               (rainbow-identifiers-mode 0)
+             (rainbow-identifiers-mode 1))))))))
 
 
 

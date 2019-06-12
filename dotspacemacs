@@ -46,8 +46,7 @@ This function should only modify configuration layer settings."
                       auto-completion-idle-delay 0.5
                       auto-completion-private-snippets-directory "~/.spacemacs.d/snippets")
      better-defaults
-     (colors :variables
-             colors-colorize-identifiers 'all)
+     colors
      csv
      (dash :variables
            helm-dash-docset-newpath "~/.local/share/Zeal/Zeal/docsets")

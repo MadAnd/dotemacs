@@ -116,8 +116,7 @@
     (evil-define-key 'hybrid js2-mode-map
       (kbd "M-o") (kbd "C-o $;")
       (kbd "M-e") (kbd "C-o $,")
-      (kbd "RET") (kbd "M-j")))
-  (add-hook 'js2-mode-hook #'madand/disable-rainbow-identifiers-mode))
+      (kbd "RET") (kbd "M-j"))))
 
 
 (defun madand-web/post-init-js-doc ()
@@ -217,8 +216,7 @@
     "w" #'madand/toggle-php-web-mode)
   (spacemacs/declare-prefix-for-mode 'php-mode "mi" "insert")
 
-  (add-hook 'php-mode-hook #'madand/set-fill-column t)
-  (add-hook 'php-mode-hook #'spacemacs/toggle-rainbow-identifier-off))
+  (add-hook 'php-mode-hook #'madand/set-fill-column t))
 
 (defun madand-web/pre-init-phpcbf ()
   (with-eval-after-load 'phpcbf
@@ -231,8 +229,7 @@
   (spacemacs/set-leader-keys-for-major-mode 'web-mode
     "w" #'madand/toggle-php-web-mode)
   (add-to-list 'auto-mode-alist
-               '("/\\(views\\|common/mail\\)/.*\\.php\\'" . web-mode))
-  (add-hook 'web-mode-hook #'madand/disable-rainbow-identifiers))
+               '("/\\(views\\|common/mail\\)/.*\\.php\\'" . web-mode)))
 
 (defun madand-web/post-init-yaml-mode ()
   (with-eval-after-load 'yaml-mode

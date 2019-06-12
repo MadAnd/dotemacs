@@ -40,6 +40,7 @@
     ;; (prog-inflection :location (recipe :fetcher local))
     projectile
     (python :location built-in)
+    rainbow-identifiers
     (rcirc :location built-in)
     rcirc-notify
     (simple :location built-in)
@@ -222,6 +223,16 @@ CommitDate: %ci\n")
   (with-eval-after-load 'python
     (add-hook 'python-mode-hook (lambda ()
                                   (setq-local zeal-at-point-docset "python")))))
+
+(defun madand-base/post-init-rainbow-identifiers ()
+  ;; Selectively enable for some programming modes.
+  (spacemacs/add-to-hooks #'rainbow-identifiers-mode '(emacs-lisp-mode-hook
+                                                       lisp-mode-hook
+                                                       lua-mode-hook
+                                                       shell-mode-hook))
+  ;; Workaround with delayed activation.
+  (spacemacs/add-to-hooks #'madand//turn-on-rainbow-identifiers-with-delay
+                          '(js2-mode-hook)))
 
 (defun madand-base/post-init-rcirc ()
   (with-eval-after-load 'rcirc
