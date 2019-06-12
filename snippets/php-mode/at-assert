@@ -1,0 +1,5 @@
+# key: atassert
+# name: @Assert\...
+# condition: 'force-in-comment
+# --
+@Assert\\$0

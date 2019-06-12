@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: twig-block-comment
+# condition: (yas--web-mode-django-p)
+# key: tbc
+# --
+{#
+  $0
+#}

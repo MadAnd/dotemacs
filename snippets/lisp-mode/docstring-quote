@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: docstring-quote
+# key: dq
+# condition: 'force-in-comment
+# --
+`$1'$0

@@ -3,7 +3,7 @@
 # name: php-interface-file
 # key: pif
 # --
-<?php
+<?php declare(strict_types=1);
 
 namespace `(php-helpers/infer-file-namespace)`;
 

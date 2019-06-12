@@ -1,0 +1,22 @@
+# key: sdto
+# name: symfony-dto
+# --
+<?php declare(strict_types=1);
+
+namespace `(php-helpers/infer-file-namespace)`;
+
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+* Data Transfer Object for the ${1:Class}.
+*
+* @author Andriy Kmit' <dev@madand.net>
+*/
+class $1Data
+{
+  /**
+  * @Assert\NotBlank()
+  * @Assert\Length(min="255")
+  */
+  public $title;
+}

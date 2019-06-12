@@ -1,0 +1,5 @@
+# key: atret
+# name: at-return
+# condition: 'force-in-comment
+# --
+@return $0

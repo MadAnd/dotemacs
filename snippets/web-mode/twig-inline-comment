@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: twig-inline-comment
+# condition: (yas--web-mode-django-p)
+# key: tic
+# --
+{# $0 #}

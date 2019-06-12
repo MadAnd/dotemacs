@@ -1,0 +1,5 @@
+# key: docinh
+# name: doc-inherit
+# condition: 'force-in-comment
+# --
+{@inheritdoc}$0

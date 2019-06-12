@@ -3,11 +3,9 @@
 # name: php-trait-file
 # key: ptf
 # --
-<?php
+<?php declare(strict_types=1);
 
 namespace `(php-helpers/infer-file-namespace)`;
-
-use Yii;
 
 /**
  * Trait `class-name` $2.

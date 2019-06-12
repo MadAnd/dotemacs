@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: twig-tag
+# condition: (yas--web-mode-django-p)
+# key: tt
+# --
+{% $0 %}

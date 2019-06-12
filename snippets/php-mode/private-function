@@ -2,7 +2,7 @@
 # name: private-function
 # key: pri
 # --
-private function ${1:name}(${2:args})
+private function ${1:name}(${2}): ${3:void}
 {
   $0
 }

@@ -2,7 +2,7 @@
 # name: public function
 # key: pub
 # --
-public function ${1}(${2})
+public function $1($2): ${3:void}
 {
   $0
 }

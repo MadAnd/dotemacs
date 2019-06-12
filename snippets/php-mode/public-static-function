@@ -2,7 +2,7 @@
 # name: public static function
 # key: pubs
 # --
-public static function ${1}(${2})
+public static function $1($2): ${3:void}
 {
   $0
 }

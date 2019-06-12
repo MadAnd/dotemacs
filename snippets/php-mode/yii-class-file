@@ -3,7 +3,7 @@
 # name: yii-class-file
 # key: ycf
 # --
-<?php
+<?php declare(strict_types=1);
 
 namespace `(php-helpers/infer-file-namespace)`;
 
