@@ -242,7 +242,7 @@ New version has the .pacnew suffix in filename."
 Also remember its original state."
   (when (bound-and-true-p page-break-lines-mode)
     (setq madand--company-page-break-lines-mode-p page-break-lines-mode)
-    (page-break-lines-mode -1)))
+    (page-break-lines-mode 0)))
 
 (defun madand//company-maybe-turn-on-page-break-lines (&rest ignore)
   "Enable `page-break-lines-mode' if it was initially enabled."
@@ -263,7 +263,7 @@ This function returns an interactive lambda of 0 args."
 (defun madand/disable-modes (mode-list)
   "Disable modes given in a list MODE-LIST."
   (dolist (mode mode-list)
-    (and (boundp mode) (funcall mode -1))))
+    (and (boundp mode) (funcall mode 0))))
 
 (defun madand//maybe-disable-fly-modes ()
   "Disable `flycheck-mode' (flyc) and/or `flyspell-mode' (flys) in the buffer,
@@ -341,7 +341,7 @@ If in perspective, use `bs--sort-by-name'. Otherwise, use
 (defun madand/turn-off-electric-pair-local-mode ()
   "Turn off `electric-pair-local-mode'."
   (interactive)
-  (electric-pair-local-mode -1))
+  (electric-pair-local-mode 0))
 
 
 (defun madand/in-string-p ()

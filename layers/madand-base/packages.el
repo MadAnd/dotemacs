@@ -271,7 +271,7 @@ CommitDate: %ci\n")
 (defun madand-base/pre-init-smartparens ()
   (spacemacs|use-package-add-hook smartparens
     :post-config
-    (show-smartparens-global-mode -1)))
+    (show-smartparens-global-mode 0)))
 
 (defun madand-base/post-init-smerge-mode ()
   (with-eval-after-load 'smerge-mode
