@@ -72,6 +72,7 @@ This function should only modify configuration layer settings."
      search-engine
      (semantic :enabled-for phpplus madand-web)
      (shell :variables
+            close-window-with-terminal t
             shell-default-shell 'eshell
             shell-default-height 30
             shell-default-position 'full)
@@ -498,7 +499,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   ;; If I enable fallback font, there is a considerable slow-down due to
   ;; high CPU usage by the X server!
   ;; TODO: find fallback Unicode font that won't cause the CPU overheat.
-  (defvar my-font-default (font-spec :name "Droid Sans Mono Slashed"
+  (defvar my-font-default (font-spec :name "Iosevka SS09"
                                      :size 18))
 
   (spacemacs|do-after-display-system-init

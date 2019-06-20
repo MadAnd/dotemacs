@@ -23,7 +23,6 @@
     popwin
     helm
     evil
-    parinfer
     company
     smartparens
     (sly :requires smartparens)
@@ -63,11 +62,12 @@
                 #'madand/projectile-find-implementation-or-test--around)
     (projectile-register-project-type
      'common-lisp #'madand/project-type-common-lisp-p
-     :test-dir "test/")))
+     :test-dir "tests/")))
 
 (defun madand-lisp/pre-init-xterm-color ()
   (when (configuration-layer/package-usedp 'sly)
-    (add-hook 'sly-mrepl-mode-hook (lambda () (setq xterm-color-preserve-properties t)))))
+    (add-hook 'sly-mrepl-mode-hook (lambda ()
+                                     (setq xterm-color-preserve-properties t)))))
 
 (defun madand-lisp/pre-init-popwin ()
   (spacemacs|use-package-add-hook sly
@@ -84,9 +84,6 @@
     :post-init
     (spacemacs/set-leader-keys-for-major-mode 'lisp-mode
       "sI" 'spacemacs/helm-sly)))
-
-(defun madand-lisp/post-init-parinfer ()
-  (add-hook 'lisp-mode-hook 'parinfer-mode))
 
 (defun madand-lisp/pre-init-evil ()
   (with-eval-after-load 'evil
@@ -115,7 +112,8 @@
             sly-repl-history-remove-duplicates t
             sly-repl-history-trim-whitespaces t
             sly-net-coding-system 'utf-8-unix)
-      (sly-setup '(sly-fancy))
+      (spacemacs|define-jump-handlers lisp-mode sly-edit-definition)
+      (spacemacs|define-jump-handlers sly-mrepl-mode sly-edit-definition-other-window)
       (spacemacs/set-leader-keys-for-major-mode 'lisp-mode
         "'" #'sly
         "ha" #'sly-apropos
@@ -192,14 +190,16 @@
         ("q" nil :exit t)))
     :config
     (progn
-      (spacemacs|define-jump-handlers lisp-mode )
+      (setq sly-lisp-implementations '((roswell ("/usr/bin/ros" "dynamic-space-size=3000" "--" "run"))
+                                       (sbcl ("/usr/bin/sbcl")))
+            sly-defpackage-regexp "^(\\(cl:\\|common-lisp:\\|uiop:\\|uiop/package:\\)?\\(defpackage\\|define-package\\)\\>[ \t']*")
+      (define-key sly-xref-mode-map (kbd "j") #'sly-xref-next-line)
+      (define-key sly-xref-mode-map (kbd "k") #'sly-xref-prev-line)
+      (sly-setup '(sly-fancy))
       (evil-define-key 'normal sly-popup-buffer-mode-map "Q" #'kill-buffer-and-window)
-      (add-hook 'sly-popup-buffer-mode-hook #'spacemacs/toggle-rainbow-identifier-off)
       (advice-add 'sly-show-description
                   :override #'madand/sly-show-description)
-      (setq sly-lisp-implementations '((roswell ("/usr/bin/ros" "-Q" "run"))
-                                       (sbcl ("/usr/bin/ros")))
-            sly-default-lisp 'roswell))))
+      (add-hook 'sly-popup-buffer-mode-hook #'spacemacs/toggle-rainbow-identifier-off))))
 
 (defun madand-lisp/init-sly-mrepl ()
   (use-package sly-mrepl
@@ -209,7 +209,10 @@
           ("<up>" . sly-mrepl-previous-input-or-button)
           ("<down>" . sly-mrepl-next-input-or-button)
           ("<C-up>" . sly-mrepl-previous-input-or-button)
-          ("<C-down>" . sly-mrepl-next-input-or-button))))
+          ("<C-down>" . sly-mrepl-next-input-or-button))
+    :config
+    (spacemacs/set-leader-keys-for-major-mode 'sly-mrepl-mode
+      "hh" #'sly-describe-symbol)))
 
 (defun madand-lisp/post-init-company ()
   (spacemacs|add-company-backends

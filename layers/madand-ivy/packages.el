@@ -17,6 +17,7 @@
   '(counsel
     ivy
     ;; ivy-rich
+    recentf
     swiper
     wgrep))
 
@@ -28,13 +29,17 @@
 (defun madand-ivy/post-init-ivy ()
   (with-eval-after-load 'ivy
     (setq ivy-wrap t
-          ivy-use-virtual-buffers nil
           ivy-height 20)
     (spacemacs/set-leader-keys "hm" #'man)
     (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit)
     (define-key ivy-minibuffer-map (kbd "C-h") (kbd "DEL"))
     (define-key ivy-minibuffer-map (kbd "C-S-h") help-map)
     (define-key ivy-minibuffer-map (kbd "C-<return>") 'ivy-immediate-done)))
+
+(defun madand-ivy/post-init-recentf ()
+  (with-eval-after-load 'ivy
+    (setq ivy-use-virtual-buffers nil)))
+
 
 (defun madand-ivy/init-ivy-rich ()
   (use-package ivy-rich

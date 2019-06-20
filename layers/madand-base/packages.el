@@ -36,6 +36,7 @@
     magithub
     (man :location built-in)
     multi-term
+    org
     org-pomodoro
     persp-mode
     ;; (prog-inflection :location (recipe :fetcher local))
@@ -48,9 +49,11 @@
     simple-mpc
     smartparens
     (smerge-mode :location built-in)
+    transient
     treemacs
     undo-tree
     writeroom-mode
+    yaml-mode
     yasnippet))
 
 (defun madand-base/init-ace-jump-buffer ()
@@ -99,7 +102,9 @@
 
 (defun madand-base/post-init-centered-cursor-mode ()
   (spacemacs/add-to-hooks #'spacemacs/toggle-centered-point-on
-                          '(Man-mode-hook Info-mode-hook)))
+                          '(Man-mode-hook
+                            Info-mode-hook
+                            magit-revision-mode-hook)))
 
 (defun madand-base/post-init-company ()
   (with-eval-after-load 'company
@@ -121,6 +126,9 @@
               #'madand//company-maybe-turn-on-page-break-lines)))
 
 (defun madand-base/post-init-evil ()
+  ;; Disable default use of tags to find definitions.
+  (setq spacemacs-default-jump-handlers
+        (delete 'evil-goto-definition spacemacs-default-jump-handlers))
   (with-eval-after-load 'evil-states
     ;; Make Term buffers start in Emacs state.
     (setq evil-insert-state-modes (delq 'term-mode evil-insert-state-modes))
@@ -148,17 +156,21 @@
     (add-to-list 'term-bind-key-alist '("C-c z" . term-stop-subjob))
     (add-to-list 'term-bind-key-alist '("<escape>" . term-send-esc))))
 
+(defun madand-base/post-init-org ()
+  (with-eval-after-load 'org
+    (spacemacs/set-leader-keys-for-major-mode 'org-mode
+      "ec" #'org-edit-src-code)))
+
 (defun madand-base/post-init-org-pomodoro ()
   (with-eval-after-load 'org-pomodoro
     (madand/pomodoro-long-mode)))
 
 (defun madand-base/init-info ()
-  (add-to-list 'Info-additional-directory-list (list (expand-file-name
-                                                      "~/.spacemacs.d/info")))
+  (add-to-list 'Info-additional-directory-list (expand-file-name
+                                                "~/.spacemacs.d/info"))
   (spacemacs/add-all-to-hook 'Info-mode-hook
                              #'spacemacs/toggle-centered-buffer
-                             (lambda ()
-                               (text-scale-set madand-info-mode-text-scale)))
+                             #'madand//set-doc-text-scale)
   (with-eval-after-load 'info
     (evil-define-key 'motion Info-mode-map
       "s" #'evil-avy-goto-char-timer
@@ -246,8 +258,8 @@ CommitDate: %ci\n")
   (with-eval-after-load 'rcirc
     (setq rcirc-log-flag t
           rcirc-buffer-maximum-lines nil
-          rcirc-fill-column (window-text-width)
-          rcirc-fill-prefix (make-string 17 ?\s)
+          rcirc-fill-column #'window-text-width
+          rcirc-fill-prefix (make-string 6 ?\s)
           rcirc-kill-channel-buffers t
           rcirc-time-format "%H:%M ")
     (advice-add 'rcirc-connect :around #'madand//rcirc-connect)))
@@ -269,12 +281,18 @@ CommitDate: %ci\n")
     :config
     (progn
       (spacemacs|hide-lighter simple-mpc-current-playlist-mode)
+      (let ((socket-path (expand-file-name "~/.config/mpd/socket")))
+        (setq simple-mpc-arguments (concat "--host=" socket-path)))
       (setq simple-mpc-mpd-playlist-directory "~/.config/mpd/playlists/"
             simple-mpc-playlist-auto-refresh 2
-            simple-mpc-playlist-format "[%track%. ][%name%: ][%title%][ - %%artist%][ - %album%]")
+            simple-mpc-playlist-format "%position%\\t%time%\\t%artist%\\t%track%\\t[%name%: ]%title%\\t%album%"
+            simple-mpc-table-separator "\t")
       (evilified-state-evilify-map simple-mpc-mode-map
         :mode simple-mpc-mode
-        :bindings (kbd "C-m") (kbd "<return>")))))
+        :bindings
+        (kbd "C-m") (kbd "<return>")
+        "(" #'simple-mpc-decrease-volume
+        ")" #'simple-mpc-increase-volume))))
 
 (defun madand-base/pre-init-smartparens ()
   (spacemacs|use-package-add-hook smartparens
@@ -284,6 +302,10 @@ CommitDate: %ci\n")
 (defun madand-base/post-init-smerge-mode ()
   (with-eval-after-load 'smerge-mode
     (add-hook 'smerge-mode-hook #'madand//smerge-disable-rainbow-identifiers)))
+
+(defun madand-base/post-init-transient ()
+  (with-eval-after-load 'transient
+    (transient-bind-q-to-quit)))
 
 (defun madand-base/post-init-treemacs ()
   (with-eval-after-load 'treemacs
@@ -295,6 +317,10 @@ CommitDate: %ci\n")
 
 (defun madand-base/post-init-writeroom-mode ()
   (add-hook 'writeroom-mode-hook #'madand//maybe-update-manpage t))
+
+(defun madand-base/post-init-yaml-mode ()
+  (with-eval-after-load 'yaml-mode
+    (add-hook 'yaml-mode-hook #'smartparens-mode)))
 
 (defun madand-base/post-init-yasnippet ()
   (with-eval-after-load 'yasnippet
@@ -312,7 +338,7 @@ CommitDate: %ci\n")
                 #'madand//yas-fallback-to-completing-prompt)
     (advice-add 'yas-insert-snippet :around
                 #'madand//yas-fallback-to-completing-prompt)
-    ;; Expand snippets with SPC.
+    ;; Expand snippets with SPC and M-z in hybrid state.
     (evil-define-key 'hybrid yas-minor-mode-map
       (kbd "SPC") yas-maybe-expand
       (kbd "M-z") #'yas-expand)

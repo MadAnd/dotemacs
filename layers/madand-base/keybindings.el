@@ -24,6 +24,7 @@
   "ogd" #'madand/magit-tag-create-done
   "ogp" #'madand/magit-tag-create-prefixed
   "ogt" #'madand/magit-tag-create-tbreverted
+  "od" #'kill-buffer-and-window
   "os" #'save-buffer
   "ot" #'google-translate-at-point
   "wO" #'delete-other-windows

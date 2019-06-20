@@ -43,7 +43,7 @@
     :after php-mode
     :init
     (progn
-      (spacemacs/set-leader-keys
+      (spacemacs/set-leader-keys-for-major-mode 'php-mode
         "Gg" #'geben
         "Gp" #'geben-toggle-pause-at-entry-line-flag
         "Gr" #'geben-run
@@ -91,10 +91,12 @@
         ("x" #'geben-clear-breakpoints)
         :on-enter
         (geben 1))
-      (spacemacs/set-leader-keys "G." #'spacemacs/geben-transient-state/body))
+      (spacemacs/set-leader-keys-for-major-mode 'php-mode
+        "G." #'spacemacs/geben-transient-state/body))
     :config
     (setq geben-display-window-function #'popwin:display-buffer
           geben-temporary-file-directory (concat spacemacs-cache-directory "geben/")
+          geben-pause-at-entry-line nil
           geben-path-mappings  '(("/home/madand/dev/php/rentling/app" "/app")
                                  ("/home/madand/dev/php/tkanaua" "/app")))))
 
@@ -201,6 +203,7 @@
     (kbd "C-s") "->"
     (kbd "C--") " => "
     (kbd "C-'") "::"
+    (kbd "C-;") "\\"
     (kbd "M-o") (kbd "C-o $;")
     (kbd "M-u") (kbd "C-o $,"))
   (evil-define-key '(normal motion) php-mode-map

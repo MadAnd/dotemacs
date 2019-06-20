@@ -430,13 +430,13 @@ If in perspective, use `bs--sort-by-name'. Otherwise, use
 
 (defun madand/pomodoro-long-mode ()
   "Configure Pomodoro to work in long mode:
-52 (mins) work, 17 - short brake, 30 - long brake after 4 pomodoros."
+45 (mins) work, 5 - short brake, 45 - long brake after 4 pomodoros."
   (interactive)
   (setq
    org-pomodoro-long-break-frequency 4
-   org-pomodoro-length 52
-   org-pomodoro-long-break-length 30
-   org-pomodoro-short-break-length 17))
+   org-pomodoro-length 45
+   org-pomodoro-long-break-length 45
+   org-pomodoro-short-break-length 5))
 
 
 
@@ -458,8 +458,9 @@ default for new frames only."
        (concat "(madand-base) Warning: `madand-base-font-size-config' is empty."
                " Dynamic font size change will not work.")))
     (cl-return-from madand/update-frame-font-size))
-  (cl-flet ((decide-font-size (font-size-config)
-              (let ((display-width (display-pixel-width)))
+  (cl-flet ((guess-font-size (font-size-config &optional (default-result 15))
+              (let ((display-width (display-pixel-width))
+                    (result default-result))
                 (dolist (cell font-size-config result)
                   (when (>= display-width (car cell))
                     (setq result (cdr cell))))))
@@ -467,7 +468,7 @@ default for new frames only."
               (let ((spec (font-spec :size size)))
                 (set-frame-font spec nil (list frame))
                 (set-face-attribute 'default frame :font spec))))
-    (set-default-font-size (decide-font-size madand-base-font-size-config)
+    (set-default-font-size (guess-font-size madand-base-font-size-config)
                            frame)))
 
 
@@ -476,5 +477,10 @@ default for new frames only."
   "If the current major mode is `Man-mode', call `Man-update-manpage'."
   (when (eq major-mode 'Man-mode)
     (Man-update-manpage)))
+
+(defun madand//set-doc-text-scale ()
+  "Set the buffer text scale to the value of `madand-doc-modes-text-scale'.
+See `text-scale-set'."
+  (text-scale-set madand-doc-modes-text-scale))
 
 ;;; funcs.el ends here
