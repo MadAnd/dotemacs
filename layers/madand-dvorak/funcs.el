@@ -1,5 +1,4 @@
-;;; -*- lexical-binding: t -*-
-;;; funcs.el --- madand-dvorak layer functions file for Spacemacs.
+;;; funcs.el --- madand-dvorak layer functions file for Spacemacs. -*- lexical-binding: t -*-
 ;;
 ;; Copyright (c) 2015-2018 Andriy Kmit'
 ;;

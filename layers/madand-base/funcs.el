@@ -1,4 +1,4 @@
-;;; packages.el --- madand-base layer functions file for Spacemacs.
+;;; packages.el --- madand-base layer functions file for Spacemacs.  -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2015-2018 Andriy Kmit'
 ;;
