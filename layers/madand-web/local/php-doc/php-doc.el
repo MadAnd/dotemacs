@@ -127,13 +127,13 @@ If set to NIL no email address is written next to the @copyright tag."
       (end-of-line))))
 
 
-(defun php-insert-doc-block-for-function (attributes arglist)
+(defun php-insert-doc-block-for-function (attributes arglist rettype)
   "Insert php-doc block for the specified function"
   (dolist (arg (split-string arglist "\s*,\s*"))
     (php-insert-doc-block-param "param" arg t))
 
-  (php-insert-doc-block-tags-for-attributes attributes)
   (php-insert-doc-block-access-tag attributes)
+  (message arglist)
 
   (let ((content)
 	(start 0))
@@ -141,20 +141,10 @@ If set to NIL no email address is written next to the @copyright tag."
       (set-mark (point))
       (php-end-of-defun)
       (setq content (buffer-substring-no-properties (mark) (point))))
-
-    (while (string-match "global \\(\\(\s*,?\s*$[a-zA-Z0-9_]+\\)+\\)\s*;" content start)
-      (setq start (match-end 0))
-      (dolist (var-name (split-string (match-string 1 content) "\s*,\s*"))
-	(insert "* @global ")
-	(insert (or
-		 (cdr (assoc-string var-name php-insert-doc-global-type-alist))
-		 "mixed"))
-	(insert " ")
-	(insert var-name)
-	(insert "\n")))
-
     (when (string-match "return" content)
-      (insert "* @return mixed\n"))))
+      (unless (string-empty-p arglist)
+        (insert "*\n"))
+      (insert (format "* @return %s\n" (or rettype "mixed"))))))
 
 (defun php-insert-doc-block-tags-for-attributes (attributes)
   (when php-insert-doc-attribute-tags
@@ -207,9 +197,10 @@ If set to NIL no email address is written next to the @copyright tag."
     (insert "/**\n* \n*\n")
 
     ;; handle functions
-    (when (string-match "function\s*\\([A-Za-z0-9_]+\\)\s*\(\\([^\)]*\\)\)" sig)
+    (when (string-match "function\s*\\([A-Za-z0-9_]+\\)\s*\(\\([^\)]*\\)\)\\(?::\s*\\([A-Za-z0-9_]+\\)\\)?" sig)
       (php-insert-doc-block-for-function (substring sig 0 (match-beginning 0))
-					 (match-string 2 sig))
+                                         (match-string 2 sig)
+                                         (match-string 3 sig))
       (throw 'handled t))
 
     ;; handle classes

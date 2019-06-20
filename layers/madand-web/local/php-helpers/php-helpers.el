@@ -326,7 +326,7 @@ If called interactively, the result will also be inserted at point."
     (newline-and-indent)
     (insert "/** @var ")
     (let ((return-point (point)))
-      (insert " " (symbol-name var-at-point) " */")
+      (insert " $" (symbol-name var-at-point) " */")
       (set-window-point nil return-point)
       (evil-insert-state))))
 
