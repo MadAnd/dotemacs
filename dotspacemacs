@@ -537,8 +537,6 @@ before packages are loaded."
   ;; Enable some Emacs features that are disabled by default.
   (put 'set-goal-column 'disabled nil)
 
-  (spacemacs/set-google-translate-languages "en" "uk")
-
   ;; Global minor modes.
   ;; (dtrt-indent-mode 1)
   (global-hungry-delete-mode 1)

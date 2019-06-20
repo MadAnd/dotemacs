@@ -32,6 +32,7 @@
     evil-unimpaired
     flyspell
     (frame :location built-in)
+    google-translate
     (info :location built-in)
     magithub
     (man :location built-in)
@@ -209,6 +210,12 @@
   ;;; Setup dynamic font resize according to the current display width.
   (spacemacs|do-after-display-system-init
    (add-hook 'window-size-change-functions #'madand/update-frame-font-size)))
+
+(defun madand-base/post-init-google-translate ()
+  (with-eval-after-load 'google-translate
+    (spacemacs/set-google-translate-languages "en" "uk")
+    ;; Workaround for https://github.com/atykhonov/google-translate/issues/52
+    (setq google-translate-backend-method 'curl)))
 
 (defun madand-base/init-jit-lock ()
   (with-eval-after-load 'jit-lock
