@@ -28,8 +28,8 @@
 (defmacro madand|gen-insert-command (str)
   "Return lambda which is an interactive command that inserts STR at point.
 
-Note: this is a workaround for evil-iedit, since straightforward
-approach like (define-key map (kbd \"M-d\") \"$\") did not work properly!"
+Note: this is a workaround for evil-iedit, since the straightforward
+approach `(define-key map (kbd \"M-d\") \"$\")' did not work properly!"
   `(lambda ()
      (interactive)
      (insert ,str)))
