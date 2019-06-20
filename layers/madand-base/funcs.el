@@ -323,7 +323,7 @@ if we were inside of one."
         (end-of-line)
         (insert " ")
         (evil-insert-state))
-    (evil-open-below count)))
+    (evil-open-above count)))
 
 (defun madand/evil-open-below-maybe-continue-comment (count)
   "Call `evil-open-below' then continue multi-line C-style comment (/**)
