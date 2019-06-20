@@ -8,7 +8,7 @@
 namespace `(php-helpers/infer-file-namespace)`;
 
 /**
- * `class-name` is the interface that should be implemented by $3.
+ * $3
  *
  * @author Andriy Kmit' <dev@madand.net>
  */

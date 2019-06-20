@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: twig-trans
+# condition: (yas--web-mode-django-p)
+# key: ttrans
+# --
+{{ "$1"|trans }}$0
