@@ -282,31 +282,91 @@ when certain conditions are met:
      ;; The default return value - do not disable anything.
      nil)))
 
-(defun madand/inside-multilne-c-comment-p ()
-  "Return t if point is inside of a mutilne C style \"/** … **/\" comment.
-Rturns nil if point is on the comment closing part \"**/\"."
+(defun madand/inside-of-multilne-c-comment? ()
+  "Return t if point is inside of a mutilne C-style \"/** … */\" comment.
+Rturns nil if point is on the comment closing part \"*/\"."
   (save-excursion
     (back-to-indentation)
-    (and (madand/in-string-or-comment-p)
-         (looking-at-p (rxt-pcre-to-elisp "/\\*{2}|\\*[^/]+")))))
+    (and (derived-mode-p 'c-mode)
+         (madand/in-string-or-comment-p)
+         (looking-at-p (rxt-pcre-to-elisp "\\*[^/]+")))))
+
+(defun madand/first-line-of-multiline-c-comment? ()
+  "Return t if point is on the first line of a multiline C-style \"/** … */\"
+comment."
+  (save-excursion
+    (back-to-indentation)
+    (and (derived-mode-p 'c-mode)
+         (looking-at-p (rxt-pcre-to-elisp "/\\*\\*?")))))
+
+(defun madand/last-line-of-multiline-c-comment? ()
+  "Return t if point is on the last line of a multiline C-style \"/** … */\"
+comment."
+  (save-excursion
+    (back-to-indentation)
+    (and (derived-mode-p 'c-mode)
+         (looking-at-p (rxt-pcre-to-elisp "\\*/")))))
 
 (defun madand/evil-open-above-maybe-continue-comment (count)
   "Call `evil-open-above' then continue multi-line C-style comment (/**)
 if we were inside of one."
   (interactive "p")
-  (let ((should-continue-comment (madand/inside-multilne-c-comment-p)))
-    (evil-open-above count)
-    (when should-continue-comment
-      (insert "* "))))
+  (if (madand/inside-of-multilne-c-comment?)
+      ;; This is more tricky since there is no backward version of
+      ;; `c-indent-new-comment-line'.
+      (progn
+        (forward-line -1)
+        (end-of-line)
+        (dotimes (_ count)
+          (c-indent-new-comment-line))
+        (forward-line (- 1 count))
+        (end-of-line)
+        (insert " ")
+        (evil-insert-state))
+    (evil-open-below count)))
 
 (defun madand/evil-open-below-maybe-continue-comment (count)
   "Call `evil-open-below' then continue multi-line C-style comment (/**)
 if we were inside of one."
   (interactive "p")
-  (let ((should-continue-comment (madand/inside-multilne-c-comment-p)))
-    (evil-open-below count)
-    (when should-continue-comment
-      (insert "* "))))
+  (if (or (madand/inside-of-multilne-c-comment?)
+          (madand/first-line-of-multiline-c-comment?))
+      (progn
+        (end-of-line)
+        (dotimes (_ count)
+          (c-indent-new-comment-line))
+        (evil-insert-state))
+    (evil-open-below count)))
+
+(defun madand/insert-space-above (count)
+  "Call `evil-open-above' then continue multi-line C-style comment (/**)
+if we were inside of one."
+  (interactive "p")
+  (save-excursion
+    (if (madand/inside-of-multilne-c-comment?)
+        ;; This is more tricky since there is no backward version of
+        ;; `c-indent-new-comment-line'.
+        (progn
+          (forward-line -1)
+          (end-of-line)
+          (dotimes (_ count)
+            (c-indent-new-comment-line)))
+      (dotimes (_ count)
+        (evil-insert-newline-above)))))
+
+(defun madand/insert-space-below (count)
+  "Call `evil-open-below' then continue multi-line C-style comment (/**)
+if we were inside of one."
+  (interactive "p")
+  (save-excursion
+    (if (or (madand/inside-of-multilne-c-comment?)
+            (madand/first-line-of-multiline-c-comment?))
+        (progn
+          (end-of-line)
+          (dotimes (_ count)
+            (c-indent-new-comment-line)))
+      (dotimes (_ count)
+        (evil-insert-newline-below)))))
 
 
 

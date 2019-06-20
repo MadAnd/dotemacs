@@ -29,6 +29,7 @@
     evil-magit
     evil-mc
     evil-surround
+    evil-unimpaired
     flyspell
     (frame :location built-in)
     (info :location built-in)
@@ -180,6 +181,13 @@
     (evil-define-key 'visual evil-surround-mode-map "s" nil)
     (evil-define-key 'visual evil-surround-mode-map "S" nil)
     (evil-define-key 'visual evil-surround-mode-map "gs" 'evil-surround-region)))
+
+(defun madand-base/post-init-evil-unimpaired ()
+  (with-eval-after-load 'evil-unimpaired
+    (advice-add 'evil-unimpaired/insert-space-above :override
+                #'madand/insert-space-above)
+    (advice-add 'evil-unimpaired/insert-space-below :override
+                #'madand/insert-space-below)))
 
 (defun madand-base/post-init-flyspell ()
   (with-eval-after-load 'flyspell
