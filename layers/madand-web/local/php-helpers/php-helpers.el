@@ -339,7 +339,7 @@ If there are multiple class definitions in the buffer,  the first is returned."
       (evil-with-state 'emacs-state
         (widen)
         (beginning-of-buffer)
-        (when (re-search-forward "^\\(?:final \\)?class \\([[:alnum:]]+\\)")
+        (when (re-search-forward "^\\(?:final \\)?class \\([a-zA-Z0-9_]+\\)")
           (match-string-no-properties 1))))))
 
 ;;;###autoload
