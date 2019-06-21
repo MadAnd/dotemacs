@@ -330,6 +330,46 @@ If called interactively, the result will also be inserted at point."
       (set-window-point nil return-point)
       (evil-insert-state))))
 
+(defun php-helpers//current-buffer-class-name ()
+  "Return the name of the PHP class defined in the current buffer.
+
+If there are multiple class definitions in the buffer,  the first is returned."
+  (save-excursion
+    (save-restriction
+      (evil-with-state 'emacs-state
+        (widen)
+        (beginning-of-buffer)
+        (when (re-search-forward "^\\(?:final \\)?class \\([[:alnum:]]+\\)")
+          (match-string-no-properties 1))))))
+
+;;;###autoload
+(defun php-helpers/rename-file-to-buffer-class-name ()
+  "Rename the current buffer's visited file according to the PHP class name."
+  (interactive)
+  (let ((name (buffer-name))
+        (filename (buffer-file-name)))
+    (if (and filename (file-exists-p filename))
+        ;; the buffer is visiting a file
+        (let* ((dir (file-name-directory filename))
+               (new-name (concat dir (php-helpers//current-buffer-class-name)
+                                 ".php")))
+          (cond ((get-buffer new-name)
+                 (error "A buffer named '%s' already exists!" new-name))
+                (t
+                 (rename-file filename new-name 1)
+                 (rename-buffer new-name)
+                 (set-visited-file-name new-name)
+                 (set-buffer-modified-p nil)
+                 (when (fboundp 'recentf-add-file)
+                   (recentf-add-file new-name)
+                   (recentf-remove-if-non-kept filename))
+                 (when (and (configuration-layer/package-used-p 'projectile)
+                            (projectile-project-p))
+                   (call-interactively #'projectile-invalidate-cache))
+                 (message "File '%s' successfully renamed to '%s'"
+                          name (file-name-nondirectory new-name)))))
+      (error "Buffer is not visiting a file"))))
+
 (provide 'php-helpers)
 
 ;;; php-helpers.el ends here
