@@ -14,17 +14,21 @@
 ;;; Code:
 
 (defconst madand-dvorak-packages
-  '(avy
+  '(ace-window
+    avy
     company
     evil
     eyebrowse
-    neotree
     persp-mode
     treemacs
     winum))
 
+(defun madand-dvorak/pre-init-ace-window ()
+  (setq-default aw-keys madand-dvorak-avy-keys))
+
 (defun madand-dvorak/post-init-avy ()
-  (setq avy-dispatch-alist madand-dvorak-avy-dispatch-alist))
+  (setq-default avy-keys madand-dvorak-avy-keys)
+  (setq-default avy-dispatch-alist madand-dvorak-avy-dispatch-alist))
 
 (defun madand-dvorak/post-init-company ()
   (with-eval-after-load 'company
@@ -46,15 +50,6 @@
       (spacemacs/transient-state-register-add-bindings "workspaces"
         `(,(list dvp-key cmd :exit t)
           ,(list (concat "C-" dvp-key) cmd))))))
-
-(defun madand-dvorak/pre-init-neotree ()
-  (spacemacs|use-package-add-hook neotree
-    :post-init
-    (madand-dvorak/loop-digit-keys (qwerty-key dvp-key)
-      (when (string= qwerty-key "0")
-        (spacemacs/set-leader-keys
-          qwerty-key nil
-          dvp-key #'neotree-show)))))
 
 (defun madand-dvorak/post-init-persp-mode ()
   (madand-dvorak/loop-digit-keys (qwerty-key dvp-key)
