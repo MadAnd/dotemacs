@@ -12,7 +12,7 @@ use Yii;
 /**
  * Class `class-name` $3.
  *
- * @author Andriy Kmit' <dev@madand.net>
+ * @author Andriy Kmit <dev@madand.net>
  */
 final class `class-name`${1: extends ${2:ParentClass}}
 {

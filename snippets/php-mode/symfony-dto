@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
 * Data Transfer Object for the ${1:Class}.
 *
-* @author Andriy Kmit' <dev@madand.net>
+* @author Andriy Kmit <dev@madand.net>
 */
 final class $1Data
 {

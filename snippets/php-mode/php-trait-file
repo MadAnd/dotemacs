@@ -10,7 +10,7 @@ namespace `(php-helpers/infer-file-namespace)`;
 /**
  * $2
  *
- * @author Andriy Kmit' <dev@madand.net>
+ * @author Andriy Kmit <dev@madand.net>
  */
 trait `class-name`
 {

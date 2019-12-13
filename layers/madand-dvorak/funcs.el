@@ -1,8 +1,8 @@
 ;;; funcs.el --- madand-dvorak layer functions file for Spacemacs. -*- lexical-binding: t -*-
 ;;
-;; Copyright (c) 2015-2018 Andriy Kmit'
+;; Copyright (c) 2012-2019 Sylvain Benner & Contributors
 ;;
-;; Author: Andriy Kmit' <dev@madand.net>
+;; Author: Andriy Kmit <dev@madand.net>
 ;; URL: https://github.com/madand/dotemacs
 ;;
 ;; This file is not part of GNU Emacs.

@@ -10,7 +10,7 @@ namespace `(php-helpers/infer-file-namespace)`;
 /**
  * $3
  *
- * @author Andriy Kmit' <dev@madand.net>
+ * @author Andriy Kmit <dev@madand.net>
  */
 interface `class-name`
 {
