@@ -90,6 +90,7 @@ This function should only modify configuration layer settings."
      ;; Private layers:
      (madand-base :variables madand-base-font-size-config '((0 . 16)
                                                             (1900 . 15)))
+     madand-eww
      madand-ivy
      madand-lisp
      (madand-web :variables

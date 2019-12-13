@@ -1,0 +1,19 @@
+;;; config.el --- madand-eww layer configuration file for Spacemacs.
+;;
+;; Copyright (c) 2012-2019 Sylvain Benner & Contributors
+;;
+;; Author: Andriy Kmit <dev@madand.net>
+;; URL: https://github.com/madand/dotemacs
+;;
+;; This file is not part of GNU Emacs.
+;;
+;;; License: GPLv3
+
+;;; Commentary:
+
+;;; Code:
+
+(defvar madand-eww-centered-buffer-url-patterns '()
+  "List of regex patterns for URLs to enable `writeroom-mode' in `eww'.")
+
+;;; config.el ends here
