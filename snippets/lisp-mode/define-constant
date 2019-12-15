@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: define-constant
+# key: defcon
+# --
+(define-constant +$1+ $0${2: :test ${3:'equal}}${4:
+:documentation "$5"})

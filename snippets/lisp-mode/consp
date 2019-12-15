@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: consp
+# key: consp
+# --
+(consp $0)

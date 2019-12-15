@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: lambda-allow-other-keys
+# key: laok
+# --
+&allow-other-keys$0

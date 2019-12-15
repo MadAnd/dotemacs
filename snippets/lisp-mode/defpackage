@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: defpackage
+# key: defpkg
+# --
+(defpackage #:${1:$$(madand//yas-lisp-infer-package-name)}
+(:documentation "$2.")
+(:use #:cl)
+$0)
+(in-package #:$1)

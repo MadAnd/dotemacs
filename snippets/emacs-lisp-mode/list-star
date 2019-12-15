@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: list-star
+# key: list*
+# --
+(cl-list* $0)

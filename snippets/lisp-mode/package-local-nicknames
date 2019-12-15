@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: package-local-nicknames
+# key: pln
+# --
+(:local-nicknames
+($0))

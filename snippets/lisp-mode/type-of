@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: type-of
+# key: tof
+# --
+(type-of $0)

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: sharp-backslash
+# key: sb
+# --
+#\\$0

@@ -3,4 +3,4 @@
 # key: dq
 # condition: 'force-in-comment
 # --
-`$1'$0
+‘$1’$0

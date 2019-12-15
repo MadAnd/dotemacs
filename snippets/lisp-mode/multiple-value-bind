@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: multiple-value-bind
+# key: mvb
+# --
+(multiple-value-bind ($1) $2
+  $0)
