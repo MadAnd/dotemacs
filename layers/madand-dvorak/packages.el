@@ -20,22 +20,24 @@
     evil
     eyebrowse
     persp-mode
+    sly
     treemacs
     winum))
 
 (defun madand-dvorak/pre-init-ace-window ()
-  (setq-default aw-keys madand-dvorak-avy-keys))
+  (setq aw-keys madand-dvorak-avy-keys))
 
 (defun madand-dvorak/post-init-avy ()
-  (setq-default avy-keys madand-dvorak-avy-keys)
-  (setq-default avy-dispatch-alist madand-dvorak-avy-dispatch-alist))
+  (setq avy-keys madand-dvorak-avy-keys
+        avy-dispatch-alist madand-dvorak-avy-dispatch-alist))
 
 (defun madand-dvorak/post-init-company ()
   (with-eval-after-load 'company
-    (madand-dvorak/loop-digit-keys (qwerty-key dvp-key)
+    (madand-dvorak|do-digit-keys (qwerty-key dvp-key)
       (define-key company-active-map
         (kbd (format "M-%s" dvp-key))
-        (madand-dvorak//company-complete-number (string-to-number qwerty-key))))))
+        (madand-dvorak//company-complete-number
+         (string-to-number qwerty-key))))))
 
 (defun madand-dvorak/post-init-evil ()
   ;; Setting `evil-inhibit-esc' to t tells Evil not to translate C-[ into ESC,
@@ -44,7 +46,7 @@
   (setq evil-inhibit-esc t))
 
 (defun madand-dvorak/post-init-eyebrowse ()
-  (madand-dvorak/loop-digit-keys (qwerty-key dvp-key)
+  (madand-dvorak|do-digit-keys (qwerty-key dvp-key)
     (let ((cmd (madand-dvorak//intern
                 "eyebrowse-switch-to-window-config-%s" qwerty-key)))
       (spacemacs/transient-state-register-add-bindings "workspaces"
@@ -52,17 +54,24 @@
           ,(list (concat "C-" dvp-key) cmd))))))
 
 (defun madand-dvorak/post-init-persp-mode ()
-  (madand-dvorak/loop-digit-keys (qwerty-key dvp-key)
+  (madand-dvorak|do-digit-keys (qwerty-key dvp-key)
     (let ((cmd (madand-dvorak//intern
                 "spacemacs/persp-switch-to-%s" qwerty-key)))
       (spacemacs/transient-state-register-add-bindings "layouts"
         `(,(list dvp-key cmd :exit t)
           ,(list (concat "C-" dvp-key) cmd))))))
 
+(defun madand-dvorak/post-init-sly ()
+  (with-eval-after-load 'sly
+    (madand-dvorak|do-digit-keys (qwerty-key dvp-key)
+      (define-key sly-db-mode-map
+        (kbd dvp-key)
+        (madand-dvorak//intern "sly-db-invoke-restart-%s" qwerty-key)))))
+
 (defun madand-dvorak/pre-init-treemacs ()
   (spacemacs|use-package-add-hook treemacs
     :post-init
-    (madand-dvorak/loop-digit-keys (qwerty-key dvp-key)
+    (madand-dvorak|do-digit-keys (qwerty-key dvp-key)
       (when (string= qwerty-key "0")
         (spacemacs/set-leader-keys
           qwerty-key nil
@@ -71,7 +80,7 @@
 (defun madand-dvorak/pre-init-winum ()
   (spacemacs|use-package-add-hook winum
     :post-init
-    (madand-dvorak/loop-digit-keys (qwerty-key dvp-key)
+    (madand-dvorak|do-digit-keys (qwerty-key dvp-key)
       ;; SPC 0 is reserved for neotree/treemacs window.
       (unless (string= qwerty-key "0")
         (spacemacs/set-leader-keys

@@ -13,20 +13,21 @@
 
 ;;; Code:
 
-(defmacro* madand-dvorak/loop-digit-keys ((qwerty-key dvp-key) &rest body)
+(require 'cl-lib)
+
+(cl-defmacro madand-dvorak|do-digit-keys ((qwerty-key dvp-key) &rest body)
   "Loop trough pairs in `madand-dvorak-digit-keys-alist'
 evaluating BODY forms on each iteration.
 
 QWERTY-KEY and DVP-KEY must be symbols that BODY forms can use to access
 the current QWERTY/Dvorak key pair on each loop iteration."
-  (declare (debug ((symbolp symbolp) &rest form))
+  (declare (debug ((symbolp symbolp) body))
            (indent defun))
   (let ((key-pair (gensym)))
     `(dolist (,key-pair madand-dvorak-digit-keys-alist)
        (let ((,qwerty-key (car ,key-pair))
              (,dvp-key (cdr ,key-pair)))
          ,@body))))
-(put 'madand-dvorak/loop-digit-keys 'common-lisp-indent-function-for-elisp 1)
 
 (defun madand-dvorak//intern (format-str &rest args)
   "`intern-soft' a result of passing FORMAT-STR with ARGS trough `format'."

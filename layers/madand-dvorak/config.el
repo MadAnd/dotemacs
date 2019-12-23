@@ -24,15 +24,21 @@
     ("8" . ")")
     ("9" . "+")
     ("0" . "]"))
-  "Alist of digit keys of QWERY to the corresponding keys of Programmer Dvorak.")
+  "Alist of digit keys of QWERTY to the corresponding keys of Programmer Dvorak.")
+
+(defvar madand-dvorak-avy-keys '(?h ?t ?n ?s ?u ?e ?o ?a)
+  "Keys for performing quick jumps (like avy).")
 
 (defvar madand-dvorak-avy-dispatch-alist
   '((?k . avy-action-kill-move)
     (?K . avy-action-kill-stay)
-    (?m . avy-action-mark)
+    (?m . avy-action-teleport)
+    (?v . avy-action-mark)
     (?c . avy-action-copy)
-    (?i . avy-action-ispell))
-  "Override value of `avy-dispatch-alist' to prevent conflicts with
-`avy-keys' set to Dvorak home keys (aoeuhtns).")
+    (?i . avy-action-ispell)
+    (?y . avy-action-yank)
+    (?z . avy-action-zap-to-char))
+  "Override value of `avy-dispatch-alist' to prevent conflicts when
+`avy-keys' is set to Dvorak home keys (aoeuhtns).")
 
 ;;; config.el ends here
