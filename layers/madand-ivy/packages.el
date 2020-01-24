@@ -15,9 +15,8 @@
 
 (defconst madand-ivy-packages
   '(counsel
+    counsel-dash
     ivy
-    ;; ivy-rich
-    recentf
     swiper
     wgrep))
 
@@ -30,26 +29,10 @@
   (with-eval-after-load 'ivy
     (setq ivy-wrap t
           ivy-height 20)
-    (spacemacs/set-leader-keys "hm" #'man)
     (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit)
-    (define-key ivy-minibuffer-map (kbd "C-h") (kbd "DEL"))
+    (define-key ivy-minibuffer-map (kbd "C-h") 'delete-backward-char)
     (define-key ivy-minibuffer-map (kbd "C-S-h") help-map)
     (define-key ivy-minibuffer-map (kbd "C-<return>") 'ivy-immediate-done)))
-
-(defun madand-ivy/post-init-recentf ()
-  (with-eval-after-load 'ivy
-    (setq ivy-use-virtual-buffers nil)))
-
-
-(defun madand-ivy/init-ivy-rich ()
-  (use-package ivy-rich
-    :defer t
-    :init
-    (with-eval-after-load 'ivy
-      (ivy-set-display-transformer 'ivy-switch-buffer
-                                   'ivy-rich-switch-buffer-transformer))
-    :config
-    (advice-add 'ivy-rich-switch-buffer-pad :override #'madand/ivy-rich-switch-buffer-pad)))
 
 (defun madand-ivy/post-init-swiper ()
   (with-eval-after-load 'swiper

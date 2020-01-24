@@ -13,6 +13,7 @@
 
 ;;; Code:
 
+(require 'cl-lib)
 
 (defun madand/elisp-flet-indent-function (indent-point state)
   "Handle `flet'-like lists, otherwise call `lisp-indent-function'."
@@ -28,7 +29,7 @@
     (lisp-indent-defform state indent-point))
    (t (lisp-indent-function indent-point state))))
 
-
+;;; ----------------------------------------------------------------------------
 
 (defun madand/sly-show-description (string package)
   "Overriding function for `slime-show-description'. It displays description
@@ -94,7 +95,7 @@ Common Lisp projects."
                                 (regexp-quote madand-lisp-test-dir)
                                 file-name t t))))
 
-
+;;; ----------------------------------------------------------------------------
 
 (defun spacemacs//sly-helm-source (&optional table)
   (or table (setq table sly-lisp-implementations))

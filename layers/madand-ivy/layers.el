@@ -15,6 +15,7 @@
 
 ;;; Code:
 
-(configuration-layer/declare-layers '(ivy))
+(configuration-layer/declare-layers '((ivy :variables
+                                           ivy-use-virtual-buffers nil)))
 
 ;;; layers.el ends here

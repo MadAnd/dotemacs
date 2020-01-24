@@ -74,7 +74,7 @@ and comments are colorized by Rainbow Identifiers, if turned on without a delay.
                (rainbow-identifiers-mode 0)
              (rainbow-identifiers-mode 1))))))))
 
-
+;;; ----------------------------------------------------------------------------
 
 (defun madand/evil-select-pasted ()
   "Visually select the most recently pasted region."
@@ -95,7 +95,7 @@ With double universal-argument, write out the day and month name."
         (system-time-locale "en_US"))
     (insert (format-time-string format))))
 
-
+;;; ----------------------------------------------------------------------------
 
 (defun madand/magit-copy-commit-date (&optional full)
   "Copy commit date from Magit buffer.
@@ -210,7 +210,7 @@ copying the short revision."
                        (format "refs/pull/%s/head:pr-%s" pr-num pr-num)
                        (magit-fetch-arguments)))
 
-
+;;; ----------------------------------------------------------------------------
 
 (defun madand/ediff-current-file-pacnew ()
   "Ediff the current file with newer version proposed by Pacman.
@@ -232,7 +232,7 @@ New version has the .pacnew suffix in filename."
           (message "%s was deleted." pacnew-file))
       (message ".pacnew file not exists!"))))
 
-
+;;; ----------------------------------------------------------------------------
 
 (defvar-local madand--company-page-break-lines-mode-p nil
   "Whether `page-break-lines-mode' was active before completion started.")
@@ -258,7 +258,7 @@ This function returns an interactive lambda of 0 args."
       (company-abort)
       (funcall yas-prev-field))))
 
-
+;;; ----------------------------------------------------------------------------
 
 (defun madand/disable-modes (mode-list)
   "Disable modes given in a list MODE-LIST."
@@ -368,7 +368,7 @@ if we were inside of one."
       (dotimes (_ count)
         (evil-insert-newline-below)))))
 
-
+;;; ----------------------------------------------------------------------------
 
 (defun madand//rcirc-connect (f server
                                 &optional port nick user-name full-name
@@ -387,7 +387,7 @@ if we were inside of one."
   (funcall f server port nick user-name full-name startup-channels password
            encryption server-alias))
 
-
+;;; ----------------------------------------------------------------------------
 
 (defun madand//ajb-sort-function (b1 b2)
   "Sort function for `ajb-sort-function'.
@@ -416,7 +416,7 @@ If in perspective, use `bs--sort-by-name'. Otherwise, use
   "Return non-nil if point is inside of either a string literal or a comment."
   (nth 8 (syntax-ppss)))
 
-
+;;; ----------------------------------------------------------------------------
 
 (defun madand/pomodoro-short-mode ()
   "Configure Pomodoro to work in short mode:
@@ -438,7 +438,7 @@ If in perspective, use `bs--sort-by-name'. Otherwise, use
    org-pomodoro-long-break-length 45
    org-pomodoro-short-break-length 5))
 
-
+;;; ----------------------------------------------------------------------------
 
 (defvar madand--base-font-size-config-warning-shown-p nil
   "Whether a warning about empty `madand-base-font-size-config' was shown.")
