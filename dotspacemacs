@@ -96,7 +96,8 @@ This function should only modify configuration layer settings."
                                                             (1900 . 15)))
      madand-eww
      madand-ivy
-     madand-lisp
+     (madand-lisp :variables
+                  madand-lisp-sly-asdf-path "~/common-lisp/asdf/")
      (madand-web :variables
                  madand-web-php-fill-column 114)
      madand-dvorak)

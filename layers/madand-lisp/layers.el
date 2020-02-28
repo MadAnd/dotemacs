@@ -15,6 +15,9 @@
 
 ;;; Code:
 
-(configuration-layer/declare-layers '(emacs-lisp))
+(configuration-layer/declare-layers '(
+                                      emacs-lisp
+                                      scheme
+                                      ))
 
 ;;; layers.el ends here
