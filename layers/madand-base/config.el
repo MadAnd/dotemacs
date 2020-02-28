@@ -29,4 +29,16 @@ Example: '((0 . 16) (1200 . 15) (1900 . 14)")
   "Text scale factor for documentation modes (e.g. Info, Man).
 The value will be passed to `text-scale-set'.")
 
+(defvar madand-irc-text-scale-level 3
+  "Text scale level for IRC buffers. See `text-scale-set'.")
+
+(defvar madand-special-modes-re-render-functions '()
+  "Information about re-render functions of some special major modes.
+
+The value is alist of (MODE . RE-RENDER-FUNCTION), where MODE designates a
+major mode and RE-RENDER-FUNCTION is a function that re-renders its buffer
+contents. See `madand//maybe-re-render-special-buffer'.
+
+Example for Man-mode: \(Man-mode . Man-update-manpage\).")
+
 ;;; config.el ends here

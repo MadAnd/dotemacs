@@ -471,16 +471,84 @@ default for new frames only."
     (set-default-font-size (guess-font-size madand-base-font-size-config)
                            frame)))
 
-
-
-(defun madand//maybe-update-manpage ()
-  "If the current major mode is `Man-mode', call `Man-update-manpage'."
-  (when (eq major-mode 'Man-mode)
-    (Man-update-manpage)))
-
-(defun madand//set-doc-text-scale ()
+(defun madand//set-text-scale-for-documentation ()
   "Set the buffer text scale to the value of `madand-doc-modes-text-scale'.
 See `text-scale-set'."
   (text-scale-set madand-doc-modes-text-scale))
+
+(defun madand//set-text-scale-for-irc ()
+  "Set text scale for IRC buffer."
+  (text-scale-set madand-irc-text-scale-level))
+
+(defun madand//maybe-re-render-special-buffer ()
+  "Re-render the current buffer if its major mode is present in
+`madand-special-modes-re-render-functions' (which see)."
+  (when-let ((x (assq major-mode madand-special-modes-re-render-functions)))
+    (run-with-timer 0.5 nil (lambda ()
+                              (funcall (cdr x))))))
+
+;;; ----------------------------------------------------------------------------
+;;; Eshell
+;;; ----------------------------------------------------------------------------
+
+(defvar madand-base--eshell-inhibit-alias-file-writes nil
+  "If t, ‘eshell-write-aliases-list’ will not do anything at all.
+
+You should never ‘setq’ this variable to t, it is only meant to
+be dynamically bound with ‘let’. Otherwise, your newly defiled
+aliases will never be written to disk.")
+
+(defun madand-base//eshell-write-aliases-list@maybe-inhibit (oldfun &rest args)
+  "Around advice function for inhibiting ‘eshell-write-aliases-list’."
+  (if madand-base--eshell-inhibit-alias-file-writes
+      nil
+    (apply oldfun args)))
+
+(defmacro madand-base/with-inhibited-eshell-alias-file-writes (&body body)
+  "Evaluate BODY forms while alias file writes are inhibited.
+
+By default, ‘eshell/alias’ writes aliases file into disk after
+every invocation. This macro provides a workaround and allows
+bulk alias definitions with a single flush in the end."
+  (declare (indent 0))
+  `(progn
+     (let ((madand-base--eshell-inhibit-alias-file-writes t))
+       ,@body)
+     (eshell-write-aliases-list)))
+
+(defun madand-base/eshell-define-aliases ()
+  "Define aliases for ‘eshell’. This will rewrite ‘eshell-aliases-file’.
+
+Use this command if you edited its definition and want to
+re-generate aliases file."
+  (madand-base/with-inhibited-eshell-alias-file-writes
+    (eshell/alias "ll" "ls -alh")
+    (eshell/alias "df" "df -h")
+    ;; Pacman aliases.
+    (let (pacman-cmd pacman-su-cmd)
+      (if-let ((pacaur (executable-find "pacaur")))
+          (setq pacman-cmd pacaur
+                pacman-su-cmd pacaur)
+        (setq pacman-cmd (executable-find "pacman")
+              pacman-su-cmd (concat "sudo " pacman-cmd)))
+      (dolist (spec '(("pac" "-S")
+                      ("pacu" "-Syu" :sudo t)
+                      ("pacr" "-R" :sudo t)
+                      ("pacs" "-Ss")
+                      ("paci" "-Si")
+                      ("paclo" "-Qdt")
+                      ("pacc" "-Scc" :sudo t)
+                      ("paclf" "-Ql")
+                      ("pacexpl" "-D --asexp" :sudo t)
+                      ("pacimpl" "-D --asdep" :sudo t)))
+        (cl-destructuring-bind (alias pacman-args &key sudo) spec
+          (eshell/alias alias (format "%s %s $*"
+                                      (if sudo pacman-su-cmd pacman-cmd)
+                                      pacman-args)))))))
+
+(defun madand/set-tab-width-4 ()
+  "Set `tab-width' to 4 spaces."
+  (interactive)
+  (setq tab-width 4))
 
 ;;; funcs.el ends here

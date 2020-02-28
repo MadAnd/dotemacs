@@ -21,28 +21,32 @@
   "id" #'madand/insert-date
   "o SPC" #'redraw-display
   "oS" #'scroll-all-mode
+  "od" #'kill-buffer-and-window
   "ogd" #'madand/magit-tag-create-done
   "ogp" #'madand/magit-tag-create-prefixed
   "ogt" #'madand/magit-tag-create-tbreverted
-  "od" #'kill-buffer-and-window
+  "on" #'spacemacs/scroll-transient-state/body
   "os" #'save-buffer
   "ot" #'google-translate-at-point
   "wO" #'delete-other-windows
   "qz" #'spacemacs/frame-killer)
 
-;; We distinguish C-i and <tab> in GUI, but this distinction is not
-;; desired in Hybrid state.
-(define-key evil-hybrid-state-map [C-i] (kbd "<tab>"))
-;; A cup of Vim for the Hybrid state.
-(define-key evil-hybrid-state-map (kbd "C-o") 'evil-execute-in-normal-state)
-(define-key evil-hybrid-state-map (kbd "C-r") 'evil-paste-from-register)
-(define-key evil-hybrid-state-map (kbd "C-h") (kbd "DEL"))
-(define-key evil-hybrid-state-map (kbd "C-S-h") help-map)
+(with-eval-after-load 'hybrid-mode
+  ;; A cup of Vim in Hybrid State.
+  (define-key evil-hybrid-state-map (kbd "C-o") 'evil-execute-in-normal-state)
+  (define-key evil-hybrid-state-map (kbd "C-r") 'evil-paste-from-register)
+  (define-key evil-hybrid-state-map (kbd "C-h") 'delete-backward-char)
+  (define-key evil-hybrid-state-map (kbd "C-S-h") help-map))
+
 ;; Make Q a buffer killer.
 (define-key evil-normal-state-map (kbd "Q") 'spacemacs/kill-this-buffer)
 (define-key evil-motion-state-map (kbd "Q") 'spacemacs/kill-this-buffer)
 ;; Unbind some Vim bindings, so that Emacs ones come into play.
 (define-key evil-motion-state-map (kbd "C-e") nil)
+
+(define-key evil-motion-state-map (kbd "zd") 'evil-scroll-page-down)
+(define-key evil-motion-state-map (kbd "zu") 'evil-scroll-page-up)
+
 ;; Vim-ish Minibuffer
 (define-key minibuffer-local-map (kbd "C-h") (kbd "DEL"))
 (define-key minibuffer-local-map (kbd "C-S-h") help-map)

@@ -16,14 +16,19 @@
 ;;; Code:
 
 (defconst madand-base-packages
-  '(ace-jump-buffer
+  '(
+    ace-jump-buffer
     ace-popup-menu
     avy
     (auto-fill :location built-in)
     (browse-url :location built-in)
     centered-cursor-mode
     company
+    (cus-edit :location built-in)
+    dockerfile-mode
+    (eshell :location built-in)
     evil
+    evil-escape
     evil-evilified-state
     evil-iedit-state
     evil-magit
@@ -31,16 +36,17 @@
     evil-surround
     evil-unimpaired
     flyspell
-    (frame :location built-in)
-    google-translate
+    hungry-delete
     (info :location built-in)
+    (lsp-ivy :requires lsp-mode
+             :location (recipe :fetcher github :repo "emacs-lsp/lsp-ivy"))
     magithub
     (man :location built-in)
     multi-term
+    nov
     org
     org-pomodoro
     persp-mode
-    ;; (prog-inflection :location (recipe :fetcher local))
     projectile
     (python :location built-in)
     rainbow-identifiers
@@ -53,9 +59,11 @@
     transient
     treemacs
     undo-tree
+    window-purpose
     writeroom-mode
     yaml-mode
-    yasnippet))
+    yasnippet
+    ))
 
 (defun madand-base/init-ace-jump-buffer ()
   (use-package ace-jump-buffer
@@ -105,13 +113,16 @@
   (spacemacs/add-to-hooks #'spacemacs/toggle-centered-point-on
                           '(Man-mode-hook
                             Info-mode-hook
-                            magit-revision-mode-hook)))
+                            magit-revision-mode-hook
+                            nov-mode-hook)))
 
 (defun madand-base/post-init-company ()
   (with-eval-after-load 'company
     (setq company-gtags-insert-arguments nil
           company-show-numbers t
-          company-selection-wrap-around t)
+          company-selection-wrap-around t
+          company-idle-delay 0.3)
+    (define-key company-mode-map [C-i] 'company-complete)
     (define-key company-active-map (kbd "C-g") 'company-abort)
     (define-key company-active-map (kbd "<escape>") 'company-abort)
     (define-key company-active-map (kbd "C-/") 'counsel-company)
@@ -126,21 +137,50 @@
     (add-hook 'company-completion-cancelled-hook
               #'madand//company-maybe-turn-on-page-break-lines)))
 
+(defun madand-base/init-cus-edit ()
+  (evilified-state-evilify-map custom-mode-map
+    :mode Custom-mode
+    :eval-after-load cus-edit
+    :bindings
+    "o" 'ace-link-custom
+    "s" 'avy-goto-word-1
+    "S" 'avy-goto-char-timer
+    ))
+
+(defun madand-base/post-init-dockerfile-mode ()
+  (add-hook 'dockerfile-mode-hook #'madand/set-tab-width-4))
+
+(defun madand-base/post-init-eshell ()
+  (advice-add 'eshell-write-aliases-list :around
+              #'madand-base//eshell-write-aliases-list@maybe-inhibit)
+  (with-eval-after-load 'em-alias
+    (unless (file-exists-p eshell-aliases-file)
+      (madand-base/eshell-define-aliases))))
+
 (defun madand-base/post-init-evil ()
   ;; Disable default use of tags to find definitions.
   (setq spacemacs-default-jump-handlers
         (delete 'evil-goto-definition spacemacs-default-jump-handlers))
+  ;; Don't show Scroll Transient State full help by default.
+  (setq spacemacs--scroll-ts-full-hint-toggle nil)
   (with-eval-after-load 'evil-states
     ;; Make Term buffers start in Emacs state.
     (setq evil-insert-state-modes (delq 'term-mode evil-insert-state-modes))
     (add-to-list 'evil-emacs-state-modes 'term-mode)
 
     (define-key evil-normal-state-map (kbd "gp") 'madand/evil-select-pasted)
-    (define-key evil-normal-state-map (kbd "O") 'madand/evil-open-above-maybe-continue-comment)
-    (define-key evil-normal-state-map (kbd "o") 'madand/evil-open-below-maybe-continue-comment)))
+    (define-key evil-normal-state-map
+      (kbd "O") 'madand/evil-open-above-maybe-continue-comment)
+    (define-key evil-normal-state-map
+      (kbd "o") 'madand/evil-open-below-maybe-continue-comment)))
+
+(defun madand-base/post-init-evil-escape ()
+  (with-eval-after-load 'evil-escape
+    (setq evil-escape-key-sequence "ue")))
 
 (defun madand-base/post-init-evil-evilified-state ()
-  (define-key evil-evilified-state-map-original (kbd "Q") 'spacemacs/kill-this-buffer))
+  (define-key evil-evilified-state-map-original
+    (kbd "Q") 'spacemacs/kill-this-buffer))
 
 (defun madand-base/post-init-evil-iedit-state ()
   (with-eval-after-load 'evil-iedit-state
@@ -157,6 +197,12 @@
     (add-to-list 'term-bind-key-alist '("C-c z" . term-stop-subjob))
     (add-to-list 'term-bind-key-alist '("<escape>" . term-send-esc))))
 
+(defun madand-base/post-init-nov ()
+  (with-eval-after-load 'nov
+    (cl-pushnew '(nov-mode . nov-render-document)
+                madand-special-modes-re-render-functions)
+    (add-hook 'nov-mode-hook #'madand//set-text-scale-for-documentation)))
+
 (defun madand-base/post-init-org ()
   (with-eval-after-load 'org
     (spacemacs/set-leader-keys-for-major-mode 'org-mode
@@ -167,22 +213,25 @@
     (madand/pomodoro-long-mode)))
 
 (defun madand-base/init-info ()
-  (add-to-list 'Info-additional-directory-list (expand-file-name
-                                                "~/.spacemacs.d/info"))
-  (spacemacs/add-all-to-hook 'Info-mode-hook
-                             #'spacemacs/toggle-centered-buffer
-                             #'madand//set-doc-text-scale)
+  (add-to-list 'Info-additional-directory-list
+               (expand-file-name "~/docs/Info"))
+  (add-hook 'Info-mode-hook #'madand//set-text-scale-for-documentation)
   (with-eval-after-load 'info
     (evil-define-key 'motion Info-mode-map
       "s" #'evil-avy-goto-char-timer
       (kbd "S-SPC") #'Info-scroll-up)))
+
+(defun madand-base/init-lsp-ivy ()
+  (use-package lsp-ivy
+    :after lsp-mode))
 
 (defun madand-base/post-init-magithub ()
   (with-eval-after-load 'ghub
     (setq ghub-username "madand")))
 
 (defun madand-base/init-man ()
-  (add-hook 'Man-mode-hook #'spacemacs/toggle-centered-buffer))
+  (cl-pushnew '(Man-mode . Man-update-manpage)
+              madand-special-modes-re-render-functions))
 
 (defun madand-base/post-init-evil-mc ()
   (add-hook 'prog-mode-hook 'evil-mc-mode)
@@ -206,15 +255,13 @@
   (with-eval-after-load 'flyspell
     (define-key evil-normal-state-map (kbd "zi") 'flyspell-correct-word-before-point)))
 
-(defun madand-base/init-frame ()
-  ;;; Setup dynamic font resize according to the current display width.
-  (spacemacs|do-after-display-system-init
-   (add-hook 'window-size-change-functions #'madand/update-frame-font-size)))
+(defun madand-base/post-init-hungry-delete ()
+  (spacemacs/defer-until-after-user-config #'global-hungry-delete-mode)
+  (with-eval-after-load 'hungry-delete
+    (spacemacs|hide-lighter hungry-delete-mode)))
 
 (defun madand-base/post-init-google-translate ()
   (with-eval-after-load 'google-translate
-    (spacemacs/set-google-translate-languages "en" "uk")
-    ;; Workaround for https://github.com/atykhonov/google-translate/issues/52
     (setq google-translate-backend-method 'curl)))
 
 (defun madand-base/init-jit-lock ()
@@ -236,11 +283,8 @@ CommitDate: %ci\n")
 
 (defun madand-base/post-init-persp-mode ()
   (with-eval-after-load 'persp-mode
-    (setq persp-auto-save-opt 0)))
-
-(defun madand-base/init-prog-inflection ()
-  (use-package prog-inflection
-    :defer nil))
+    (setq persp-auto-save-opt 0
+          persp-kill-foreign-buffer-behaviour 'kill)))
 
 (defun madand-base/pre-init-projectile ()
   (spacemacs|use-package-add-hook projectile
@@ -257,18 +301,22 @@ CommitDate: %ci\n")
                                                        lisp-mode-hook
                                                        lua-mode-hook
                                                        shell-mode-hook))
-  ;; Workaround with delayed activation.
+  ;; Workaround colorized comments by delaying the activation.
   (spacemacs/add-to-hooks #'madand//turn-on-rainbow-identifiers-with-delay
                           '(js2-mode-hook)))
 
 (defun madand-base/post-init-rcirc ()
   (with-eval-after-load 'rcirc
-    (setq rcirc-log-flag t
+    (setq rcirc-log-directory nil
+          rcirc-log-flag nil
+          rcirc-default-user-name "madand"
           rcirc-buffer-maximum-lines nil
-          rcirc-fill-column #'window-text-width
+          rcirc-time-format "%H:%M "
+          rcirc-fill-column 78
           rcirc-fill-prefix (make-string 6 ?\s)
-          rcirc-kill-channel-buffers t
-          rcirc-time-format "%H:%M ")
+          rcirc-kill-channel-buffers t)
+    (evil-set-initial-state 'rcirc-mode 'normal)
+    (add-hook 'rcirc-mode-hook #'madand//set-text-scale-for-irc)
     (advice-add 'rcirc-connect :around #'madand//rcirc-connect)))
 
 (defun madand-base/post-init-rcirc-notify ()
@@ -322,8 +370,17 @@ CommitDate: %ci\n")
   (spacemacs|use-package-add-hook undo-tree
     :post-init (setq undo-tree-enable-undo-in-region nil)))
 
+(defun madand-base/post-init-window-purpose ()
+  (setq dotspacemacs-switch-to-buffer-prefers-purpose t))
+
 (defun madand-base/post-init-writeroom-mode ()
-  (add-hook 'writeroom-mode-hook #'madand//maybe-update-manpage t))
+  (add-hook 'writeroom-mode-hook #'madand//maybe-re-render-special-buffer)
+  (setq writeroom-major-modes '(Man-mode Info-mode nov-mode))
+  (spacemacs/defer-until-after-user-config #'global-writeroom-mode)
+  (with-eval-after-load 'writeroom-mode
+    (setq writeroom-fullscreen-effect 'maximized
+          writeroom-maximize-window nil
+          writeroom-mode-line t)))
 
 (defun madand-base/post-init-yaml-mode ()
   (with-eval-after-load 'yaml-mode

@@ -26,7 +26,6 @@ This function should only modify configuration layer settings."
    ;; a layer lazily. (default t)
    dotspacemacs-ask-for-lazy-installation t
 
-   ;; If non-nil layers with lazy install support are lazy installed.
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
@@ -46,14 +45,16 @@ This function should only modify configuration layer settings."
                       auto-completion-idle-delay 0.5
                       auto-completion-private-snippets-directory "~/.spacemacs.d/snippets")
      better-defaults
+     (c-c++ :variables c-c++-backend 'lsp-ccls)
      colors
      csv
      (dash :variables
-           helm-dash-docset-newpath "~/.local/share/Zeal/Zeal/docsets")
+           dash-docs-docset-newpath "~/.local/share/Zeal/Zeal/docsets")
      docker
      epub
-     rcirc
-     fasd
+     (rcirc :variables
+            rcirc-enable-znc-support t
+            rcirc-enable-erc-image t)
      games
      (git :variables
           git-magit-status-fullscreen t)
@@ -61,6 +62,9 @@ This function should only modify configuration layer settings."
      (ibuffer :variables
               ibuffer-group-buffers-by 'projects)
      lua
+     (lsp :variables
+          lsp-ui-sideline-enable nil
+          lsp-ui-doc-enable nil)
      (markdown :variables markdown-live-preview-engine 'vmd)
      mu4e
      multiple-cursors
@@ -110,7 +114,10 @@ This function should only modify configuration layer settings."
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '(evil-escape magithub yasnippet-snippets)
+   dotspacemacs-excluded-packages '(yasnippet-snippets
+                                    popwin
+                                    forge
+                                    common-lisp-snippets)
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -133,12 +140,12 @@ It should only modify the values of Spacemacs settings."
    ;; to compile Emacs 27 from source following the instructions in file
    ;; EXPERIMENTAL.org at to root of the git repository.
    ;; (default nil)
-   dotspacemacs-enable-emacs-pdumper nil
+   dotspacemacs-enable-emacs-pdumper t
 
-   ;; File path pointing to emacs 27.1 executable compiled with support
-   ;; for the portable dumper (this is currently the branch pdumper).
-   ;; (default "emacs-27.0.50")
-   dotspacemacs-emacs-pdumper-executable-file "emacs-27.0.50"
+   ;; Name of executable file pointing to emacs 27+. This executable must be
+   ;; in your PATH.
+   ;; (default "emacs")
+   dotspacemacs-emacs-pdumper-executable-file "emacs"
 
    ;; Name of the Spacemacs dump file. This is the file will be created by the
    ;; portable dumper in the cache directory under dumps sub-directory.
@@ -172,8 +179,8 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-use-spacelpa nil
 
    ;; If non-nil then verify the signature for downloaded Spacelpa archives.
-   ;; (default nil)
-   dotspacemacs-verify-spacelpa-archives nil
+   ;; (default t)
+   dotspacemacs-verify-spacelpa-archives t
 
    ;; If non-nil then spacemacs will check for updates at startup
    ;; when the current branch is not `develop'. Note that checking for
@@ -193,10 +200,8 @@ It should only modify the values of Spacemacs settings."
    ;; section of the documentation for details on available variables.
    ;; (default 'vim)
    dotspacemacs-editing-style '(hybrid :variables
-                                       hybrid-style-visual-feedback t)
-
-   ;; If non-nil output loading progress in `*Messages*' buffer. (default nil)
-   dotspacemacs-verbose-loading nil
+                                       hybrid-style-visual-feedback t
+                                       hybrid-style-use-evil-search-module t)
 
    ;; Specify the startup banner. Default value is `official', it displays
    ;; the official spacemacs logo. An integer value is the index of text
@@ -218,6 +223,11 @@ It should only modify the values of Spacemacs settings."
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
 
+   ;; Default major mode for a new empty buffer. Possible values are mode
+   ;; names such as `text-mode'; and `nil' to use Fundamental mode.
+   ;; (default `text-mode')
+   dotspacemacs-new-empty-buffer-major-mode 'text-mode
+
    ;; Default major mode of the scratch buffer (default `text-mode')
    dotspacemacs-scratch-mode 'text-mode
 
@@ -237,14 +247,13 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.2)
+   dotspacemacs-mode-line-theme '(spacemacs :separator nil)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
-   ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
-   ;; quickly tweak the mode-line size to make separators look not too crappy.
+   ;; Default font or prioritized list of fonts.
    dotspacemacs-default-font '("not existent font")
 
    ;; The leader key (default "SPC")
@@ -286,7 +295,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil then the last auto saved layouts are resumed automatically upon
    ;; start. (default nil)
-   dotspacemacs-auto-resume-layouts nil
+   dotspacemacs-auto-resume-layouts t
 
    ;; If non-nil, auto-generate layout name when creating new layouts. Only has
    ;; effect when using the "jump to layout by number" commands. (default nil)
@@ -319,7 +328,7 @@ It should only modify the values of Spacemacs settings."
    ;; `right-then-bottom'. right-then-bottom tries to display the frame to the
    ;; right; if there is insufficient space it displays it at the bottom.
    ;; (default 'bottom)
-   dotspacemacs-which-key-position 'right
+   dotspacemacs-which-key-position 'bottom
 
    ;; Control where `switch-to-buffer' displays the buffer. If nil,
    ;; `switch-to-buffer' displays the buffer in the current window even if
@@ -370,7 +379,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil unicode symbols are displayed in the mode line.
    ;; If you use Emacs as a daemon and wants unicode characters only in GUI set
    ;; the value to quoted `display-graphic-p'. (default t)
-   dotspacemacs-mode-line-unicode-symbols nil
+   dotspacemacs-mode-line-unicode-symbols t
 
    ;; If non-nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters point
@@ -378,10 +387,14 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-smooth-scrolling nil
 
    ;; Control line numbers activation.
-   ;; If set to `t' or `relative' line numbers are turned on in all `prog-mode' and
-   ;; `text-mode' derivatives. If set to `relative', line numbers are relative.
+   ;; If set to `t', `relative' or `visual' then line numbers are enabled in all
+   ;; `prog-mode' and `text-mode' derivatives. If set to `relative', line
+   ;; numbers are relative. If set to `visual', line numbers are also relative,
+   ;; but lines are only visual lines are counted. For example, folded lines
+   ;; will not be counted and wrapped lines are counted as multiple lines.
    ;; This variable can also be set to a property list for finer control:
    ;; '(:relative nil
+   ;;   :visual nil
    ;;   :disabled-for-modes dired-mode
    ;;                       doc-view-mode
    ;;                       markdown-mode
@@ -389,6 +402,7 @@ It should only modify the values of Spacemacs settings."
    ;;                       pdf-view-mode
    ;;                       text-mode
    ;;   :size-limit-kb 1000)
+   ;; When used in a plist, `visual' takes precedence over `relative'.
    ;; (default nil)
    dotspacemacs-line-numbers nil
 
@@ -401,7 +415,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-smartparens-strict-mode nil
 
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
-   ;; over any automatically added closing parenthesis, bracket, quote, etc…
+   ;; over any automatically added closing parenthesis, bracket, quote, etc...
    ;; This can be temporary disabled by pressing `C-q' before `)'. (default nil)
    dotspacemacs-smart-closing-parenthesis nil
 
@@ -512,7 +526,13 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
-  )
+  (require 'ivy)
+  (require 'avy)
+  (require 'counsel)
+  (require 'swiper)
+  (require 'projectile)
+  (require 'persp-mode)
+  (spacemacs/dump-modes '(magit-status-mode)))
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -526,25 +546,34 @@ before packages are loaded."
    auth-sources '("~/.authinfo.gpg")
    create-lockfiles nil
    delete-by-moving-to-trash nil
+   mouse-yank-at-point t
    powerline-default-separator 'alternate
    ranger-cleanup-eagerly t
-   rcirc-server-alist '(("irc.freenode.net" :encryption tls :port 6697
-                         :channels ("#emacs"))
-                        ("irc.gitter.im" :encryption tls
-                         :channels ("#syl20bnr/spacemacs")))
+   rcirc-server-alist '(("freenode"
+                         :host "madand.net" :encryption tls :port 7797
+                         :auth "madand/freenode"))
    scroll-conservatively 1000
    scroll-margin 2)
+
+  (spacemacs/set-google-translate-languages "en" "uk")
+
+  (spacemacs/toggle-highlight-current-line-globally-off)
+
+  (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 
   ;; Enable some Emacs features that are disabled by default.
   (put 'set-goal-column 'disabled nil)
 
-  ;; Global minor modes.
-  ;; (dtrt-indent-mode 1)
-  (global-hungry-delete-mode 1)
+  (with-eval-after-load 'ws-butler
+    (add-to-list 'ws-butler-global-exempt-modes 'magit-mode))
+
+  ;; Setup dynamic font resize according to the current display width.
+  (spacemacs|do-after-display-system-init
+   (add-hook 'window-size-change-functions #'madand/update-frame-font-size))
 
   ;; Treat more buffer types as "useful".
   (dolist (pattern '("\\*info.*\\*" "\\*Man.+\\*" "\\*magit.+" "\\*multiterm.+"))
-    (pushnew pattern spacemacs-useful-buffers-regexp))
+    (cl-pushnew pattern spacemacs-useful-buffers-regexp))
 
   (with-eval-after-load 'with-editor
     ;; Workaround for FreeBSD: https://github.com/magit/magit/issues/2672
