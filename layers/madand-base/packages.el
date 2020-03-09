@@ -142,6 +142,7 @@
     :mode Custom-mode
     :eval-after-load cus-edit
     :bindings
+    "i" 'evil-insert-state
     "o" 'ace-link-custom
     "s" 'avy-goto-word-1
     "S" 'avy-goto-char-timer
@@ -176,7 +177,7 @@
 
 (defun madand-base/post-init-evil-escape ()
   (with-eval-after-load 'evil-escape
-    (setq evil-escape-key-sequence "ue")))
+    (setq evil-escape-key-sequence "uh")))
 
 (defun madand-base/post-init-evil-evilified-state ()
   (define-key evil-evilified-state-map-original

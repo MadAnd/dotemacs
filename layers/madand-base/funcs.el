@@ -15,6 +15,9 @@
 
 ;;; Code:
 
+(eval-when-compile
+  (require 'cl-lib))
+
 (defun madand/buffer-dir-name ()
   "Get the name of a directory where the current buffer's file is located."
   (require 'f)
@@ -504,7 +507,7 @@ aliases will never be written to disk.")
       nil
     (apply oldfun args)))
 
-(defmacro madand-base/with-inhibited-eshell-alias-file-writes (&body body)
+(cl-defmacro madand-base/with-inhibited-eshell-alias-file-writes (&body body)
   "Evaluate BODY forms while alias file writes are inhibited.
 
 By default, ‘eshell/alias’ writes aliases file into disk after
