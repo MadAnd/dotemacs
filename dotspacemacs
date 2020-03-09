@@ -172,7 +172,7 @@ It should only modify the values of Spacemacs settings."
    ;; This is an advanced option and should not be changed unless you suspect
    ;; performance issues due to garbage collection operations.
    ;; (default '(100000000 0.1))
-   dotspacemacs-gc-cons '(100000000 0.1)
+   dotspacemacs-gc-cons `(,(* 250 (expt 1024 2)) 0.3)
 
    ;; If non-nil then Spacelpa repository is the primary source to install
    ;; a locked version of packages. If nil then Spacemacs will install the
@@ -561,6 +561,15 @@ before packages are loaded."
   (spacemacs/toggle-highlight-current-line-globally-off)
 
   (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+
+  ;; Garbage collect when Emacs is idle.
+  (defvar madand-garbage-collect-timer nil
+    "Timer that runs ‘garbage-collect’ when Emacs is idling.")
+  (defun madand/run-gc-with-timer ()
+    "Run GC with idle timer, then prime the timer again."
+    (garbage-collect))
+  (setq madand-garbage-collect-timer (run-with-idle-timer
+                                      3 t #'madand/run-gc-with-timer))
 
   ;; Enable some Emacs features that are disabled by default.
   (put 'set-goal-column 'disabled nil)
