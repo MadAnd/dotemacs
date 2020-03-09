@@ -554,4 +554,14 @@ re-generate aliases file."
   (interactive)
   (setq tab-width 4))
 
+;;;-----------------------------------------------------------------------------
+
+(defun madand/browse-url-mpv (url &optional new-window)
+  "Open URL with mpv(1). Interactively, prompt for the URL."
+  (interactive "sURL: ")
+  (with-temp-buffer
+    (insert (format "mpv '%s'" url))
+    (call-process-region (point-min) (point-max) "/bin/sh" nil 0))
+  (message "MPV started for %s" url))
+
 ;;; funcs.el ends here

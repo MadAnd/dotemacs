@@ -106,7 +106,9 @@
           avy-buffer-menu-filter-fn #'spacemacs/useful-buffer-p)))
 
 (defun madand-base/init-browse-url ()
-  (setq browse-url-browser-function #'browse-url-firefox
+  (setq browse-url-browser-function '(("youtube\\.com/" . madand/browse-url-mpv)
+                                      ("github\\.com/" . browse-url-firefox)
+                                      ("." . eww-browse-url))
         browse-url-firefox-new-window-is-tab t))
 
 (defun madand-base/post-init-centered-cursor-mode ()
