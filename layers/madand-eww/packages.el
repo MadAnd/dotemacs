@@ -15,25 +15,45 @@
 
 (defconst madand-eww-packages
   '(
+    ace-link
+    dash-docs
     (eww :location built-in)
+    (eww-imenu :location local)
     language-detection
+    (shr :location built-in)
+    window-purpose
     ))
 
+(defun madand-eww/post-init-ace-link ()
+  (with-eval-after-load 'ace-link
+    (advice-add 'ace-link--eww-action :filter-args
+                #'madand-eww//ace-link--eww-action@fix-off-by-one)))
+
+(defun madand-eww/post-init-dash-docs ()
+  (with-eval-after-load 'dash-docs
+    (setq dash-docs-browser-func #'eww)))
+
 (defun madand-eww/init-eww ()
+  ;; Global keys with ‘SPC ae’ prefix.
+  (spacemacs/declare-prefix "ae" "eww")
+  (spacemacs/set-leader-keys
+    "awf" 'eww-open-file
+    "awb" 'eww-list-bookmarks
+    "aws" 'eww-search-words
+    "aww" 'eww)
+  ;; Hooks.
   (spacemacs/add-all-to-hook 'eww-mode-hook
                              #'madand//set-text-scale-for-documentation
                              #'centered-cursor-mode
-                             #'madand//eww-turn-on-word-wrapping)
+                             #'visual-line-mode)
   (spacemacs/add-all-to-hook 'eww-after-render-hook
-                             #'madand//eww-maybe-turn-on-centered-buffer-mode
+                             #'madand-eww//maybe-turn-on-extra-visual-modes
                              #'recenter)
+  ;; Initial evil states for eww modes.
   (dolist (mode '(eww-mode eww-history-mode eww-bookmark-mode eww-buffers-mode))
     (evil-set-initial-state mode 'motion))
+
   (with-eval-after-load 'eww
-    ;; Automatic programming language detection of code snippets.
-    (setq shr-external-rendering-functions
-          '((pre . madand//eww-tag-pre)))
-    (spacemacs/set-leader-keys "aw" 'eww)
     (spacemacs/declare-prefix-for-mode 'eww-mode "ml" "list")
     (spacemacs/declare-prefix-for-mode 'eww-mode "mv" "view")
     (spacemacs/set-leader-keys-for-major-mode 'eww-mode
@@ -56,12 +76,15 @@
       "vr" 'eww-readable
       "vs" 'eww-view-source)
     (evil-define-key 'motion eww-mode-map
+      "j"         'evil-next-visual-line
+      "k"         'evil-previous-visual-line
+      "gj"        'evil-next-line
+      "gk"        'evil-previous-line
       "gr"        'eww-reload
       "J"         'madand/eww-jump-next-buffer
       "K"         'madand/eww-jump-previous-buffer
       (kbd "C-j") 'shr-next-link
       (kbd "C-k") 'shr-previous-link
-      "o"         'ace-link-eww
       "s"         'avy-goto-char
       "S"         'eww-switch-to-buffer)
     (dolist (keymap (list eww-link-keymap eww-image-link-keymap))
@@ -85,8 +108,27 @@
       "p" 'eww-buffer-show-previous
       "q" 'kill-this-buffer)))
 
+(defun madand-eww/init-eww-imenu ()
+  (use-package eww-imenu
+    :after eww
+    :config
+    (eww-imenu/register-tag-handlers)))
+
 (defun madand-eww/init-language-detection ()
   (use-package language-detection
-    :defer t))
+    :after eww
+    :config
+    (add-to-list 'shr-external-rendering-functions
+                 '(pre . madand-eww//tag-pre))))
+
+(defun madand-eww/post-init-shr ()
+  (with-eval-after-load 'shr
+    (setq shr-use-fonts nil
+          shr-width 72)))
+
+(defun madand-eww/post-init-window-purpose ()
+  (spacemacs|use-package-add-hook window-purpose
+    :pre-config
+    (add-to-list 'purpose-user-mode-purposes '(eww-mode . eww))))
 
 ;;; packages.el ends here

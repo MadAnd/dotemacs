@@ -13,7 +13,11 @@
 
 ;;; Code:
 
-(defvar madand-eww-centered-buffer-url-patterns '()
-  "List of regex patterns for URLs to enable `writeroom-mode' in `eww'.")
+(defvar madand-eww-centered-buffer-url-regexp-list ()
+  "URL regexps for buffers to auto-enable `writeroom-mode'.")
+
+(defvar madand-eww-readable-url-regexp-list ()
+  "URL regexps for buffers to auto-enable `eww-readable'.")
+
 
 ;;; config.el ends here
