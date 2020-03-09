@@ -554,7 +554,7 @@ before packages are loaded."
                          :host "madand.net" :encryption tls :port 7797
                          :auth "madand/freenode"))
    scroll-conservatively 1000
-   scroll-margin 2)
+   scroll-margin 0)
 
   (spacemacs/set-google-translate-languages "en" "uk")
 
