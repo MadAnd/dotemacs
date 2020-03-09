@@ -30,7 +30,8 @@
   "Keys for performing quick jumps (like avy).")
 
 (defvar madand-dvorak-avy-dispatch-alist
-  '((?k . avy-action-kill-move)
+  '((?g . avy-action-translate)
+    (?k . avy-action-kill-move)
     (?K . avy-action-kill-stay)
     (?m . avy-action-teleport)
     (?v . avy-action-mark)
