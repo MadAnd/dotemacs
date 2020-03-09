@@ -13,9 +13,6 @@
 
 ;;; Code:
 
-(defvar madand-eww-centered-buffer-url-regexp-list ()
-  "URL regexps for buffers to auto-enable `writeroom-mode'.")
-
 (defvar madand-eww-readable-url-regexp-list ()
   "URL regexps for buffers to auto-enable `eww-readable'.")
 

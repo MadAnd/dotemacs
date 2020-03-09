@@ -19,7 +19,6 @@
     auto-highlight-symbol
     (elisp-mode :location built-in)
     (evil-cleverparens :excluded t)
-    (eww :location built-in)
     (lisp-mode :location built-in)
     lispy
     lispyville
@@ -48,9 +47,6 @@
   (add-hook 'emacs-lisp-mode-hook #'lispy-mode)
   (add-hook 'emacs-lisp-mode-hook #'lispyville-mode)
   (madand/elisp-setup-flet-indent))
-
-(defun madand-lisp/post-init-eww ()
-  (add-to-list madand-eww-enable-centered-buffer-url-regexp-list "/HyperSpec/"))
 
 (defun madand-lisp/init-lisp-mode ()
   (add-hook 'lisp-mode-hook #'madand-lisp/clear-default-jump-handlers -99)

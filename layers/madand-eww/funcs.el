@@ -150,7 +150,6 @@
   "Turn on extra visual modes if the URL matches a corresponding pattern.
 
 See:
-* ‘madand-eww-centered-buffer-url-regexp-list’
 * ‘madand-eww-readable-url-regexp-list’
 * ‘eww-after-render-hook’"
   (when madand-eww--recursive-reload?
@@ -163,9 +162,6 @@ See:
                                 (madand-eww//match-any-regexp? url ,regexp-list))
                        ,@body
                        (setq need-reload? t))))
-      (maybe-turn-on (not writeroom-mode)
-                     madand-eww-centered-buffer-url-regexp-list
-                     (spacemacs/toggle-centered-buffer))
       (maybe-turn-on t
                      madand-eww-readable-url-regexp-list
                      (eww-readable)))
