@@ -15,6 +15,16 @@
 
 ;;; Code:
 
-(configuration-layer/declare-layers '(javascript html php))
+(configuration-layer/declare-layers '(dap
+                                      (javascript :variables
+                                                  javascript-backend 'lsp
+                                                  javascript-fmt-tool 'prettier
+                                                  import-js 'import-js
+                                                  javascript-repl 'skewer)
+                                      html
+                                      php
+                                      (typescript :variables
+                                                  typescript-fmt-tool 'prettier
+                                                  typescript-backend 'lsp)))
 
 ;;; layers.el ends here

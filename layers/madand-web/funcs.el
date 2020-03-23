@@ -25,15 +25,6 @@
   "`browse-url' compatible function to use EWW as a browser."
   (eww url))
 
-(defmacro madand|gen-insert-command (str)
-  "Return lambda which is an interactive command that inserts STR at point.
-
-Note: this is a workaround for evil-iedit, since the straightforward
-approach `(define-key map (kbd \"M-d\") \"$\")' did not work properly!"
-  `(lambda ()
-     (interactive)
-     (insert ,str)))
-
 (defun madand/toggle-php-web-mode ()
   "Toggle between `php-mode' and `web-mode'."
   (interactive)
@@ -43,7 +34,7 @@ approach `(define-key map (kbd \"M-d\") \"$\")' did not work properly!"
   (hack-dir-local-variables)
   (hack-local-variables-apply))
 
-(defun madand/set-fill-column ()
+(defun madand/php-set-fill-column ()
   "If value of `madand-web-php-fill-column' is not nil, set fill column to that
 value."
   (interactive)
@@ -134,7 +125,6 @@ to the project root."
     "sR" 'spacemacs/skewer-eval-region-and-focus
     "ss" 'skewer-repl))
 
-
 (defvar madand-web-js-repl 'skewer "REPL backend to be used in JavaScript buffers.
 
 Valid values are: nodejs and skewer.")
@@ -174,5 +164,29 @@ Fall back to CURRENT-SUFFIX-FUNCTION for other project types."
     (cond
      ((member project-type '(madand-nodeapp)) ".test")
      (t (funcall current-suffix-function project-type)))))
+
+(defun madand/remove-dumb-jump-from-jump-handlers ()
+  "Remove `dumb-jump-go' from `spacemacs-jump-handlers'."
+  (setq spacemacs-jump-handlers (delq 'dumb-jump-go spacemacs-jump-handlers)))
+
+(defun madand-web//set-js-buffer-dash-docsets ()
+  "Set ‘counsel-dash-docsets’ for JavaScript buffers."
+  (setq-local counsel-dash-docsets '("JavaScript" "VueJS" "jQuery" "Lo-Dash")
+              counsel-dash-common-docsets '()))
+
+(defun madand-web//maybe-turn-on-prettier-js ()
+  "Format buffer contents with ‘prettier-js’ if conditions are met.
+
+The formatting is done only iff all of the following conditions are true:
+* Current buffer major mode is derived from ‘js-mode’
+* Variable ‘madand-web-format-js-before-save’ is t"
+  (when madand-web-format-js-before-save
+    (prettier-js-mode)))
+
+
+(defun madand-web//set-php-buffer-dash-docsets ()
+  "Set ‘counsel-dash-docsets’ for PHP buffers."
+  (setq-local counsel-dash-docsets '("PHP" "Symfony" "Yii")
+              counsel-dash-common-docsets '()))
 
 ;;; funcs.el ends here

@@ -17,4 +17,11 @@
   "Default value of `fill-column' to be used in `php-mode' buffers.
 If nil, default value will not be changed.")
 
+(defvar madand-web-format-js-before-save nil
+  "Whether to format JS buffers with ‘prettier-js’ before saving.
+
+Use this variable as dir-local, to enable auto-formatting across
+entire projects.")
+(put 'madand-web-format-js-before-save 'safe-local-variable #'booleanp)
+
 ;;; config.el ends here
