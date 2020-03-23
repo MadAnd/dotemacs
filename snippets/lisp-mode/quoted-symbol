@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: quoted-symbol
+# key: qs
+# --
+|$1|$0
