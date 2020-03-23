@@ -46,7 +46,10 @@
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
   (add-hook 'emacs-lisp-mode-hook #'lispy-mode)
   (add-hook 'emacs-lisp-mode-hook #'lispyville-mode)
-  (madand/elisp-setup-flet-indent))
+  (with-eval-after-load 'elisp-mode
+    (madand/elisp-setup-flet-indent)
+    (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode
+      "hh" 'helpful-at-point)))
 
 (defun madand-lisp/init-lisp-mode ()
   (add-hook 'lisp-mode-hook #'madand-lisp/clear-default-jump-handlers -99)
