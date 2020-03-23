@@ -170,22 +170,22 @@ Fall back to CURRENT-SUFFIX-FUNCTION for other project types."
   (setq spacemacs-jump-handlers (delq 'dumb-jump-go spacemacs-jump-handlers)))
 
 (defun madand-web//set-js-buffer-dash-docsets ()
-  "Set ‘counsel-dash-docsets’ for JavaScript buffers."
+  "Set `counsel-dash-docsets' for JavaScript buffers."
   (setq-local counsel-dash-docsets '("JavaScript" "VueJS" "jQuery" "Lo-Dash")
               counsel-dash-common-docsets '()))
 
 (defun madand-web//maybe-turn-on-prettier-js ()
-  "Format buffer contents with ‘prettier-js’ if conditions are met.
+  "Format buffer contents with `prettier-js' if conditions are met.
 
 The formatting is done only iff all of the following conditions are true:
-* Current buffer major mode is derived from ‘js-mode’
-* Variable ‘madand-web-format-js-before-save’ is t"
+* Current buffer major mode is derived from `js-mode'
+* Variable `madand-web-format-js-before-save' is t"
   (when madand-web-format-js-before-save
     (prettier-js-mode)))
 
 
 (defun madand-web//set-php-buffer-dash-docsets ()
-  "Set ‘counsel-dash-docsets’ for PHP buffers."
+  "Set `counsel-dash-docsets' for PHP buffers."
   (setq-local counsel-dash-docsets '("PHP" "Symfony" "Yii")
               counsel-dash-common-docsets '()))
 

@@ -21,7 +21,7 @@
 (defvar madand-lisp-use-qlot nil
   "Whether to use qlot when starting REPL.
 
-See info node ‘(elisp)Directory Local Variables’.")
+See info node `(elisp)Directory Local Variables'.")
 (put 'madand-lisp-use-qlot 'safe-local-variable #'booleanp)
 
 (defvar madand-lisp-src-dir "src/"
@@ -47,7 +47,7 @@ $ git clone https://gitlab.common-lisp.net/asdf/asdf.git ~/common-lisp/asdf
 Now set the variable in Emacs:
 \(setq madand-lisp-sly-asdf-path \"~/common-lisp/asdf/\").
 
-NOTE: by default ASDF already recursively scans ‘~/common-lisp/’
+NOTE: by default ASDF already recursively scans `~/common-lisp/'
 for system definitions. However, setting this variable is useful
 when one uses tools (e.g. Qlot) for per-project system isolation,
 which make ASDF not to scan default locations.")

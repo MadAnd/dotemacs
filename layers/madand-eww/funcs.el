@@ -144,14 +144,14 @@
   (cl-some (lambda (regexp) (string-match-p regexp str)) regexp-list))
 
 (defvar madand-eww--recursive-reload? nil
-  "Recursion guard for ‘madand-eww//maybe-turn-on-extra-visual-modes’.")
+  "Recursion guard for `madand-eww//maybe-turn-on-extra-visual-modes'.")
 
 (cl-defun madand-eww//maybe-turn-on-extra-visual-modes ()
   "Turn on extra visual modes if the URL matches a corresponding pattern.
 
 See:
-* ‘madand-eww-readable-url-regexp-list’
-* ‘eww-after-render-hook’"
+* `madand-eww-readable-url-regexp-list'
+* `eww-after-render-hook'"
   (when madand-eww--recursive-reload?
     (setq madand-eww--recursive-reload? nil)
     (cl-return-from madand-eww//maybe-turn-on-extra-visual-modes))

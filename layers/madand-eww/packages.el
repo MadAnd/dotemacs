@@ -35,7 +35,7 @@
     (setq dash-docs-browser-func #'eww)))
 
 (defun madand-eww/init-eww ()
-  ;; Global keys with ‘SPC ae’ prefix.
+  ;; Global keys with `SPC ae' prefix.
   (spacemacs/declare-prefix "ae" "eww")
   (spacemacs/set-leader-keys
     "awf" 'eww-open-file

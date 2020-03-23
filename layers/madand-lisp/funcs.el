@@ -16,14 +16,14 @@
 (require 'cl-lib)
 
 ;;; ----------------------------------------------------------------------------
-;;; Indentation for ‘cl-flet’ and friends
+;;; Indentation for `cl-flet' and friends
 ;;; ----------------------------------------------------------------------------
 
 (defvar madand-lisp--elisp-flet-style-macros ()
-  "List of Elisp forms that should be indented like ‘flet’.")
+  "List of Elisp forms that should be indented like `flet'.")
 
 (defun madand/elisp-setup-flet-indent ()
-  "Setup proper indentation for ‘cl-flet’ and similar forms in Elisp.
+  "Setup proper indentation for `cl-flet' and similar forms in Elisp.
 Source: https://emacs.stackexchange.com/a/39177"
   (setq madand-lisp--elisp-flet-style-macros
         (let ((macros '(flet flet* values macrolet labels)))
@@ -74,7 +74,7 @@ buffer with `help-mode'."
     (sly-eval-last-expression))))
 
 ;;; ----------------------------------------------------------------------------
-;;; Projectile support for project type ‘common-lisp’
+;;; Projectile support for project type `common-lisp'
 ;;; ----------------------------------------------------------------------------
 
 (defun madand/project-type-common-lisp-p ()
@@ -152,11 +152,11 @@ actually before the character it is visually displayed on."
     (apply oldfun args)))
 
 (defun madand/advice-add@evil-fix-point-off-by-one (symbol)
-  "Add around advice for SYMBOL with ‘madand//evil-fix-point-off-by-one’."
+  "Add around advice for SYMBOL with `madand//evil-fix-point-off-by-one'."
   (advice-add symbol :around 'madand//evil-fix-point-off-by-one))
 
 (defun madand/advice-remove@evil-fix-point-off-by-one (symbol)
-  "Remove around advice for SYMBOL with ‘madand//evil-fix-point-off-by-one’."
+  "Remove around advice for SYMBOL with `madand//evil-fix-point-off-by-one'."
   (advice-remove symbol 'madand//evil-fix-point-off-by-one))
 
 (defun madand/sly-eval-current-form-sp (&optional arg)
@@ -179,17 +179,17 @@ Requires smartparens because all movement is done using `sp-up-sexp'."
       (call-interactively 'sly-eval-last-expression))))
 
 (defun madand-lisp/clear-default-jump-handlers ()
-  "Clear ‘spacemacs-default-jump-handlers’ buffer locally.
+  "Clear `spacemacs-default-jump-handlers' buffer locally.
 
 This function should be placed in the beginning of the <major-mode>-hook
-variable. For this one should use the third argument of ‘add-hook’.
+variable. For this one should use the third argument of `add-hook'.
 
 Example:
 \(add-hook 'lisp-mode-hook #'madand/lisp-disable-default-jump-handlers -99)"
   (setq-local spacemacs-default-jump-handlers ()))
 
 (defun madand-lisp/xterm-preserve-colors ()
-  "Set ‘xterm-color-preserve-properties’ to t."
+  "Set `xterm-color-preserve-properties' to t."
   (setq xterm-color-preserve-properties t))
 
 ;;; ----------------------------------------------------------------------------
@@ -205,9 +205,9 @@ root directory. If not in project, return nil."
       (file-exists-p (expand-file-name "qlfile" root))))
 
 (defun madand-lisp//sly-start@maybe-use-qlot (oldfun &rest args)
-  "Modify args to use ‘qlot exec’ if ‘madand-lisp-use-qlot’ is t.
+  "Modify args to use `qlot exec' if `madand-lisp-use-qlot' is t.
 
-This is an :filter-args advice for the command ‘sly-start’, which
+This is an :filter-args advice for the command `sly-start', which
 see."
   (when (and madand-lisp-use-qlot
              (madand-lisp/project-uses-qlot?))
@@ -235,13 +235,13 @@ see."
 ;;;-----------------------------------------------------------------------------
 
 (defun madand-lisp/sly-quit-current-lisp ()
-  "Quit currently active ‘sly’ Lisp connection, without any prompts.
-See ‘sly-quit-lisp’."
+  "Quit currently active `sly' Lisp connection, without any prompts.
+See `sly-quit-lisp'."
   (interactive)
   (sly-quit-lisp t))
 
 (defun madand-lisp/sly-goto-imports (&optional goto-last)
-  "Move point to the first ‘:import-from’ form in the buffer.
+  "Move point to the first `:import-from' form in the buffer.
 
 If GOTO-LAST is non-nil or when called interactively with the
 prefix arg, move point to the last import form."

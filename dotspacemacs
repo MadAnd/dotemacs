@@ -564,7 +564,7 @@ before packages are loaded."
 
   ;; Garbage collect when Emacs is idle.
   (defvar madand-garbage-collect-timer nil
-    "Timer that runs ‘garbage-collect’ when Emacs is idling.")
+    "Timer that runs `garbage-collect' when Emacs is idling.")
   (defun madand/run-gc-with-timer ()
     "Run GC with idle timer, then prime the timer again."
     (garbage-collect))

@@ -18,7 +18,7 @@
 If nil, default value will not be changed.")
 
 (defvar madand-web-format-js-before-save nil
-  "Whether to format JS buffers with ‘prettier-js’ before saving.
+  "Whether to format JS buffers with `prettier-js' before saving.
 
 Use this variable as dir-local, to enable auto-formatting across
 entire projects.")

@@ -495,14 +495,14 @@ See `text-scale-set'."
 ;;; ----------------------------------------------------------------------------
 
 (defvar madand-base--eshell-inhibit-alias-file-writes nil
-  "If t, ‘eshell-write-aliases-list’ will not do anything at all.
+  "If t, `eshell-write-aliases-list' will not do anything at all.
 
-You should never ‘setq’ this variable to t, it is only meant to
-be dynamically bound with ‘let’. Otherwise, your newly defiled
+You should never `setq' this variable to t, it is only meant to
+be dynamically bound with `let'. Otherwise, your newly defiled
 aliases will never be written to disk.")
 
 (defun madand-base//eshell-write-aliases-list@maybe-inhibit (oldfun &rest args)
-  "Around advice function for inhibiting ‘eshell-write-aliases-list’."
+  "Around advice function for inhibiting `eshell-write-aliases-list'."
   (if madand-base--eshell-inhibit-alias-file-writes
       nil
     (apply oldfun args)))
@@ -510,7 +510,7 @@ aliases will never be written to disk.")
 (cl-defmacro madand-base/with-inhibited-eshell-alias-file-writes (&body body)
   "Evaluate BODY forms while alias file writes are inhibited.
 
-By default, ‘eshell/alias’ writes aliases file into disk after
+By default, `eshell/alias' writes aliases file into disk after
 every invocation. This macro provides a workaround and allows
 bulk alias definitions with a single flush in the end."
   (declare (indent 0))
@@ -520,7 +520,7 @@ bulk alias definitions with a single flush in the end."
      (eshell-write-aliases-list)))
 
 (defun madand-base/eshell-define-aliases ()
-  "Define aliases for ‘eshell’. This will rewrite ‘eshell-aliases-file’.
+  "Define aliases for `eshell'. This will rewrite `eshell-aliases-file'.
 
 Use this command if you edited its definition and want to
 re-generate aliases file."
