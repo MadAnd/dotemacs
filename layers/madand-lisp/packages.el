@@ -59,11 +59,15 @@
 
 (defun madand-lisp/init-lispy ()
   (use-package lispy
-    :defer t))
+    :defer t
+    :init
+    (spacemacs|diminish lispy-mode)))
 
 (defun madand-lisp/init-lispyville ()
   (use-package lispyville
-    :defer t))
+    :defer t
+    :init
+    (spacemacs|diminish lispyville-mode)))
 
 (defun madand-lisp/post-init-projectile ()
   (with-eval-after-load 'projectile
