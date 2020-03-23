@@ -211,7 +211,7 @@ With prefix argument refresh cache before listing candidates."
 
 (defun php-helpers/sort-uses-after-save-handler ()
   "Handler for `after-save-hook' to automatically sort use-statements, iff
-  `php-helpers-sort-uses-on-save' is t."
+`php-helpers-sort-uses-on-save' is t."
   (when php-helpers-sort-uses-on-save
     (php-helpers/sort-uses)))
 
@@ -330,28 +330,53 @@ If called interactively, the result will also be inserted at point."
       (set-window-point nil return-point)
       (evil-insert-state))))
 
-(defun php-helpers//current-buffer-class-name ()
-  "Return the name of the PHP class defined in the current buffer.
+(defvar php-helpers--class-name-regex (rx
+                                       line-start
+                                       (group (zero-or-one "final"
+                                                           (one-or-more " "))
+                                              (or "class" "trait" "interface")
+                                              (one-or-more " "))
+                                       (group (one-or-more (syntax word))))
+  "Regex for extracting the class/trait/interface's name.")
 
-If there are multiple class definitions in the buffer,  the first is returned."
-  (save-excursion
-    (save-restriction
-      (evil-with-state 'emacs-state
-        (widen)
-        (beginning-of-buffer)
-        (when (re-search-forward "^\\(?:final \\)?class \\([a-zA-Z0-9_]+\\)")
-          (match-string-no-properties 1))))))
+(cl-defun php-helpers//buffer-class-name (&optional (buffer (current-buffer)))
+  "Return the name of a class/trait/interface defined in BUFFER.
+
+If there are multiple such definitions, the first one is returned."
+  (with-current-buffer buffer
+    (save-excursion
+      (save-restriction
+        (evil-with-state 'emacs-state
+          (widen)
+          (beginning-of-buffer)
+          (when (re-search-forward php-helpers--class-name-regex nil t)
+            (match-string-no-properties 2)))))))
 
 ;;;###autoload
-(defun php-helpers/rename-file-to-buffer-class-name ()
-  "Rename the current buffer's visited file according to the PHP class name."
+(cl-defun php-helpers/rename-class (new-name
+                                    &optional (buffer (current-buffer)))
+  "Replace the class name in the topmost class/trait/interface declaration."
+  (interactive "MNew class name: ")
+  (with-current-buffer buffer
+    (save-excursion
+      (save-restriction
+        (evil-with-state 'emacs-state
+          (widen)
+          (beginning-of-buffer)
+          (when (re-search-forward php-helpers--class-name-regex nil t)
+            (replace-match (concat "\\1" new-name))))))))
+
+;;;###autoload
+(defun php-helpers/rename-file-to-class-name ()
+  "Rename the current buffer's visited file according to its PHP class name.
+This operation is inverse of `php-helpers/rename-class-to-file-name'."
   (interactive)
   (let ((name (buffer-name))
         (filename (buffer-file-name)))
     (if (and filename (file-exists-p filename))
         ;; the buffer is visiting a file
         (let* ((dir (file-name-directory filename))
-               (new-name (concat dir (php-helpers//current-buffer-class-name)
+               (new-name (concat dir (php-helpers//buffer-class-name)
                                  ".php")))
           (cond ((get-buffer new-name)
                  (error "A buffer named '%s' already exists!" new-name))
@@ -369,6 +394,67 @@ If there are multiple class definitions in the buffer,  the first is returned."
                  (message "File '%s' successfully renamed to '%s'"
                           name (file-name-nondirectory new-name)))))
       (error "Buffer is not visiting a file"))))
+
+;;;###autoload
+(defun php-helpers/rename-class-to-file-name (&optional dont-save)
+  "Rename the topmost class according to the visited file name (see PSR-0).
+
+If DONT-SAVE is non-nil or when called interactively with the prefix argument,
+the buffer will not be automatically saved after the operation.
+
+This operation is inverse of `php-helpers/rename-file-to-class-name'."
+  (interactive "P")
+  (let ((buffer-name (buffer-name))
+        (filename (buffer-file-name)))
+    (if (and filename (file-exists-p filename))
+        ;; the buffer is visiting a file
+        (progn
+          (php-helpers/rename-class (file-name-base filename))
+          (unless dont-save
+            (save-buffer)))
+      (error "Buffer is not visiting a file"))))
+
+
+
+(defvar php-helpers-template-getter "\
+%visibility% function %method-name%()%return-type%
+{
+    return $this->%property-name%;
+}"
+  "Template for property getter methods.")
+
+(defvar php-helpers-template-setter "\
+%visibility% function %method-name%(%value-type% $value): void
+{
+    $this->%property-name% = $value;
+}"
+  "Template for the property setter methods.")
+
+(defvar php-helpers-accessor-visibility "public"
+  "The accessor methods (getter, setter) visibility.")
+
+(defun php-helpers//generate-accessor-name (prefix property-name)
+  "Generate accessor method name for PROPERTY-NAME."
+  (concat prefix (upcase-initials property-name)))
+
+(defun php-helpers/generate-getter ()
+  "Generate getter for the property at point and place it in the kill ring."
+  (interactive)
+  (let* ((return-type "")
+         (property-name (word-at-point t))
+         (method-name (php-helpers//generate-accessor-name "get"
+                                                           property-name)))
+    (with-temp-buffer
+      (insert "\n")
+      (insert (s-replace-all
+               (list (cons "%visibility%" php-helpers-accessor-visibility)
+                     (cons "%method-name%" method-name)
+                     (cons "%return-type%" return-type)
+                     (cons "%property-name%" property-name))
+               php-helpers-template-getter))
+      (insert "\n")
+      (kill-region (point-min) (point-max))
+      (message "Method %s has been put into kill ring."))))
 
 (provide 'php-helpers)
 
