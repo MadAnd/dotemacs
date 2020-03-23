@@ -44,7 +44,6 @@
   ;; Hooks.
   (spacemacs/add-all-to-hook 'eww-mode-hook
                              #'madand//set-text-scale-for-documentation
-                             #'centered-cursor-mode
                              #'visual-line-mode)
   (spacemacs/add-all-to-hook 'eww-after-render-hook
                              #'madand-eww//maybe-turn-on-extra-visual-modes
