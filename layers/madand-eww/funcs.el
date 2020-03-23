@@ -164,7 +164,10 @@ See:
                        (setq need-reload? t))))
       (maybe-turn-on t
                      madand-eww-readable-url-regexp-list
-                     (eww-readable)))
+                     (eww-readable))
+      (maybe-turn-on (> (window-width) 90)
+                     '("")
+                     (spacemacs/toggle-centered-buffer)))
     (when need-reload?
       (setq madand-eww--recursive-reload? t)
       (eww-reload))))
