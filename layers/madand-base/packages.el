@@ -22,7 +22,6 @@
     avy
     (auto-fill :location built-in)
     (browse-url :location built-in)
-    centered-cursor-mode
     company
     (cus-edit :location built-in)
     dockerfile-mode
@@ -110,13 +109,6 @@
                                       ("github\\.com/" . browse-url-firefox)
                                       ("." . eww-browse-url))
         browse-url-firefox-new-window-is-tab t))
-
-(defun madand-base/post-init-centered-cursor-mode ()
-  (spacemacs/add-to-hooks #'spacemacs/toggle-centered-point-on
-                          '(Man-mode-hook
-                            Info-mode-hook
-                            magit-revision-mode-hook
-                            nov-mode-hook)))
 
 (defun madand-base/post-init-company ()
   (with-eval-after-load 'company

@@ -557,11 +557,10 @@ before packages are loaded."
    scroll-conservatively 1000
    scroll-margin 0)
 
-  (spacemacs/set-google-translate-languages "en" "uk")
-
   (spacemacs/toggle-highlight-current-line-globally-off)
 
   (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+  (add-hook 'text-mode-hook #'display-fill-column-indicator-mode)
 
   ;; Garbage collect when Emacs is idle.
   (defvar madand-garbage-collect-timer nil

@@ -27,7 +27,8 @@
   "ogt" #'madand/magit-tag-create-tbreverted
   "on" #'spacemacs/scroll-transient-state/body
   "os" #'save-buffer
-  "ot" #'google-translate-at-point
+  "ot" #'define-word-at-point
+  "oT" #'define-word
   "wO" #'delete-other-windows
   "qz" #'spacemacs/frame-killer)
 
