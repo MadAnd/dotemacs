@@ -19,6 +19,7 @@
     dash-docs
     (eww :location built-in)
     (eww-imenu :location local)
+    (image :location built-in)
     language-detection
     (shr :location built-in)
     window-purpose
@@ -112,6 +113,11 @@
     :after eww
     :config
     (eww-imenu/register-tag-handlers)))
+
+(defun madand-eww/init-image ()
+  (with-eval-after-load 'image
+    (define-key image-map "o" nil)
+    (define-key image-map "O" 'image-save)))
 
 (defun madand-eww/init-language-detection ()
   (use-package language-detection
