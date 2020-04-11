@@ -81,4 +81,6 @@
  '(magit-blame-name ((t (:background "#93a1a1" :foreground "firebrick4"))) t)
  '(smerge-refined-added ((t (:inherit diff-refine-added))))
  '(smerge-refined-changed ((t (:inherit diff-refine-changed))))
- '(smerge-refined-removed ((t (:inherit diff-refine-removed)))))
+ '(smerge-refined-removed ((t (:inherit diff-refine-removed))))
+ '(which-key-command-description-face ((t (:foreground "#268bd2"))))
+ '(which-key-key-face ((t (:foreground "#b58900" :weight bold)))))
