@@ -58,6 +58,7 @@
     (spacemacs/declare-prefix-for-mode 'eww-mode "mv" "view")
     (spacemacs/set-leader-keys-for-major-mode 'eww-mode
       "b"  'eww-back-url
+      "c"  'eww-copy-page-url
       "f"  'eww-forward-url
       "s"  'browse-web
       "r"  'eww-reload

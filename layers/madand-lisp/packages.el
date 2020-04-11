@@ -19,6 +19,7 @@
     auto-highlight-symbol
     (elisp-mode :location built-in)
     (evil-cleverparens :excluded t)
+    (eww :location built-in)
     (lisp-mode :location built-in)
     lispy
     lispyville
@@ -50,6 +51,9 @@
     (madand/elisp-setup-flet-indent)
     (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode
       "hh" 'helpful-at-point)))
+
+(defun madand-lisp/post-init-eww ()
+  (add-to-list 'madand-eww-no-images-url-regexp-list "HyperSpec/"))
 
 (defun madand-lisp/init-lisp-mode ()
   (add-hook 'lisp-mode-hook #'madand-lisp/clear-default-jump-handlers -99)

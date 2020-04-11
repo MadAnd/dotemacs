@@ -16,5 +16,7 @@
 (defvar madand-eww-readable-url-regexp-list ()
   "URL regexps for buffers to auto-enable `eww-readable'.")
 
+(defvar madand-eww-no-images-url-regexp-list ()
+  "URL regexps for buffers to auto-disable rendering of images.")
 
 ;;; config.el ends here

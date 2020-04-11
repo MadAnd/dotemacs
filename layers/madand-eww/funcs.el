@@ -165,9 +165,13 @@ See:
       (maybe-turn-on t
                      madand-eww-readable-url-regexp-list
                      (eww-readable))
+      (maybe-turn-on t
+                     madand-eww-no-images-url-regexp-list
+                     (setq-local shr-inhibit-images t))
       (maybe-turn-on (> (window-width) 90)
                      '("")
-                     (spacemacs/toggle-centered-buffer)))
+                     (unless writeroom-mode
+                       (spacemacs/toggle-centered-buffer))))
     (when need-reload?
       (setq madand-eww--recursive-reload? t)
       (eww-reload))))
