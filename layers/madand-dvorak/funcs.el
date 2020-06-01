@@ -41,4 +41,11 @@ Otherwise it will be called with argument 10."
     (interactive)
     (company-complete-number (if (plusp n) n 10))))
 
+(defun madand//avy-action-translate-stay (pt)
+  "Translate the candidate but don't move the point."
+  (save-excursion
+    (goto-char pt)
+    (define-word-at-point nil))
+  t)
+
 ;;; funcs.el ends here
