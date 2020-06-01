@@ -37,6 +37,7 @@
     flyspell
     hungry-delete
     (info :location built-in)
+    lsp-mode
     (lsp-ivy :requires lsp-mode
              :location (recipe :fetcher github :repo "emacs-lsp/lsp-ivy"))
     magithub
@@ -51,6 +52,7 @@
     rainbow-identifiers
     (rcirc :location built-in)
     rcirc-notify
+    (shell :location built-in)
     (simple :location built-in)
     simple-mpc
     smartparens
@@ -111,6 +113,10 @@
         browse-url-secondary-browser-function 'browse-url-firefox
         browse-url-firefox-new-window-is-tab t))
 
+(defun madand-base/post-init-cc-mode ()
+  (with-eval-after-load 'cc-mode
+    (evil-define-key 'hybrid c-mode-map (kbd "M-o") (kbd "C-o $;"))))
+
 (defun madand-base/post-init-company ()
   (with-eval-after-load 'company
     (setq company-gtags-insert-arguments nil
@@ -141,6 +147,7 @@
     "o" 'ace-link-custom
     "s" 'avy-goto-word-1
     "S" 'avy-goto-char-timer
+    "C-y" 'yank
     ))
 
 (defun madand-base/post-init-dockerfile-mode ()
@@ -217,6 +224,10 @@
       "s" #'evil-avy-goto-char-timer
       (kbd "S-SPC") #'Info-scroll-up)))
 
+(defun madand-base/post-init-lsp-mode ()
+  (with-eval-after-load 'lsp-mode
+    (setq lsp-file-watch-threshold 100000)))
+
 (defun madand-base/init-lsp-ivy ()
   (use-package lsp-ivy
     :after lsp-mode))
@@ -280,7 +291,10 @@ CommitDate: %ci\n")
 
 (defun madand-base/pre-init-projectile ()
   (spacemacs|use-package-add-hook projectile
-    :post-init (setq projectile-dynamic-mode-line nil)))
+    :post-init (setq projectile-dynamic-mode-line nil)
+    )
+  (with-eval-after-load 'projectile
+    (add-to-list 'projectile-globally-ignored-directories "node_modules")))
 
 (defun madand-base/post-init-python ()
   (with-eval-after-load 'python
@@ -306,11 +320,15 @@ CommitDate: %ci\n")
           rcirc-kill-channel-buffers t)
     (evil-set-initial-state 'rcirc-mode 'normal)
     (add-hook 'rcirc-mode-hook #'madand//set-text-scale-for-irc)
-    (advice-add 'rcirc-connect :around #'madand//rcirc-connect)))
+    (advice-add 'rcirc-connect :around #'madand//rcirc-connect)
+    (evil-define-key 'normal rcirc-mode-map (kbd "o") 'link-hint-open-link)))
 
 (defun madand-base/post-init-rcirc-notify ()
   (with-eval-after-load 'rcirc-notify
     (setq rcirc-notify-popup-timeout 60000)))
+
+(defun madand-base/post-init-shell ()
+  (setq shell-file-name "/bin/bash"))
 
 (defun madand-base/init-simple ()
   (with-eval-after-load 'simple
@@ -360,7 +378,9 @@ CommitDate: %ci\n")
     :post-init (setq undo-tree-enable-undo-in-region nil)))
 
 (defun madand-base/post-init-window-purpose ()
-  (setq dotspacemacs-switch-to-buffer-prefers-purpose t))
+  (setq dotspacemacs-switch-to-buffer-prefers-purpose t)
+  (with-eval-after-load 'window-purpose-layout
+    (setq purpose-layout-dirs (list "~/.spacemacs.d/layouts/"))))
 
 (defun madand-base/post-init-writeroom-mode ()
   (add-hook 'writeroom-mode-hook #'madand//maybe-re-render-special-buffer)

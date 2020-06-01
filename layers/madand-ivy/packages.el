@@ -32,7 +32,11 @@
     (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit)
     (define-key ivy-minibuffer-map (kbd "C-h") 'delete-backward-char)
     (define-key ivy-minibuffer-map (kbd "C-S-h") help-map)
-    (define-key ivy-minibuffer-map (kbd "C-<return>") 'ivy-immediate-done)))
+    (define-key ivy-minibuffer-map (kbd "C-<return>") 'ivy-immediate-done)
+    (evil-define-key 'normal ivy-occur-grep-mode-map
+      (kbd "RET") 'ivy-occur-press-and-switch)
+    (evil-define-key 'normal ivy-occur-mode-map
+      (kbd "RET") 'ivy-occur-press-and-switch)))
 
 (defun madand-ivy/post-init-swiper ()
   (with-eval-after-load 'swiper

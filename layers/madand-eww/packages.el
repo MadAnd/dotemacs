@@ -58,7 +58,7 @@
     (spacemacs/declare-prefix-for-mode 'eww-mode "mv" "view")
     (spacemacs/set-leader-keys-for-major-mode 'eww-mode
       "b"  'eww-back-url
-      "c"  'eww-copy-page-url
+      "y"  'eww-copy-page-url
       "f"  'eww-forward-url
       "s"  'browse-web
       "r"  'eww-reload
@@ -86,7 +86,7 @@
       "K"         'madand/eww-jump-previous-buffer
       (kbd "C-j") 'shr-next-link
       (kbd "C-k") 'shr-previous-link
-      "s"         'avy-goto-char
+      "s"         'avy-goto-word-1
       "S"         'eww-switch-to-buffer)
     (dolist (keymap (list eww-link-keymap eww-image-link-keymap))
       (define-key keymap "f" 'eww-follow-link)
