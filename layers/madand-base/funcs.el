@@ -29,6 +29,16 @@
   (let ((yas-prompt-functions '(yas/completing-prompt)))
     (apply orig-fun args)))
 
+(defun madand/simple-multpile-choice (prompt choices)
+  "Convenience wrapper around `read-multiple-choice'.
+
+Return the third element of the selected choice or, if there is
+no third element will return the second one."
+  (let ((answer (read-multiple-choice prompt choices)))
+    (if (> (length answer) 2)
+        (third answer)
+      (second answer))))
+
 (defun madand/sudo-async-shell-command (command
                                         &optional output-buffer error-buffer)
   "Invoke command as root with TRAMP sudo.
