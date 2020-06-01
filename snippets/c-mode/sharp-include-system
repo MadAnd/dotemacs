@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: sharp-include-system
+# key: sincs
+# --
+#include <$1$0

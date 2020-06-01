@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: sharp-include
+# key: sinc
+# --
+#include "$1"$0

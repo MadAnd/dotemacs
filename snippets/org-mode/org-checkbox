@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: org-checkbox
+# key: ocb
+# --
+[ ] $0
