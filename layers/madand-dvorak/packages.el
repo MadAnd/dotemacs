@@ -1,4 +1,4 @@
-;;; packages.el --- madand-dvorak layer packages file for Spacemacs.
+;;; packages.el --- madand-dvorak layer packages file for Spacemacs. -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2012-2019 Sylvain Benner & Contributors
 ;;
