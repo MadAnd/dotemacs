@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: declare-optimize
+# key: dopt
+# --
+(`
+(madand/simple-multpile-choice
+  "Optimization quality:"
+  '((?s "speed") (?z "space") (?S "safety") (?d "debug")
+    (?c "compilation-speed")))
+` `
+(madand/simple-multpile-choice
+  "Level:"
+  '((?a "0") (?o "1") (?e "2") (?u "3")))
+`)$0

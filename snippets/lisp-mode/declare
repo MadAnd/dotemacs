@@ -2,4 +2,8 @@
 # name: declare
 # key: decl
 # --
-(declare (`(yas-choose-value '("type" "ftype" "ignore" "ignorable" "dynamic-extent"))` $0))
+(declare (`
+(madand/simple-multpile-choice
+  "Which declaration?"
+  '((?t "type") (?f "ftype") (?i "ignore") (?I "ignorable") (?d "dynamic-extent")
+    (?o "optimize") (?s "special") (?l "inline") (?L "notinline")))` $0))
