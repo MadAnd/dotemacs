@@ -15,17 +15,11 @@
 ;;; Code:
 
 (defconst madand-web-packages
-  '(
-    company
+  '(company
     counsel-dash
     eww
     flycheck
-    graphql-mode
-    (js-mode :location built-in)
-    js2-mode
-    js-doc
     lsp-mode
-    mocha
     (php-doc :location local)
     (php-helpers :location local)
     php-mode
@@ -35,8 +29,7 @@
     (company-php :excluded t)
     (drupal-mode :excluded t)
     (php-auto-yasnippets :excluded t)
-    (php-extras :excluded t)
-    ))
+    (php-extras :excluded t)))
 
 (defun madand-web/post-init-company ()
   (spacemacs|add-company-backends
@@ -44,11 +37,6 @@
     :modes php-mode
     :append-hooks nil
     :call-hooks t))
-
-(defun madand-web/post-init-counsel-dash ()
-  (add-hook 'js-mode-hook #'madand-web//set-js-buffer-dash-docsets)
-  (with-eval-after-load 'counsel-dash
-    (setq counsel-dash-browser-func #'madand/browse-url-eww-new-buffer)))
 
 (defun madand-web/post-init-eww ()
   (with-eval-after-load 'eww
@@ -58,44 +46,11 @@
   (setq flycheck-phpcs-standard "PSR2"
         flycheck-php-phpcs-executable "~/.composer/vendor/bin/phpcs"))
 
-(defun madand-web/init-graphql-mode ()
-  (use-package graphql-mode
-    :defer t))
-
-(defun madand-web/init-js-mode ()
-  )
-
-(defun madand-web/post-init-js2-mode ()
-  (with-eval-after-load 'js2-mode
-    (add-hook 'js2-mode-local-vars-hook #'madand-web//maybe-turn-on-prettier-js)
-    (setq js2-basic-offset 2
-          js2-strict-missing-semi-warning nil
-          js2-strict-inconsistent-return-warning nil)
-    ;; Shortcuts for common yet cumbersome things.
-    (evil-define-key 'hybrid js2-mode-map
-      (kbd "M-o") (kbd "C-o $;")
-      (kbd "M-e") (kbd "C-o $,")
-      (kbd "RET") (kbd "M-j"))))
-
-
-(defun madand-web/post-init-js-doc ()
-  (evil-define-key 'hybrid js2-mode-map "@" 'js-doc-insert-tag))
-
 (defun madand-web/post-init-lsp-mode ()
   (add-hook 'php-mode-hook #'lsp)
   (with-eval-after-load 'lsp-mode
     (setq lsp-file-watch-threshold 100000)
     (evil-define-key 'normal php-mode-map "gd" #'lsp-ui-peek-find-definitions)))
-
-(defun madand-web/init-mocha ()
-  (use-package mocha
-    :init
-    (progn
-      (spacemacs/declare-prefix-for-mode 'js2-mode "mt" "test")
-      (spacemacs/set-leader-keys-for-major-mode 'js2-mode
-        "tt" #'mocha-test-file
-        "tT" #'mocha-test-at-point
-        "tp" #'mocha-test-project))))
 
 (defun madand-web/init-php-doc ()
   (use-package php-doc

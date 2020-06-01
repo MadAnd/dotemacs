@@ -1,4 +1,4 @@
-;;; layers.el --- madand-web layer layers file for Spacemacs.
+;;; layers.el --- madand-js layer layers file for Spacemacs.
 ;;
 ;; Copyright (c) 2012-2019 Sylvain Benner & Contributors
 ;;
@@ -11,10 +11,10 @@
 
 ;;; Commentary:
 
-;; Layers required by madand-web layer.
+;; Layers required by madand-js layer.
 
 ;;; Code:
 
-(configuration-layer/declare-layers '(dap html php))
+(configuration-layer/declare-layers '(dap import-js lsp prettier))
 
 ;;; layers.el ends here
