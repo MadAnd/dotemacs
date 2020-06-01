@@ -11,17 +11,17 @@
 
 ;;; Commentary:
 
-;; Base layer with general configuration.
+;; Kitchen sink layer with general configuration.
 
 ;;; Code:
 
 (defconst madand-base-packages
-  '(
-    ace-jump-buffer
+  '(ace-jump-buffer
     ace-popup-menu
     avy
     (auto-fill :location built-in)
     (browse-url :location built-in)
+    (cc-mode :location built-in)
     company
     (cus-edit :location built-in)
     dockerfile-mode
@@ -61,8 +61,7 @@
     window-purpose
     writeroom-mode
     yaml-mode
-    yasnippet
-    ))
+    yasnippet))
 
 (defun madand-base/init-ace-jump-buffer ()
   (use-package ace-jump-buffer
@@ -257,10 +256,6 @@
   (with-eval-after-load 'hungry-delete
     (spacemacs|hide-lighter hungry-delete-mode)))
 
-(defun madand-base/post-init-google-translate ()
-  (with-eval-after-load 'google-translate
-    (setq google-translate-backend-method 'curl)))
-
 (defun madand-base/init-jit-lock ()
   (with-eval-after-load 'jit-lock
     (setq jit-lock-defer-time nil
@@ -297,10 +292,7 @@ CommitDate: %ci\n")
   (spacemacs/add-to-hooks #'rainbow-identifiers-mode '(emacs-lisp-mode-hook
                                                        lisp-mode-hook
                                                        lua-mode-hook
-                                                       shell-mode-hook))
-  ;; Workaround colorized comments by delaying the activation.
-  (spacemacs/add-to-hooks #'madand//turn-on-rainbow-identifiers-with-delay
-                          '(js2-mode-hook)))
+                                                       js-mode-hook)))
 
 (defun madand-base/post-init-rcirc ()
   (with-eval-after-load 'rcirc

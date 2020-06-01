@@ -130,7 +130,8 @@ Common Lisp projects."
       original-result)))
 
 (defun madand/browse-url-eww-new-buffer (url &optional new-window)
-  "`browse-url' compatible function to use EWW as a browser."
+  "Open URL in a new EWW buffer.
+This function may be used anywhere where `browse-url' is expected."
   (eww url 4))
 
 (defun madand//browse-url-eww--around-advice (fun &rest args)
