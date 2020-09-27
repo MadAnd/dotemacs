@@ -35,6 +35,7 @@
     (setq dash-docs-browser-func #'eww)))
 
 (defun madand-eww/init-eww ()
+  (setq eww-bookmarks-directory "~/.spacemacs.d/data/")
   ;; Global keys with `SPC ae' prefix.
   (spacemacs/declare-prefix "ae" "eww")
   (spacemacs/set-leader-keys
