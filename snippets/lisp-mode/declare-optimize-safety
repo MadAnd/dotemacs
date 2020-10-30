@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: declare-optimize-safety
+# key: declosf
+# --
+(safety `(yas-choose-value "0" "1" "2" "3")`)

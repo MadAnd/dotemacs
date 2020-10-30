@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: declare-optimize-debug
+# key: declod
+# --
+(debug `(yas-choose-value "0" "1" "2" "3")`)

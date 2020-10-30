@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: declare
-# key: decl
+# key: declr
 # --
 (declare (`
 (madand/simple-multpile-choice

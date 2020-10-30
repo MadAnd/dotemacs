@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: yas-comment-insert-file-path
+# key: yas-cifp
+# type: command
+# --
+(madand//yas-comment-insert-file-path)

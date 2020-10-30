@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: this
-# key: th
+# name: true
+# key: tr
 # --
-this$0
+true$0

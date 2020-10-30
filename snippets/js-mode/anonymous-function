@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: anonymous-function
-# key: f
+# key: fn
 # --
 function ($1) {
       $0

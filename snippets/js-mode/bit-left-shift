@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: bit-left-shift
+# key: bls
+# --
+<< $0

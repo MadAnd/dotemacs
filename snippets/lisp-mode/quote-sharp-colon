@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: quote-sharp-colon
+# key: qsc
+# --
+'#:$0

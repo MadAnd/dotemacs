@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: bit-not
+# key: bnot
+# --
+~ $0

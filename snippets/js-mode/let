@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: this
-# key: th
+# name: let
+# key: le
 # --
-this$0
+let $0

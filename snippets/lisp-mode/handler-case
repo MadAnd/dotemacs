@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: handler-case
+# key: hc
+# --
+(handler-case $0)

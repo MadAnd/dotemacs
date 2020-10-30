@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
-# name: progn
-# key: pgn
+# name: prog2
+# key: pgt
 # --
-(progn
+(prog2
   $0)

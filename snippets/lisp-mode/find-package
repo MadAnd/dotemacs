@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: find-package
+# key: fdp
+# --
+(find-package $0)

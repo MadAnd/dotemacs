@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: new-object
-# key: n
+# key: nw
 # --
 new $1($0)

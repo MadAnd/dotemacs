@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: finally
-# key: fin
+# key: fi
 # --
 finally {
   $1

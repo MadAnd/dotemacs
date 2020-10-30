@@ -20,3 +20,16 @@
         (string-remove-suffix ".lisp")
         (concat (projectile-project-name) "/"))
     ""))
+
+(defun madand//following-top-level-defun-name ()
+  "Return the name of the first lop-level defun declared after the point.
+
+This actually returns the second item of the nearest top level
+form, not only defun."
+  (save-match-data
+    (save-excursion
+      (re-search-forward (rx line-start "("
+                             (+ (or (syntax symbol) (syntax word)))
+                             (+ (syntax whitespace))
+                             (group (+ (or (syntax symbol) (syntax word))))))
+      (match-string-no-properties 1))))

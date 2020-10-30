@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: return-from
-# key: retf
+# key: rtf
 # --
-(return-from ${1:`(madand//yas-get-parent-defun-name)`}$0)
+(return-from $0)

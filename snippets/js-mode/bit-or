@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: bit-or
+# key: bor
+# --
+| $0

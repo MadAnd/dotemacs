@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: handler-case-clause
+# key: hcc
+# --
+(${1:error} ($2)
+  $0)

@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: yield
-# key: y
+# key: yl
 # --
 yield $0

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: bit-xor
+# key: bxor
+# --
+^ $0

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: in-package
+# key: inpkg
+# --
+(in-package #:$0)

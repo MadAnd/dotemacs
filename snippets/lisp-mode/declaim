@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: declaim
+# key: declm
+# --
+(declaim $0)

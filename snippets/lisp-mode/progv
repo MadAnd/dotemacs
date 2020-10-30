@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: progv
+# key: pgv
+# --
+(progv ${1:symbols} ${2:values}
+  $0)

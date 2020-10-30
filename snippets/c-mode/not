@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: this
-# key: th
+# name: not
+# key: not
 # --
-this$0
+!$0
