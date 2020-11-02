@@ -31,11 +31,13 @@
     (sly-macrostep :requires (sly macrostep))
     (sly-repl-ansi-color :requires sly)
     xterm-color
+    window-purpose
     ))
 
 (defun madand-lisp/post-init-ace-link ()
   (with-eval-after-load 'sly
-    (dolist (map '(sly-trace-dialog-mode))
+    (dolist (map '(sly-trace-dialog-mode-map
+                   sly-inspector-mode-map))
       (evil-define-key 'evilified map "o" #'ace-link-help))))
 
 (defun madand-lisp/post-init-auto-highlight-symbol ()
@@ -47,6 +49,8 @@
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
   (add-hook 'emacs-lisp-mode-hook #'lispy-mode)
   (add-hook 'emacs-lisp-mode-hook #'lispyville-mode)
+  (add-hook 'emacs-lisp-mode-hook #'madand-lisp//yasnippet-configure-h)
+
   (with-eval-after-load 'elisp-mode
     (madand/elisp-setup-flet-indent)
     (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode
@@ -59,13 +63,21 @@
   (add-hook 'lisp-mode-hook #'madand-lisp/clear-default-jump-handlers -99)
   (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
   (add-hook 'lisp-mode-hook #'lispy-mode)
-  (add-hook 'lisp-mode-hook #'lispyville-mode))
+  (add-hook 'lisp-mode-hook #'lispyville-mode)
+  (add-hook 'lisp-mode-hook #'madand-lisp//yasnippet-configure-h)
+  (with-eval-after-load 'lisp-mode
+    (put 'uiop:define-package 'common-lisp-indent-function '(as defpackage))))
 
 (defun madand-lisp/init-lispy ()
   (use-package lispy
     :defer t
     :init
-    (spacemacs|diminish lispy-mode)))
+    (spacemacs|diminish lispy-mode)
+    :config
+    ;; Make it possible to enter qualified symbols like cl:and in non-operator
+    ;; position like (boundp cl:and).
+    (setq lispy-colon-no-space-regex '((lisp-mode . "[^\\)]")
+                                       (sly-mrepl-mode . "[^\\)]")))))
 
 (defun madand-lisp/init-lispyville ()
   (use-package lispyville
@@ -121,9 +133,9 @@
                                       sly-edit-definition-other-window)
 
       (dolist (x '(("m=" . "format")
-                   ("mh" . "help")
+                   ("mh" . "help/doc/xref")
                    ("mc" . "compile")
-                   ("me" . "evaluate")
+                   ("me" . "eval")
                    ("mE" . "errors/notes")
                    ("mg" . "navigation")
                    ("mi" . "import/export")
@@ -134,7 +146,8 @@
         (spacemacs/declare-prefix-for-mode 'sly-mode (car x) (cdr x)))
       (spacemacs/set-leader-keys-for-major-mode 'lisp-mode
         "'"  'sly-mrepl
-        ;; "E"  'sly-edit-value
+        "." 'spacemacs/common-lisp-navigation-transient-state/body
+        "E"  'sly-edit-value
         ;; Code Formatting
         "==" 'indent-sexp
         "=b" 'madand-lisp/indent-buffer
@@ -144,7 +157,7 @@
         "hA" 'sly-apropos-all
         "hb" 'sly-who-binds
         "hd" 'sly-disassemble-symbol
-        "hF" 'hyperspec-lookup-format
+        "hg" 'common-lisp-hyperspec-glossary-term
         "hh" 'sly-describe-symbol
         "hH" 'sly-hyperspec-lookup
         "hm" 'sly-who-macroexpands
@@ -155,6 +168,8 @@
         "hS" 'sly-who-sets
         "h<" 'sly-who-calls
         "h>" 'sly-calls-who
+        "h#" 'common-lisp-hyperspec-lookup-reader-macro
+        "h~" 'common-lisp-hyperspec-format
         ;; Compilation
         "cc" 'sly-compile-file
         "cC" 'sly-compile-and-load-file
@@ -177,7 +192,6 @@
         "EN" 'sly-previous-note
         "Er" 'sly-remove-notes
         ;; Navigation
-        "g." 'spacemacs/common-lisp-navigation-transient-state/body
         "gb" 'sly-pop-find-definition-stack
         "gi" 'madand-lisp/sly-goto-imports
         "gu" 'sly-edit-uses
@@ -186,6 +200,7 @@
         "ie" 'sly-export-symbol-at-point
         "ic" 'sly-export-class
         ;; Macroexpand
+        "m." 'spacemacs/macrostep-transient-state/body
         "me" 'sly-macroexpand-1
         "mE" 'sly-macroexpand-all
         ;; REPL
@@ -237,7 +252,9 @@
     (progn
       (setq sly-lisp-implementations
             '((ros-sbcl ("ros" "-L" "sbcl-bin" "run"))
-              (ros-ecl ("ros" "-L" "ecl" "run")))
+              (ros-ccl  ("ros" "-L" "ccl"      "run"))
+              (ros-ecl  ("ros" "-L" "ecl"      "run"))
+              (abcl ("/home/madand/.roswell/impls/x86-64/linux/abcl-bin/1.7.1/abcl")))
             sly-default-lisp 'ros-sbcl
             sly-description-autofocus t
             sly-command-switch-to-existing-lisp 'never
@@ -246,14 +263,19 @@
       (add-hook 'sly-popup-buffer-mode-hook
                 #'spacemacs/toggle-rainbow-identifier-off)
       (add-hook 'sly-mode-hook #'madand-lisp//turn-off-sly-symbol-completion-mode)
-      (add-hook 'sly-mrepl-mode-hook #'yas-minor-mode)
+      (spacemacs/add-all-to-hook 'sly-mrepl-mode-hook
+                                 #'yas-minor-mode
+                                 #'madand-lisp//yas-activate-lisp-snippets-h
+                                 #'lispy-mode
+                                 #'lispyville-mode)
+      (advice-add 'sly-show-description :override #'madand/sly-show-description)
+      (advice-add 'sly-start :around #'madand-lisp//sly-start@maybe-use-qlot)
+      (evil-define-key 'normal sly-mode-map
+        "gb" 'slime-pop-find-definition-stack)
       (define-key sly-xref-mode-map (kbd "j") #'sly-xref-next-line)
       (define-key sly-xref-mode-map (kbd "k") #'sly-xref-prev-line)
       (evil-define-key 'normal sly-popup-buffer-mode-map
-        "Q" #'kill-buffer-and-window)
-      (advice-add 'sly-show-description :override #'madand/sly-show-description)
-      (advice-add 'sly-start :around #'madand-lisp//sly-start@maybe-use-qlot)
-      )))
+        "Q" #'kill-buffer-and-window))))
 
 (defun madand-lisp/post-init-company ()
   (spacemacs|add-company-backends
@@ -275,6 +297,12 @@
   (cl-pushnew 'sly-repl-ansi-color sly-contribs)
   (use-package sly-repl-ansi-color
     :defer t))
+(defun madand-lisp/pre-init-window-purpose ()
+  (spacemacs|use-package-add-hook window-purpose
+    :pre-config
+    (progn
+      (add-to-list 'purpose-user-mode-purposes '(slime-repl-mode . terminal))
+      (purpose-compile-user-configuration))))
 
 (defun madand-lisp/pre-init-xterm-color ()
   (when (configuration-layer/package-usedp 'sly)

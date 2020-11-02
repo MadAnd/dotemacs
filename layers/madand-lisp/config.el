@@ -32,7 +32,7 @@ See info node `(elisp)Directory Local Variables'.")
   "Path of the test files relative to the project root.")
 (put 'madand-lisp-test-dir 'safe-local-variable #'stringp)
 
-(defvar madand-lisp-sly-asdf-path nil
+(defvar madand-lisp-asdf-path nil
   "Path of the local ASDF installation or nil.
 
 If non-nil, the value is used to set CL_SOURCE_REGISTRY
@@ -42,10 +42,10 @@ with the Lisp implementation of choice lacks some needed
 features (e.g. support of Package-Local Nicknames).
 
 Here are typical setup steps on a Unix-like OS:
-$ mkdir ~/common-lisp/
-$ git clone https://gitlab.common-lisp.net/asdf/asdf.git ~/common-lisp/asdf
+$ mkdir ~/lisp/
+$ git clone https://gitlab.common-lisp.net/asdf/asdf.git ~/lisp/asdf
 Now set the variable in Emacs:
-\(setq madand-lisp-sly-asdf-path \"~/common-lisp/asdf/\").
+\(setq madand-lisp-asdf-path \"~/lisp/asdf/\").
 
 NOTE: by default ASDF already recursively scans `~/common-lisp/'
 for system definitions. However, setting this variable is useful

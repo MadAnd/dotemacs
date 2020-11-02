@@ -210,12 +210,12 @@ root directory. If not in project, return nil."
 
 This is an :filter-args advice for the command `sly-start', which
 see."
-  (when (and madand-lisp-use-qlot
-             (madand-lisp/project-uses-qlot?))
-    (cl-destructuring-bind
-        (&key program program-args name env &allow-other-keys) args
-      (cl-flet ((set-argument (key value)
-                  (setq args (plist-put args key value))))
+  (cl-destructuring-bind
+      (&key program program-args name env &allow-other-keys) args
+    (cl-flet ((set-argument (key value)
+                (setq args (plist-put args key value))))
+      (when (and madand-lisp-use-qlot
+                 (madand-lisp/project-uses-qlot?))
         (set-argument :program "qlot")
         (set-argument :program-args
                       (cl-list* "exec" program
@@ -229,7 +229,7 @@ see."
                                       (projectile-project-name) name)))
         (set-argument :env
                       (cons (concat "CL_SOURCE_REGISTRY="
-                                    (expand-file-name madand-lisp-sly-asdf-path))
+                                    (expand-file-name madand-lisp-asdf-path))
                             env)))))
   (apply oldfun args))
 
@@ -279,5 +279,23 @@ prefix arg, move point to the last import form."
   (save-mark-and-excursion
     (beginning-of-defun)
     (indent-sexp)))
+
+;;; ----------------------------------------------------------------------------
+;;; Yasnippet
+;;; ----------------------------------------------------------------------------
+
+(defun madand-lisp//yas-try-key-for-lisp (args)
+  "Try keys for lisp buffers.
+Intended to be used with `yas-key-syntaxes'."
+  (skip-chars-backward "a-zA-Z':#-"))
+
+(defun madand-lisp//yas-activate-lisp-snippets-h ()
+  "Activate Lisp snippets in the current buffer.
+Useful in REPL buffers."
+  (yas-activate-extra-mode 'lisp-mode))
+
+(defun madand-lisp//yasnippet-configure-h ()
+  "Configure `yasnippet' in (E)Lisp mode buffer."
+  (setq-local yas-key-syntaxes '(madand-lisp//yas-try-key-for-lisp)))
 
 ;;; funcs.el ends here
