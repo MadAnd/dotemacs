@@ -5,7 +5,7 @@
 (`
 (madand/simple-multpile-choice
   "Optimization quality:"
-  '((?s "speed") (?z "space") (?S "safety") (?d "debug")
+  '((?s "speed") (?p "space") (?f "safety") (?d "debug")
     (?c "compilation-speed")))
 ` `
 (madand/simple-multpile-choice

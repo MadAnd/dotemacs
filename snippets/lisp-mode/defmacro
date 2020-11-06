@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: defmacro
-# key: defmacro
+# key: defmac
 # --
 (defmacro ${1:name} ($2)
 "$3"

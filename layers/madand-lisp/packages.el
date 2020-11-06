@@ -51,9 +51,7 @@
   (add-hook 'emacs-lisp-mode-hook #'madand-lisp//yasnippet-configure-h)
 
   (with-eval-after-load 'elisp-mode
-    (madand/elisp-setup-flet-indent)
-    (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode
-      "hh" 'helpful-at-point)))
+    (madand/elisp-setup-flet-indent)))
 
 (defun madand-lisp/post-init-eww ()
   (add-to-list 'madand-eww-no-images-url-regexp-list "HyperSpec/"))
@@ -126,107 +124,11 @@
                      common-lisp-hyperspec-lookup-reader-macro
                      common-lisp-hyperspec-format
                      common-lisp-hyperspec-glossary-term))
-        (advice-add fun :around #'madand//browse-url-eww--around-advice))
+        (advice-add fun :around #'madand-lisp//with-browse-url-in-eww))
       (spacemacs|define-jump-handlers lisp-mode sly-edit-definition)
       (spacemacs|define-jump-handlers sly-mrepl-mode
                                       sly-edit-definition-other-window)
 
-      (dolist (x '(("m=" . "format")
-                   ("mh" . "help/doc/xref")
-                   ("mc" . "compile")
-                   ("me" . "eval")
-                   ("mE" . "errors/notes")
-                   ("mg" . "navigation")
-                   ("mi" . "import/export")
-                   ("mm" . "macro")
-                   ("ms" . "repl")
-                   ("mS" . "stickers")
-                   ("mt" . "trace")))
-        (spacemacs/declare-prefix-for-mode 'sly-mode (car x) (cdr x)))
-      (spacemacs/set-leader-keys-for-major-mode 'lisp-mode
-        "'"  'sly-mrepl
-        "." 'spacemacs/common-lisp-navigation-transient-state/body
-        "E"  'sly-edit-value
-        ;; Code Formatting
-        "==" 'indent-sexp
-        "=b" 'madand-lisp/indent-buffer
-        "=f" 'madand-lisp/indent-defun
-        ;; Help
-        "ha" 'sly-apropos
-        "hA" 'sly-apropos-all
-        "hb" 'sly-who-binds
-        "hd" 'sly-disassemble-symbol
-        "hg" 'common-lisp-hyperspec-glossary-term
-        "hh" 'sly-describe-symbol
-        "hH" 'sly-hyperspec-lookup
-        "hm" 'sly-who-macroexpands
-        "hp" 'sly-apropos-package
-        "hr" 'sly-who-references
-        "hR" 'hyperspec-lookup-reader-macro
-        "hs" 'sly-who-specializes
-        "hS" 'sly-who-sets
-        "h<" 'sly-who-calls
-        "h>" 'sly-calls-who
-        "h#" 'common-lisp-hyperspec-lookup-reader-macro
-        "h~" 'common-lisp-hyperspec-format
-        ;; Compilation
-        "cc" 'sly-compile-file
-        "cC" 'sly-compile-and-load-file
-        "cf" 'sly-compile-defun
-        "cl" 'sly-load-file
-        "cr" 'sly-compile-region
-        ;; Evaluation
-        "eb" 'sly-eval-buffer
-        "ec" 'madand/sly-eval-current-form-sp
-        "ee" 'sly-eval-last-expression
-        "eE" 'sly-eval-print-last-expression
-        "ef" 'sly-eval-defun
-        "eF" 'sly-undefine-function
-        "eI" 'sly-unintern-symbol
-        "el" 'madand/sly-eval-sexp-end-of-line
-        "er" 'sly-eval-region
-        "eP" 'sly-pprint-eval-last-expression
-        ;; Errors/notes
-        "En" 'sly-next-note
-        "EN" 'sly-previous-note
-        "Er" 'sly-remove-notes
-        ;; Navigation
-        "gb" 'sly-pop-find-definition-stack
-        "gi" 'madand-lisp/sly-goto-imports
-        "gu" 'sly-edit-uses
-        ;; Import/export
-        "ii" 'sly-import-symbol-at-point
-        "ie" 'sly-export-symbol-at-point
-        "ic" 'sly-export-class
-        ;; Macroexpand
-        "m." 'spacemacs/macrostep-transient-state/body
-        "me" 'sly-macroexpand-1
-        "mE" 'sly-macroexpand-all
-        ;; REPL
-        "sc" 'sly-mrepl-clear-repl
-        "si" 'sly
-        "sI" 'sly-interrupt
-        "sl" 'sly-list-connections
-        "sN" 'sly-mrepl-new
-        "sn" 'sly-next-connection
-        "sp" 'sly-prev-connection
-        "sq" 'sly-quit-lisp
-        "sQ" 'madand-lisp/sly-quit-current-lisp
-        "sr" 'sly-restart-inferior-lisp
-        "ss" 'sly-mrepl-sync
-        "sw" 'madand/sly-connect-to-stumpwm
-        ;; Stickers
-        "Sb" 'sly-stickers-toggle-break-on-stickers
-        "Sc" 'sly-stickers-clear-defun-stickers
-        "SC" 'sly-stickers-clear-buffer-stickers
-        "Sf" 'sly-stickers-fetch
-        "Sr" 'sly-stickers-replay
-        "Ss" 'sly-stickers-dwim
-        ;; trace
-        "td" 'sly-trace-dialog
-        "tt" 'sly-trace-dialog-toggle-trace
-        "tT" 'sly-toggle-fancy-trace
-        "tu" 'sly-untrace-all)
       (spacemacs|define-transient-state common-lisp-navigation
         :title "Common Lisp Navigation Transient State"
         :doc "
@@ -262,19 +164,14 @@
       (add-hook 'sly-popup-buffer-mode-hook
                 #'spacemacs/toggle-rainbow-identifier-off)
       (add-hook 'sly-mode-hook #'madand-lisp//turn-off-sly-symbol-completion-mode)
+      (add-hook 'sly-mrepl-mode-hook #'madand-lisp//yasnippet-configure-h)
       (spacemacs/add-all-to-hook 'sly-mrepl-mode-hook
                                  #'yas-minor-mode
                                  #'madand-lisp//yas-activate-lisp-snippets-h
                                  #'lispy-mode
                                  #'lispyville-mode)
       (advice-add 'sly-show-description :override #'madand/sly-show-description)
-      (advice-add 'sly-start :around #'madand-lisp//sly-start@maybe-use-qlot)
-      (evil-define-key 'normal sly-mode-map
-        "gb" 'slime-pop-find-definition-stack)
-      (define-key sly-xref-mode-map (kbd "j") #'sly-xref-next-line)
-      (define-key sly-xref-mode-map (kbd "k") #'sly-xref-prev-line)
-      (evil-define-key 'normal sly-popup-buffer-mode-map
-        "Q" #'kill-buffer-and-window))))
+      (advice-add 'sly-start :around #'madand-lisp//sly-start@maybe-use-qlot))))
 
 (defun madand-lisp/post-init-company ()
   (spacemacs|add-company-backends

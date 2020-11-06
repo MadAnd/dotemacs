@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: defmethod-initialize-instance-after
+# --
+(defmethod initialize-instance :after ((obj ${1:class}) &key)
+  (with-slots (${2:slot-names}) obj
+    $0))

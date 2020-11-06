@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: find
+# key: fd
+# --
+(find ${1:item} ${2:sequence}$0)

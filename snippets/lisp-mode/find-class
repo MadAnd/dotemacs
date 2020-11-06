@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: find-class
+# key: fdcla
+# --
+(find-class ${1:symbol}$0)

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: defmethod-initialize-instance
+# --
+(defmethod initialize-instance`(yas-choose-value " :after" " :before" " :around")` ((obj ${1:class}) &key$2)
+  $0)

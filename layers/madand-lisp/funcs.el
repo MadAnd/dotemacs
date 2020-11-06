@@ -129,14 +129,22 @@ Common Lisp projects."
                 (s-pad-left 20 " " (s-replace s "" original-result)))
       original-result)))
 
-(defun madand/browse-url-eww-new-buffer (url &optional new-window)
-  "Open URL in a new EWW buffer.
-This function may be used anywhere where `browse-url' is expected."
-  (eww url 4))
+(defvar madand-lisp--hyperspec-buffer-name "*eww-hyperspec*")
 
-(defun madand//browse-url-eww--around-advice (fun &rest args)
+(defun madand-lisp//browse-url-for-hyperspec (url &rest args)
+  "Variant of `eww-browse-url' for viewing Common Lisp Hyperspec.
+
+We ensures that a single dedicated Eww buffer is (re)used by
+`hyperspec-lookup' and friends."
+  (pop-to-buffer
+   (get-buffer-create madand-lisp--hyperspec-buffer-name))
+  (unless (eq major-mode 'eww-mode)
+    (eww-mode))
+  (eww url))
+
+(defun madand-lisp//with-browse-url-in-eww (fun &rest args)
   "Call FUN in dynamic environment where `browse-url' uses `eww'."
-  (let ((browse-url-browser-function #'madand/browse-url-eww-new-buffer))
+  (let ((browse-url-browser-function #'madand-lisp//browse-url-for-hyperspec))
     (apply fun args)))
 
 ;;;-----------------------------------------------------------------------------

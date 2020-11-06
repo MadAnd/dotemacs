@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: find-if
+# key: fdif
+# --
+(find-if ${1:predicate} ${2:sequence}$0)

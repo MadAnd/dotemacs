@@ -1,10 +1,10 @@
 # -*- mode: snippet -*-
 # name: defclass
-# key: dc
+# key: defcla
 # --
 (defclass $1 ($2)
-          ($0)${3:
-          (:default-initargs
-          :$4)}${5:
-          (:metaclass :$6)}${7:
-          (:documentation "$8")})
+  ($0)${3:
+  (:default-initargs
+  :$4)}${5:
+  (:metaclass :$6)}${7:
+  (:documentation "$8")})

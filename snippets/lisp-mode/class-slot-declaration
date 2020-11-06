@@ -3,7 +3,8 @@
 # key: csd
 # --
 (${1:slot-name}${2:
-:initarg :$1}${3:
-:`(yas-choose-value "reader" "accessor" "writer")` $1}${4:
-:type $5}${6:
-:documentation "$7."})$0
+:`(yas-choose-value "reader" "accessor" "writer")` $1
+}:initarg :$1${3:
+:initform ${4:nil}}${5:
+:type $6}${7:
+:documentation "$8"})$0

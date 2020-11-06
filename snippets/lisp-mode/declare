@@ -5,5 +5,5 @@
 (declare (`
 (madand/simple-multpile-choice
   "Which declaration?"
-  '((?t "type") (?f "ftype") (?i "ignore") (?I "ignorable") (?d "dynamic-extent")
-    (?o "optimize") (?s "special") (?l "inline") (?L "notinline")))` $0))
+  '((?t "type") (?f "ftype") (?i "ignore") (?g "ignorable") (?d "dynamic-extent")
+    (?o "optimize") (?s "special") (?l "inline") (?n "notinline")))` $0))

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: uiop-define-package
+# key: udefpac
+# --
+(uiop:define-package #:${1:$$(madand//yas-lisp-infer-package-name)}
+  (:documentation "$2.")
+  (:use #:cl)
+  $0)
