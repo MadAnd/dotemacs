@@ -15,4 +15,9 @@
 
 ;;; Code:
 
+(defun madand-ivy//ivy-occur-press@reposition ()
+  "Call `reposition-window' in the last ivy-occur target buffer."
+  (with-selected-window (ivy-state-window ivy-occur-last)
+    (reposition-window)))
+
 ;;; funcs.el ends here

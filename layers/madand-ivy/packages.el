@@ -15,7 +15,6 @@
 
 (defconst madand-ivy-packages
   '(counsel
-    counsel-dash
     ivy
     swiper
     wgrep))
@@ -28,11 +27,14 @@
 (defun madand-ivy/post-init-ivy ()
   (with-eval-after-load 'ivy
     (setq ivy-wrap t
-          ivy-height 20)
-    (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit)
-    (define-key ivy-minibuffer-map (kbd "C-h") 'delete-backward-char)
-    (define-key ivy-minibuffer-map (kbd "C-S-h") help-map)
-    (define-key ivy-minibuffer-map (kbd "C-<return>") 'ivy-immediate-done)
+          ivy-height 15)
+    (advice-add 'ivy-occur-press :after #'madand-ivy//ivy-occur-press@reposition)
+    (evil-define-key nil ivy-minibuffer-map
+      [C-i] 'ivy-partial-or-done
+      (kbd "<escape>") 'minibuffer-keyboard-quit
+      (kbd "C-h") 'ivy-backward-delete-char
+      (kbd "C-S-h") help-map
+      (kbd "C-<return>") 'ivy-immediate-done)
     (evil-define-key 'normal ivy-occur-grep-mode-map
       (kbd "RET") 'ivy-occur-press-and-switch)
     (evil-define-key 'normal ivy-occur-mode-map
