@@ -31,7 +31,6 @@
     (sly-macrostep :requires (sly macrostep))
     (sly-repl-ansi-color :requires sly)
     xterm-color
-    window-purpose
     ))
 
 (defun madand-lisp/post-init-ace-link ()
@@ -297,12 +296,6 @@
   (cl-pushnew 'sly-repl-ansi-color sly-contribs)
   (use-package sly-repl-ansi-color
     :defer t))
-(defun madand-lisp/pre-init-window-purpose ()
-  (spacemacs|use-package-add-hook window-purpose
-    :pre-config
-    (progn
-      (add-to-list 'purpose-user-mode-purposes '(slime-repl-mode . terminal))
-      (purpose-compile-user-configuration))))
 
 (defun madand-lisp/pre-init-xterm-color ()
   (when (configuration-layer/package-usedp 'sly)
