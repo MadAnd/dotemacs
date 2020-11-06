@@ -17,6 +17,18 @@
 (require 'cl-lib)
 
 ;;; ----------------------------------------------------------------------------
+;;; Helper functions for using EWW with `browse-url'
+;;; ----------------------------------------------------------------------------
+
+(defun madand-eww/browse-url-in-new-buffer (url &rest _)
+  "Open URL in a new EWW buffer.
+
+This function may be used anywhere where `browse-url' is
+expected. Rest arguments are ignored and are only present for
+compatibility with `eww-browse-url'."
+  (eww-browse-url url t))
+
+;;; ----------------------------------------------------------------------------
 ;;; Jump between eww buffers
 ;;; ----------------------------------------------------------------------------
 
@@ -50,11 +62,11 @@
         (car (last eww-buffers))
       (nth (1- eww-buffer-pos) eww-buffers))))
 
-(defun madand/eww-jump-next-buffer ()
+(defun madand-eww/jump-next-buffer ()
   (interactive)
   (pop-to-buffer-same-window (madand-eww//next-buffer (current-buffer))))
 
-(defun madand/eww-jump-previous-buffer ()
+(defun madand-eww/jump-previous-buffer ()
   (interactive)
   (pop-to-buffer-same-window (madand-eww//previous-buffer (current-buffer))))
 

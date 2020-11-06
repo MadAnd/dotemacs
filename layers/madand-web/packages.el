@@ -93,7 +93,7 @@
   (with-eval-after-load 'php-mode
     (setq php-template-compatibility nil
           php-manual-path "/usr/share/doc/php/php-chunked-xhtml"
-          php-search-documentation-browser-function #'madand/browse-url-eww
+          php-search-documentation-browser-function #'madand-eww/browse-url-in-new-buffer
           php-mode-coding-style 'psr2)
     (evil-define-key 'hybrid c-mode-map (kbd "RET") (kbd "M-j"))
     ;; Shortcuts for common yet cumbersome things.

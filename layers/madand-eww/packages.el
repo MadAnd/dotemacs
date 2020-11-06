@@ -36,8 +36,6 @@
 
 (defun madand-eww/init-eww ()
   (setq eww-bookmarks-directory "~/.spacemacs.d/data/")
-  ;; Global keys with `SPC ae' prefix.
-  (spacemacs/declare-prefix "ae" "eww")
   (spacemacs/set-leader-keys
     "awf" 'eww-open-file
     "awb" 'eww-list-bookmarks
@@ -58,57 +56,60 @@
     (spacemacs/declare-prefix-for-mode 'eww-mode "ml" "list")
     (spacemacs/declare-prefix-for-mode 'eww-mode "mv" "view")
     (spacemacs/set-leader-keys-for-major-mode 'eww-mode
+      "a"  'eww-add-bookmark
       "b"  'eww-back-url
-      "y"  'eww-copy-page-url
+      "d"  'eww-download
       "f"  'eww-forward-url
-      "s"  'browse-web
-      "r"  'eww-reload
-      "p"  'eww-previous-url
+      "j"  'madand-eww/jump-next-buffer
+      "k"  'madand-eww/jump-previous-buffer
       "n"  'eww-next-url
       "h"  'eww-list-histories
-      "d"  'eww-download
-      "a"  'eww-add-bookmark
       "lb" 'eww-list-buffers
       "lc" 'url-cookie-list
       "lo" 'eww-list-bookmarks
+      "p"  'eww-previous-url
+      "r"  'eww-reload
+      "s"  'browse-web
       "t"  'eww-top-url
       "u"  'eww-up-url
+      "vn" 'eww-open-in-new-buffer
       "vx" 'eww-browse-with-external-browser
       "vf" 'eww-toggle-fonts
       "vr" 'eww-readable
-      "vs" 'eww-view-source)
+      "vs" 'eww-view-source
+      "y"  'eww-copy-page-url)
     (evil-define-key 'motion eww-mode-map
       "j"         'evil-next-visual-line
       "k"         'evil-previous-visual-line
       "gj"        'evil-next-line
       "gk"        'evil-previous-line
       "gr"        'eww-reload
-      "J"         'madand/eww-jump-next-buffer
-      "K"         'madand/eww-jump-previous-buffer
-      (kbd "C-j") 'shr-next-link
-      (kbd "C-k") 'shr-previous-link
+      "J"         'madand-eww/jump-next-buffer
+      "K"         'madand-eww/jump-previous-buffer
       "s"         'avy-goto-word-1
-      "S"         'eww-switch-to-buffer)
+      "S"         'eww-switch-to-buffer
+      (kbd "C-j") 'shr-next-link
+      (kbd "C-k") 'shr-previous-link)
     (dolist (keymap (list eww-link-keymap eww-image-link-keymap))
       (define-key keymap "f" 'eww-follow-link)
       (define-key keymap "F" 'eww-open-in-new-buffer))
     (evil-define-key 'motion eww-history-mode-map
       (kbd "RET") 'eww-history-browse
       "f" 'eww-history-browse
-      "q" 'kill-this-buffer)
+      "q" 'quit-window)
     (evil-define-key 'motion eww-bookmark-mode-map
       (kbd "RET") 'eww-bookmark-browse
       "f" 'eww-bookmark-browse
-      "D" 'eww-bookmark-kill
-      "y" 'eww-bookmark-yank
-      "q" 'kill-this-buffer)
+      "dd" 'eww-bookmark-kill
+      "p" 'eww-bookmark-yank
+      "q" 'quit-window)
     (evil-define-key 'motion eww-buffers-mode-map
       (kbd "RET") 'eww-buffer-select
       "f" 'eww-buffer-select
       "d" 'eww-buffer-kill
       "n" 'eww-buffer-show-next
       "p" 'eww-buffer-show-previous
-      "q" 'kill-this-buffer)))
+      "q" 'quit-window)))
 
 (defun madand-eww/init-eww-imenu ()
   (use-package eww-imenu
@@ -133,9 +134,11 @@
     (setq shr-use-fonts nil
           shr-width 72)))
 
-(defun madand-eww/post-init-window-purpose ()
+(defun madand-eww/pre-init-window-purpose ()
   (spacemacs|use-package-add-hook window-purpose
     :pre-config
-    (add-to-list 'purpose-user-mode-purposes '(eww-mode . eww))))
+    (progn
+      (add-to-list 'purpose-user-mode-purposes '(eww-mode . eww))
+      (purpose-compile-user-configuration))))
 
 ;;; packages.el ends here
