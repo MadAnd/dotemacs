@@ -35,6 +35,7 @@
     evil-surround
     evil-unimpaired
     flyspell
+    gcmh
     hungry-delete
     (info :location built-in)
     lsp-mode
@@ -261,6 +262,15 @@
 (defun madand-base/post-init-flyspell ()
   (with-eval-after-load 'flyspell
     (define-key evil-normal-state-map (kbd "zi") 'flyspell-correct-word-before-point)))
+
+(defun madand-base/init-gcmh ()
+  (use-package gcmh
+    :hook (spacemacs-post-user-config . gcmh-mode)
+    :init
+    (setq gcmh-idle-delay 50
+          gcmh-low-cons-threshold (* 1 (expt 1024 2))
+          gcmh-high-cons-threshold (* 32 (expt 1024 2))
+          gcmh-verbose t)))
 
 (defun madand-base/post-init-hungry-delete ()
   (spacemacs/defer-until-after-user-config #'global-hungry-delete-mode)
