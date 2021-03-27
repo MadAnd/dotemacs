@@ -194,4 +194,24 @@ See:
     (setq pt (1- pt)))
   (list pt))
 
+(defun madand-eww/open-from-clipboard (&optional arg)
+  "Call `eww' with the current clipboard contents.
+
+If called with a prefix ARG, use a new buffer instead of reusing
+the default EWW buffer."
+  (interactive "p")
+  (eww (gui-get-selection 'CLIPBOARD)
+       arg))
+
+(defun madand-eww/eww-open-file (file &optional arg)
+  "Render FILE using EWW.
+
+This is an improved variant of `eww-open-file' that allows for
+opening a file in a new EWW buffer with the prefix argument."
+  (interactive "fFile: \np")
+  (eww (concat "file://"
+               (and (memq system-type '(windows-nt ms-dos)) "/")
+               (expand-file-name file))
+       arg))
+
 ;;; funcs.el ends here

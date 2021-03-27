@@ -37,7 +37,8 @@
 (defun madand-eww/init-eww ()
   (setq eww-bookmarks-directory "~/.spacemacs.d/data/")
   (spacemacs/set-leader-keys
-    "awf" 'eww-open-file
+    "awc" 'madand-eww/open-from-clipboard
+    "awf" 'madand-eww/eww-open-file
     "awb" 'eww-list-bookmarks
     "aws" 'eww-search-words
     "aww" 'eww)
